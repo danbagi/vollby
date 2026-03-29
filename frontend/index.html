@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html class="dark" lang="sk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VOLL.BY | VOLEBNÉ PREFERENCIE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      "surface-container-lowest":"#0e0e0e","surface-container-low":"#1c1b1b",
+      "surface-container":"#201f1f","surface-container-high":"#2a2a2a",
+      "surface-container-highest":"#353534","surface-variant":"#353534",
+      "surface":"#131313","background":"#131313",
+      "on-surface":"#e5e2e1","on-surface-variant":"#c2c6d5","on-background":"#e5e2e1",
+      "outline":"#8c909e","outline-variant":"#424753",
+      "primary":"#acc7ff","primary-container":"#508ff8",
+      "on-primary":"#002f68","on-primary-fixed":"#001a40","on-primary-container":"#00285b",
+      "tertiary":"#acc7ff","tertiary-container":"#508ff8",
+      "error":"#ffb4ab","error-container":"#93000a",
+      "inverse-surface":"#e5e2e1","inverse-primary":"#005bbf",
+    },
+    fontFamily: {"headline":["Space Grotesk"],"body":["Space Grotesk"],"label":["Space Grotesk"],"mono":["JetBrains Mono"]},
+    borderRadius: {"DEFAULT":"0px","lg":"0px","xl":"0px","2xl":"0px","full":"0px"},
+  }}
+}
+</script>
+<style>
+* { border-radius: 0 !important; }
+body {
+  background-color: #131313;
+  background-image: radial-gradient(circle at 2px 2px, #2a2a2a 1px, transparent 0);
+  background-size: 32px 32px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24 }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0e0e0e; }
+::-webkit-scrollbar-thumb { background: #424753; border: 2px solid #0e0e0e; }
+.pchip {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+  padding:6px 12px; cursor:grab; border:2px solid; user-select:none;
+  text-transform:uppercase; letter-spacing:.06em;
+  transition:opacity .15s; border-radius:0 !important;
+}
+.pchip:hover { opacity:.8; }
+.pchip.dragging { opacity:.3; cursor:grabbing; }
+.drop-zone { transition: background .1s, border-color .1s; }
+.drop-zone.drag-over { background: rgba(172,199,255,0.05) !important; border-color: #acc7ff !important; }
+#mobile-nav { display: none; }
+#mobile-nav.open { display: flex; }
+</style>
+</head>
+<body class="text-on-surface min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-10">
+      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY</a>
+      <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
+        <a href="index.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1">Prehľad</a>
+        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Model</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <select id="agency-filter" class="hidden md:block bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer">
+        <option value="all">Všetky agentúry</option>
+        <option value="AKO">AKO</option>
+        <option value="Focus">Focus</option>
+        <option value="Ipsos">Ipsos</option>
+        <option value="NMS">NMS</option>
+      </select>
+      <span class="font-mono text-[10px] text-[#8c909e] uppercase tracking-widest hidden sm:block" id="last-poll-date">–</span>
+      <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
+        <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile nav -->
+  <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]">Prehľad</a>
+    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Model</a>
+    <div class="pt-3 border-t border-outline-variant">
+      <select id="agency-filter-mobile" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer">
+        <option value="all">Všetky agentúry</option>
+        <option value="AKO">AKO</option>
+        <option value="Focus">Focus</option>
+        <option value="Ipsos">Ipsos</option>
+        <option value="NMS">NMS</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-screen-2xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-16 md:space-y-20">
+
+  <!-- HERO -->
+  <section class="border-b-2 border-outline pb-8 md:pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
+    <div>
+      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Vývoj volebných preferencií SR</span>
+      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none">VOLEBNÉ<br/>PREFERENCIE</h1>
+    </div>
+    <div class="text-right space-y-1">
+      <div class="font-mono text-xs uppercase tracking-widest text-outline">Posledný prieskum</div>
+      <div class="font-mono text-xl font-bold text-on-surface" id="hero-last-poll">NAČÍTAVAM...</div>
+      <div class="flex gap-2 justify-end flex-wrap" id="time-btns">
+        <button onclick="setRange(6)"  class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
+        <button onclick="setRange(12)" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
+        <button onclick="setRange(99)" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTY FILTER PILLS -->
+  <div class="overflow-x-auto pb-1">
+    <div class="flex gap-0 border-2 border-outline w-max" id="party-pills"></div>
+  </div>
+
+  <!-- SECTION 1: TREND CHART -->
+  <section class="border-2 border-outline bg-surface">
+    <div class="p-5 border-b-2 border-outline flex justify-between items-center flex-wrap gap-4">
+      <h2 class="font-black text-xl uppercase tracking-tight">Trend vývoja</h2>
+      <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Zdroj: AKO / Focus / Ipsos / NMS · Wikipedia</span>
+    </div>
+    <div class="p-4 md:p-6 relative h-[250px] md:h-[400px]">
+      <canvas id="trend-chart"></canvas>
+    </div>
+  </section>
+
+  <!-- SECTION 2: AKTUÁLNY ODHAD -->
+  <section>
+    <div class="flex items-end justify-between border-b-2 border-outline pb-4 mb-0 flex-wrap gap-4">
+      <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Aktuálny odhad</h2>
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Posledných</span>
+        <input type="range" id="median-slider" min="3" max="15" value="5" class="w-20 md:w-24 accent-[#acc7ff]"/>
+        <span class="font-mono text-sm font-bold text-[#acc7ff]" id="median-n">5</span>
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">prieskumov</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-0 border-2 border-outline border-t-0" id="median-cards"></div>
+  </section>
+
+  <!-- SECTION 3: PREPOČET NA SEDADLÁ -->
+  <section>
+    <div class="border-b-2 border-outline pb-4 mb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-1 block">Projekcia mandátov NRSR</span>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Prepočet na sedadlá</h2>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Hagenbach-Bischoff</span>
+        <select id="poll-select" class="bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer"></select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 border-2 border-outline border-t-0">
+      <!-- LEFT: HEMICYCLE + BARS -->
+      <div class="lg:col-span-8 border-b-2 lg:border-b-0 lg:border-r-2 border-outline">
+        <div class="p-4 md:p-8 border-b-2 border-outline">
+          <div class="flex justify-between items-center mb-4 md:mb-6 border-b-2 border-outline-variant pb-4">
+            <h3 class="font-black text-lg uppercase tracking-tight">Rozdelenie pléna</h3>
+            <div class="text-right">
+              <div class="font-mono text-[10px] text-outline uppercase tracking-widest">1 bod = 1 poslanec</div>
+              <div class="font-mono text-3xl md:text-5xl font-black text-on-surface leading-none tabular-nums" id="total-seats-display">150<span class="text-outline text-lg">/150</span></div>
+            </div>
+          </div>
+          <div class="relative flex justify-center">
+            <svg id="hemicycle-svg" viewBox="0 0 700 320" class="w-full max-w-2xl">
+              <text x="350" y="160" text-anchor="middle" fill="#8c909e" font-size="12"
+                font-family="JetBrains Mono,monospace" font-weight="700" letter-spacing="3">NAČÍTAVAM...</text>
+            </svg>
+          </div>
+          <div class="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-6 justify-center" id="majority-info"></div>
+        </div>
+        <div class="p-4 md:p-8">
+          <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6">Distribúcia strán</h3>
+          <div class="space-y-3 md:space-y-4" id="seat-bars"></div>
+        </div>
+      </div>
+      <!-- RIGHT: COALITION SUMMARY -->
+      <aside class="lg:col-span-4 flex flex-col">
+        <div class="p-4 md:p-8 border-b-2 border-outline flex-1">
+          <div class="font-mono text-[10px] uppercase text-[#acc7ff] tracking-widest mb-2">Koaličný potenciál</div>
+          <h3 class="font-black text-xl md:text-2xl uppercase leading-tight mb-4 md:mb-6">Aktuálny stav</h3>
+          <div class="space-y-4" id="coalition-summary"></div>
+        </div>
+        <div class="p-4 md:p-8 bg-surface-container-lowest">
+          <div class="font-mono text-[10px] uppercase text-outline tracking-widest mb-3">Metodológia</div>
+          <p class="font-mono text-xs text-on-surface-variant leading-relaxed">Hagenbach-Bischoffova kvóta · 150 kresiel · prah 5%</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- SECTION 4: DRAG & DROP COALITION BUILDER -->
+  <section class="border-2 border-outline">
+    <div class="p-4 md:p-8 border-b-2 border-outline flex justify-between items-end flex-wrap gap-4">
+      <div>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-2 block">Interaktívny kalkulátor</span>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Koaličná skladba</h2>
+      </div>
+      <button onclick="resetCoalitions()" class="font-mono font-bold text-xs uppercase tracking-widest px-6 py-3 border-2 border-on-surface bg-on-surface text-surface hover:bg-[#acc7ff] hover:border-[#acc7ff] hover:text-[#131313] transition-none">↺ Resetovať</button>
+    </div>
+
+    <!-- Progress bars -->
+    <div class="grid grid-cols-2 border-b-2 border-outline">
+      <div class="p-4 md:p-6 border-r-2 border-outline">
+        <div class="flex justify-between items-center mb-3">
+          <span class="font-mono text-[10px] uppercase tracking-widest text-outline">Vládna koalícia</span>
+          <span class="font-mono font-bold text-lg" id="gov-num" style="color:#CC0000">0</span>
+        </div>
+        <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
+          <div id="gov-bar" class="h-full transition-none" style="width:0%;background:#CC0000"></div>
+          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/20"></div>
+        </div>
+        <div class="font-mono text-[10px] mt-2" id="gov-status" style="color:#CC0000"></div>
+      </div>
+      <div class="p-4 md:p-6">
+        <div class="flex justify-between items-center mb-3">
+          <span class="font-mono text-[10px] uppercase tracking-widest text-outline">Opozícia</span>
+          <span class="font-mono font-bold text-lg" id="opp-num" style="color:#acc7ff">0</span>
+        </div>
+        <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
+          <div id="opp-bar" class="h-full transition-none" style="width:0%;background:#acc7ff"></div>
+          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/20"></div>
+        </div>
+        <div class="font-mono text-[10px] mt-2" id="opp-status" style="color:#acc7ff"></div>
+      </div>
+    </div>
+
+    <!-- Three zones: vertical on mobile, grid on md+ -->
+    <div class="grid grid-cols-1 md:grid-cols-3">
+      <div id="zone-gov" class="drop-zone border-b-2 md:border-b-0 md:border-r-2 border-outline p-4 md:p-8 min-h-40 md:min-h-64 bg-surface-container-low"
+           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'gov')">
+        <div class="mb-4 md:mb-6">
+          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#CC0000]" id="big-gov">00</div>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Vládna koalícia</h3>
+        </div>
+        <div class="flex flex-wrap gap-2" id="chips-gov"></div>
+      </div>
+      <div id="zone-neutral" class="drop-zone border-b-2 md:border-b-0 md:border-r-2 border-outline p-4 md:p-8 min-h-40 md:min-h-64 bg-surface"
+           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'neutral')">
+        <div class="mb-4 md:mb-6">
+          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-outline" id="big-neutral">00</div>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Nezaradené</h3>
+        </div>
+        <div class="flex flex-wrap gap-2" id="chips-neutral">
+          <div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">Preneste strany sem</div>
+        </div>
+      </div>
+      <div id="zone-opp" class="drop-zone p-4 md:p-8 min-h-40 md:min-h-64 bg-surface-container-low"
+           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'opp')">
+        <div class="mb-4 md:mb-6">
+          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#acc7ff]" id="big-opp">00</div>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Opozícia</h3>
+        </div>
+        <div class="flex flex-wrap gap-2" id="chips-opp"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: RAW DATA LEDGER -->
+  <section>
+    <div class="flex items-center justify-between border-b-2 border-outline pb-4 mb-0 flex-wrap gap-4">
+      <div class="flex items-center gap-4">
+        <span class="material-symbols-outlined text-[#acc7ff]" style="font-variation-settings:'FILL' 1">analytics</span>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Raw Data Ledger</h2>
+      </div>
+    </div>
+    <div class="overflow-x-auto border-2 border-outline border-t-0">
+      <table class="w-full text-left font-mono text-xs">
+        <thead>
+          <tr class="border-b-2 border-outline bg-surface-container-low">
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap">Agentúra</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap">Dátum</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#00CCFF">PS</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#CC0000">Smer</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#8B4513">Rep.</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#99AA00">OĽaNO</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#66FF00">SaS</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#660033">Hlas</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#6600AA">Dem.</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#003366">KDH</th>
+          </tr>
+        </thead>
+        <tbody id="polls-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e] mt-16 md:mt-20">
+  <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
+    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2">DATA JOURNALISM</span></div>
+    <div class="flex flex-wrap justify-center gap-6">
+      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Metodológia</a>
+      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Zdroj dát</a>
+    </div>
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 VOLL.BY</div>
+  </div>
+</footer>
+
+<script>
+const API = "http://localhost:8000";
+let POLLS = [];
+
+function mapPoll(p) {
+  return {
+    id: p.id, firm: p.firm, dateStr: p.date_str,
+    date: new Date(p.date + "T12:00:00"),
+    PS: p.ps, Smer: p.smer, Hlas: p.hlas, OLaNO: p.olano,
+    KDH: p.kdh, SaS: p.sas, SNS: p.sns, Rep: p.rep, MA: p.ma, Dem: p.dem,
+  };
+}
+
+const PARTIES = [
+  {key:"PS",   label:"PS",    color:"#00CCFF", defaultZone:"opp"},
+  {key:"Smer", label:"Smer",  color:"#CC0000", defaultZone:"gov"},
+  {key:"Rep",  label:"Rep.",  color:"#8B4513", defaultZone:"neutral"},
+  {key:"OLaNO",label:"OĽaNO", color:"#99AA00", defaultZone:"opp"},
+  {key:"SaS",  label:"SaS",   color:"#66FF00", defaultZone:"opp"},
+  {key:"Hlas", label:"Hlas",  color:"#660033", defaultZone:"gov"},
+  {key:"Dem",  label:"Dem.",  color:"#6600AA", defaultZone:"opp"},
+  {key:"KDH",  label:"KDH",   color:"#003366", defaultZone:"opp"},
+  {key:"SNS",  label:"SNS",   color:"#546E7A", defaultZone:"gov"},
+  {key:"MA",   label:"MA",    color:"#FF8800", defaultZone:"opp"},
+];
+const TOTAL = 150, MAJ = 76;
+
+let activeParties = new Set(["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem"]);
+let agencyFilter = "all";
+let medianN = 5;
+let rangeMonths = 6;
+let chart = null;
+let currentSeats = [], zoneMap = {};
+let dragKey = null;
+
+// ── HELPERS ────────────────────────────────────────────────────
+function median(arr) {
+  const v = arr.filter(x=>x!=null&&!isNaN(x)).sort((a,b)=>a-b);
+  if(!v.length) return null;
+  const m = Math.floor(v.length/2);
+  return v.length%2 ? v[m] : (v[m-1]+v[m])/2;
+}
+function getFiltered() { return agencyFilter==="all" ? POLLS : POLLS.filter(p=>p.firm===agencyFilter); }
+
+function toggleMobileNav() {
+  document.getElementById("mobile-nav").classList.toggle("open");
+}
+
+function setAgencyFilter(val) {
+  agencyFilter = val;
+  document.getElementById("agency-filter").value = val;
+  document.getElementById("agency-filter-mobile").value = val;
+  buildChart(); renderMedian(); renderPollsTable();
+}
+document.getElementById("agency-filter").addEventListener("change", e => setAgencyFilter(e.target.value));
+document.getElementById("agency-filter-mobile").addEventListener("change", e => setAgencyFilter(e.target.value));
+
+// ── PARTY PILLS ────────────────────────────────────────────────
+function renderPills() {
+  const wrap = document.getElementById("party-pills");
+  wrap.innerHTML = "";
+  PARTIES.forEach(p => {
+    const on = activeParties.has(p.key);
+    const btn = document.createElement("button");
+    btn.className = "font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-r-2 transition-none";
+    btn.style.cssText = on
+      ? `background:${p.color};color:#131313;border-right-color:#131313`
+      : `background:#131313;color:#8c909e;border-right-color:#424753`;
+    btn.textContent = p.label;
+    btn.onclick = () => {
+      if(on){if(activeParties.size>1)activeParties.delete(p.key);}
+      else activeParties.add(p.key);
+      renderPills(); buildChart();
+    };
+    wrap.appendChild(btn);
+  });
+  if(wrap.lastChild) wrap.lastChild.style.borderRight = "none";
+}
+
+// ── TREND CHART ────────────────────────────────────────────────
+function buildChart() {
+  const cutoff = new Date();
+  if(rangeMonths !== 99) cutoff.setMonth(cutoff.getMonth() - rangeMonths);
+  const filtered = getFiltered().filter(p=>rangeMonths===99||p.date>=cutoff).slice().reverse();
+  const labels = filtered.map(p => p.date.toLocaleDateString("sk-SK",{month:"short",year:"2-digit"}));
+  const datasets = PARTIES.filter(p=>activeParties.has(p.key)).map(p => ({
+    label: p.label,
+    data: filtered.map(r=>r[p.key]),
+    borderColor: p.color,
+    backgroundColor: "transparent",
+    borderWidth: 2.5, pointRadius: 2, pointHoverRadius: 5,
+    tension: 0.35, spanGaps: true,
+  }));
+  if(chart) chart.destroy();
+  const ctx = document.getElementById("trend-chart").getContext("2d");
+  chart = new Chart(ctx, {
+    type: "line", data: {labels, datasets},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: {mode:"index", intersect:false},
+      plugins: {
+        legend: {display:false},
+        tooltip: {
+          backgroundColor:"#201f1f", borderColor:"#424753", borderWidth:2,
+          titleColor:"#e5e2e1", bodyColor:"#8c909e", padding:10,
+          titleFont:{family:"Space Grotesk",weight:"700",size:13},
+          bodyFont:{family:"JetBrains Mono",size:11},
+          callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(1)+"%":"–"}`}
+        }
+      },
+      scales: {
+        x:{grid:{color:"rgba(66,71,83,0.4)"},ticks:{color:"#8c909e",font:{family:"JetBrains Mono",size:10},maxRotation:45}},
+        y:{grid:{color:"rgba(66,71,83,0.4)"},ticks:{color:"#8c909e",font:{family:"JetBrains Mono",size:11},callback:v=>v+"%"},min:0}
+      }
+    }
+  });
+}
+
+function setRange(m) {
+  rangeMonths = m;
+  document.querySelectorAll(".range-btn").forEach((b,i) => {
+    const on = [6,12,99][i] === m;
+    b.className = `range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 transition-none ${on?"border-outline bg-surface-container-highest text-on-surface":"border-outline-variant text-outline hover:border-outline hover:text-on-surface"}`;
+  });
+  buildChart();
+}
+
+// ── MEDIAN CARDS ───────────────────────────────────────────────
+function renderMedian() {
+  const recent = getFiltered().slice(0, medianN);
+  const old = getFiltered().slice(10, 25);
+  const grid = document.getElementById("median-cards");
+  grid.innerHTML = "";
+  const visible = PARTIES
+    .map(p => ({...p, med: median(recent.map(r=>r[p.key]).filter(v=>v!=null))}))
+    .filter(p => p.med != null && p.med >= 3)
+    .sort((a,b) => b.med - a.med);
+
+  visible.forEach((p, i) => {
+    const oldVals = old.map(r=>r[p.key]).filter(v=>v!=null);
+    const oldMed = oldVals.length ? median(oldVals) : null;
+    const diff = oldMed != null ? p.med - oldMed : null;
+    const above = p.med >= 5;
+    const isLast = i === visible.length - 1;
+    const card = document.createElement("div");
+    card.className = `p-4 md:p-6 border-b-2 border-r-2 border-outline bg-surface hover:bg-surface-container-high transition-none ${isLast?"border-r-0":""}`;
+    card.style.borderTopWidth = "4px";
+    card.style.borderTopColor = p.color;
+    card.innerHTML = `
+      <div class="flex justify-between items-start mb-3">
+        <span class="font-mono font-bold text-sm uppercase" style="color:${p.color}">${p.label}</span>
+        ${diff!=null
+          ? diff > 0.3
+            ? `<span class="font-mono text-xs bg-[#66FF00] text-[#131313] px-2 py-0.5">+${diff.toFixed(1)}%</span>`
+            : diff < -0.3
+            ? `<span class="font-mono text-xs bg-[#CC0000] text-white px-2 py-0.5">${diff.toFixed(1)}%</span>`
+            : `<span class="font-mono text-xs bg-surface-container px-2 py-0.5 text-outline">0.0%</span>`
+          : ""}
+      </div>
+      <div class="font-black text-5xl md:text-7xl leading-none tracking-tighter">${p.med.toFixed(1)}<span class="text-outline text-xl md:text-2xl">%</span></div>
+      <div class="mt-3 h-1 bg-surface-container-lowest">
+        <div style="width:${Math.min(p.med*2.5,100)}%;background:${p.color};height:100%"></div>
+      </div>
+      <div class="mt-2 font-mono text-[10px] uppercase tracking-widest ${above?"text-[#66FF00]":"text-[#CC0000]"}">${above?"▲ NAD PRAHOM":"▼ POD PRAHOM"}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("median-slider").addEventListener("input", e => {
+  medianN = +e.target.value;
+  document.getElementById("median-n").textContent = medianN;
+  renderMedian();
+});
+
+// ── SEATS: HAGENBACH-BISCHOFF ──────────────────────────────────
+function allocateSeats(poll) {
+  const cands = PARTIES.map(p=>({...p,pct:poll[p.key]||0})).filter(p=>p.pct>=5);
+  if(!cands.length) return [];
+  const sum = cands.reduce((s,p)=>s+p.pct,0), q = sum/(TOTAL+1);
+  cands.forEach(p=>{p.seats=Math.floor(p.pct/q);p.rem=p.pct/q-p.seats;});
+  let r = TOTAL - cands.reduce((s,p)=>s+p.seats,0);
+  [...cands].sort((a,b)=>b.rem-a.rem).slice(0,r).forEach(p=>p.seats++);
+  return cands.sort((a,b)=>b.seats-a.seats);
+}
+
+function initZone() { zoneMap = {}; currentSeats.forEach(p=>{zoneMap[p.key]=p.defaultZone;}); }
+
+// ── HEMICYCLE ──────────────────────────────────────────────────
+function drawHemicycle() {
+  const svg = document.getElementById("hemicycle-svg"); svg.innerHTML = "";
+  const W=700,H=320,cx=W/2,cy=H-28,rows=5,rMin=65,rMax=245,MARG=0.07;
+  const total = currentSeats.reduce((s,p)=>s+p.seats,0); if(!total) return;
+  const radii=[], spR=[];
+  for(let i=0;i<rows;i++) radii.push(rMin+(rMax-rMin)*(i/(rows-1)));
+  const sumR = radii.reduce((s,r)=>s+r,0);
+  radii.forEach(r=>spR.push(Math.round(total*r/sumR)));
+  let diff = total - spR.reduce((s,v)=>s+v,0);
+  for(let i=0;diff!==0;i=(i+1)%rows){spR[i]+=diff>0?1:-1;diff+=diff>0?-1:1;}
+  const dotR = Math.max(3.2,Math.min(6.5,(Math.PI*rMin/(spR[0]+1))/2.8/2));
+  let all=[];
+  for(let ri=0;ri<rows;ri++){
+    const r=radii[ri],n=spR[ri];
+    for(let si=0;si<n;si++){
+      const a=Math.PI-MARG-(si/(n-1||1))*(Math.PI-2*MARG);
+      all.push({x:cx+r*Math.cos(a),y:cy-r*Math.sin(a)});
+    }
+  }
+  all.sort((a,b)=>a.x-b.x);
+  const oC=[],nC=[],gC=[];
+  currentSeats.forEach(p=>{
+    const z=zoneMap[p.key]||'neutral';
+    const arr=z==='gov'?gC:z==='opp'?oC:nC;
+    for(let i=0;i<p.seats;i++) arr.push(p.color);
+  });
+  const cm=[...oC,...nC,...gC];
+  for(let ri=0;ri<rows;ri++){
+    const r=radii[ri];
+    const arc=document.createElementNS("http://www.w3.org/2000/svg","path");
+    arc.setAttribute("d",`M${cx+r*Math.cos(Math.PI-MARG)} ${cy-r*Math.sin(Math.PI-MARG)} A${r} ${r} 0 0 1 ${cx+r*Math.cos(MARG)} ${cy-r*Math.sin(MARG)}`);
+    arc.setAttribute("fill","none");arc.setAttribute("stroke","rgba(66,71,83,0.3)");arc.setAttribute("stroke-width","1");
+    svg.appendChild(arc);
+  }
+  all.forEach((pos,i)=>{
+    const c=document.createElementNS("http://www.w3.org/2000/svg","rect");
+    const s=dotR*1.6;
+    c.setAttribute("x",(pos.x-s/2).toFixed(1));c.setAttribute("y",(pos.y-s/2).toFixed(1));
+    c.setAttribute("width",s);c.setAttribute("height",s);
+    c.setAttribute("fill",cm[i]||"#353534");
+    svg.appendChild(c);
+  });
+  const ln=document.createElementNS("http://www.w3.org/2000/svg","line");
+  ln.setAttribute("x1",cx);ln.setAttribute("y1",cy-rMin+5);ln.setAttribute("x2",cx);ln.setAttribute("y2",cy-rMax-8);
+  ln.setAttribute("stroke","rgba(255,255,255,0.3)");ln.setAttribute("stroke-width","2");ln.setAttribute("stroke-dasharray","6,4");
+  svg.appendChild(ln);
+  const lbl=document.createElementNS("http://www.w3.org/2000/svg","text");
+  lbl.setAttribute("x",cx+8);lbl.setAttribute("y",cy-rMax-10);
+  lbl.setAttribute("fill","rgba(255,255,255,0.4)");lbl.setAttribute("font-size","10");lbl.setAttribute("font-family","JetBrains Mono, monospace");lbl.setAttribute("font-weight","700");
+  lbl.textContent="76 MAJORITA"; svg.appendChild(lbl);
+}
+
+function renderBars() {
+  const max = currentSeats[0]?.seats||1;
+  const el = document.getElementById("seat-bars"); el.innerHTML = "";
+  currentSeats.forEach(p=>{
+    const row = document.createElement("div"); row.className = "flex items-center gap-3 md:gap-4";
+    row.innerHTML = `
+      <div class="w-20 md:w-24 font-mono font-bold text-xs uppercase text-right shrink-0" style="color:${p.color}">${p.label}</div>
+      <div class="flex-1 bg-surface-container-lowest border-2 border-outline-variant h-7 md:h-8 relative overflow-hidden">
+        <div class="absolute inset-y-0 left-0 transition-none" style="width:${(p.seats/max*100).toFixed(1)}%;background:${p.color}20;border-right:2px solid ${p.color}"></div>
+        <div class="absolute right-3 inset-y-0 flex items-center font-mono font-bold text-sm text-on-surface">${p.seats}</div>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+
+
+function updateMajorityInfo() {
+  const gS = currentSeats.filter(p=>p.defaultZone==='gov').reduce((s,p)=>s+p.seats,0);
+  const oS = currentSeats.filter(p=>p.defaultZone==='opp').reduce((s,p)=>s+p.seats,0);
+  document.getElementById("majority-info").innerHTML = `
+    <span class="font-mono text-xs text-outline">Vládna: <strong class="text-[#CC0000]">${gS}</strong></span>
+    <span class="font-mono text-xs text-outline">Opozícia: <strong style="color:#acc7ff">${oS}</strong></span>
+    <span class="font-mono text-xs text-outline">Väčšina: <strong class="text-white">76</strong></span>
+    <span class="font-mono text-xs font-bold ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?"✓ VÄČŠINA":"✗ BEZ VÄČŠINY"}</span>`;
+}
+
+// ── COALITION BUILDER ──────────────────────────────────────────
+function buildChips() {
+  ['gov','neutral','opp'].forEach(zone=>{
+    const el = document.getElementById(`chips-${zone}`); el.innerHTML = "";
+    const inZone = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')===zone);
+    if(zone==='neutral' && !inZone.length){
+      el.innerHTML = `<div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">Sem preneste strany</div>`;
+      return;
+    }
+    inZone.forEach(p=>{
+      const chip = document.createElement("div");
+      chip.className = "pchip"; chip.dataset.key = p.key; chip.draggable = true;
+      chip.style.cssText = `color:${p.color};border-color:${p.color};background:${p.color}22`;
+      chip.innerHTML = `${p.label} <span style="opacity:.6;font-size:10px">${p.seats}</span>`;
+      chip.addEventListener("dragstart",()=>{dragKey=p.key;setTimeout(()=>chip.classList.add("dragging"),0);});
+      chip.addEventListener("dragend",()=>{dragKey=null;chip.classList.remove("dragging");});
+      el.appendChild(chip);
+    });
+  });
+  updateCoalitionTotals();
+}
+
+function onDragOver(e){e.preventDefault();e.currentTarget.classList.add("drag-over");}
+function onDragLeave(e){e.currentTarget.classList.remove("drag-over");}
+function onDrop(e,zone){
+  e.preventDefault();e.currentTarget.classList.remove("drag-over");
+  if(!dragKey) return;
+  zoneMap[dragKey]=zone; buildChips(); drawHemicycle();
+}
+
+function updateCoalitionTotals() {
+  const gS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
+  const oS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='opp').reduce((s,p)=>s+p.seats,0);
+  const nS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='neutral').reduce((s,p)=>s+p.seats,0);
+  document.getElementById("big-gov").textContent = String(gS).padStart(2,"0");
+  document.getElementById("big-opp").textContent = String(oS).padStart(2,"0");
+  document.getElementById("big-neutral").textContent = String(nS).padStart(2,"0");
+  document.getElementById("gov-num").textContent = gS;
+  document.getElementById("opp-num").textContent = oS;
+  document.getElementById("gov-bar").style.width = Math.min(gS/TOTAL*100,100)+"%";
+  document.getElementById("opp-bar").style.width = Math.min(oS/TOTAL*100,100)+"%";
+  document.getElementById("gov-bar").style.background = gS>=MAJ?"#66FF00":"#CC0000";
+  document.getElementById("opp-bar").style.background = oS>=MAJ?"#66FF00":"#acc7ff";
+  document.getElementById("gov-status").textContent = gS>=MAJ?"✓ MÁ VÄČŠINU":"✗ CHÝBA "+(MAJ-gS)+" KRESIEL";
+  document.getElementById("gov-status").style.color = gS>=MAJ?"#66FF00":"#CC0000";
+  document.getElementById("opp-status").textContent = oS>=MAJ?"✓ MÁ VÄČŠINU":"✗ CHÝBA "+(MAJ-oS)+" KRESIEL";
+  document.getElementById("opp-status").style.color = oS>=MAJ?"#66FF00":"#acc7ff";
+}
+
+function resetCoalitions() { initZone(); buildChips(); drawHemicycle(); }
+
+// ── POLLS TABLE ────────────────────────────────────────────────
+function renderPollsTable() {
+  const data = getFiltered().slice(0, 20);
+  const tbody = document.getElementById("polls-tbody");
+  tbody.innerHTML = "";
+  data.forEach((poll, i) => {
+    const tr = document.createElement("tr");
+    tr.className = `border-b border-outline-variant ${i%2===0?"bg-surface-container-low":"bg-surface"} hover:bg-surface-container-high transition-none`;
+    tr.innerHTML = `
+      <td class="py-3 px-4 font-mono font-bold text-sm whitespace-nowrap">${poll.firm}</td>
+      <td class="py-3 px-4 font-mono text-xs text-outline whitespace-nowrap">${poll.dateStr}</td>
+      ${["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem","KDH"].map(k => {
+        const v = poll[k];
+        if(v==null) return `<td class="py-3 px-4 font-mono text-xs text-right text-outline/30">–</td>`;
+        const p = PARTIES.find(x=>x.key===k);
+        const hi = v >= 10;
+        return `<td class="py-3 px-4 font-mono text-xs text-right font-${hi?"bold":"normal"}" style="color:${p?.color||'#8c909e'}">${v.toFixed(1)}%</td>`;
+      }).join("")}`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── SEATS RENDER ───────────────────────────────────────────────
+function renderCoalitionSummary() {
+  const el = document.getElementById("coalition-summary"); el.innerHTML = "";
+  const gS = currentSeats.filter(p=>p.defaultZone==='gov').reduce((s,p)=>s+p.seats,0);
+  const oS = currentSeats.filter(p=>p.defaultZone==='opp').reduce((s,p)=>s+p.seats,0);
+  [{label:"Smer + Hlas + SNS",seats:gS,color:"#CC0000"},{label:"Opozícia",seats:oS,color:"#acc7ff"}]
+  .forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "border-2 border-outline p-4 flex justify-between items-center";
+    div.innerHTML = `<span class="font-mono text-xs uppercase tracking-wider text-outline">${item.label}</span><span class="font-mono font-black text-2xl" style="color:${item.color}">${item.seats}</span>`;
+    el.appendChild(div);
+  });
+  const maj = document.createElement("div");
+  maj.className = `border-2 p-4 mt-2 ${gS>=76?"border-[#66FF00] bg-[#66FF00]/10":"border-[#CC0000] bg-[#CC0000]/10"}`;
+  maj.innerHTML = `<span class="font-mono font-bold text-xs uppercase tracking-wider ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?"✓ VLÁDNA KOALÍCIA MÁ VÄČŠINU":"✗ VLÁDNA KOALÍCIA NEMÁ VÄČŠINU — CHÝBA "+(76-gS)}</span>`;
+  el.appendChild(maj);
+}
+
+function renderSeats(idx) {
+  currentSeats = allocateSeats(POLLS[idx]);
+  initZone(); drawHemicycle(); renderBars(); buildChips(); updateMajorityInfo(); renderCoalitionSummary();
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+async function init() {
+  document.getElementById("hero-last-poll").textContent = "NAČÍTAVAM...";
+  try {
+    const res = await fetch(`${API}/polls`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    POLLS = (await res.json()).map(mapPoll);
+
+    const latest = POLLS[0];
+    document.getElementById("last-poll-date").textContent = latest.firm + " · " + latest.dateStr;
+    document.getElementById("hero-last-poll").textContent = latest.firm + " — " + latest.dateStr;
+
+    const sel = document.getElementById("poll-select");
+    sel.innerHTML = "";
+    POLLS.forEach((p, i) => {
+      const o = document.createElement("option");
+      o.value = i;
+      o.textContent = `${p.firm} · ${p.dateStr}`;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", e => renderSeats(+e.target.value));
+
+    renderPills();
+    setRange(6);
+    renderMedian();
+    renderPollsTable();
+    renderSeats(0);
+  } catch {
+    document.getElementById("hero-last-poll").innerHTML =
+      `<span style="color:#CC0000">CHYBA: Backend nedostupný — spustite server</span>`;
+    document.getElementById("hemicycle-svg").innerHTML =
+      `<text x="350" y="160" text-anchor="middle" fill="#CC0000" font-size="11"
+        font-family="JetBrains Mono,monospace" font-weight="700">
+        CHYBA: Backend nedostupný — spustite server
+      </text>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="dark" lang="sk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VOLL.BY | METODOLÓGIA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      "surface-container-lowest":"#0e0e0e","surface-container-low":"#1c1b1b",
+      "surface-container":"#201f1f","surface-container-high":"#2a2a2a",
+      "surface-container-highest":"#353534","surface-variant":"#353534",
+      "surface":"#131313","background":"#131313",
+      "on-surface":"#e5e2e1","on-surface-variant":"#c2c6d5",
+      "outline":"#8c909e","outline-variant":"#424753",
+      "primary":"#acc7ff","primary-container":"#508ff8",
+      "on-primary":"#002f68","error":"#ffb4ab",
+    },
+    fontFamily: {"headline":["Space Grotesk"],"body":["Space Grotesk"],"mono":["JetBrains Mono"]},
+    borderRadius: {"DEFAULT":"0px","lg":"0px","xl":"0px","2xl":"0px","full":"0px"},
+  }}
+}
+</script>
+<style>
+* { border-radius: 0 !important; }
+body {
+  background-color: #131313;
+  background-image: radial-gradient(circle at 2px 2px, #2a2a2a 1px, transparent 0);
+  background-size: 32px 32px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24 }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0e0e0e; }
+::-webkit-scrollbar-thumb { background: #424753; border: 2px solid #0e0e0e; }
+#mobile-nav { display: none; }
+#mobile-nav.open { display: flex; }
+</style>
+</head>
+<body class="text-on-surface min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-10">
+      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY</a>
+      <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
+        <a href="index.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Prehľad</a>
+        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Model</a>
+      </nav>
+    </div>
+    <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
+      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+    </button>
+  </div>
+  <!-- Mobile nav -->
+  <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Prehľad</a>
+    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Model</a>
+  </div>
+</header>
+
+<main class="max-w-screen-2xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-0">
+
+  <!-- HERO -->
+  <section class="border-b-2 border-outline pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
+    <div>
+      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Dokumentácia predikčného modelu</span>
+      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none">METODOLÓGIA</h1>
+    </div>
+    <div class="text-right">
+      <p class="font-mono text-sm text-outline max-w-xs leading-relaxed">Ako funguje predikčný model voll.by</p>
+    </div>
+  </section>
+
+  <!-- SEKCIA 1 — ZDROJE DÁT -->
+  <section class="border-b-2 border-outline">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
+        <div>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">01</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">ZDROJE<br/>DÁT</h2>
+        </div>
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest">
+          Ipsos · AKO · Focus · NMS
+        </div>
+      </div>
+      <div class="lg:col-span-9 p-8 space-y-4">
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          voll.by agreguje verejne dostupné prieskumy volebných preferencií zo stránky Wikipedia – Opinion polling for the next Slovak parliamentary election. Dáta zahŕňajú prieskumy agentúr Ipsos, AKO, Focus a NMS od roku 2023 po súčasnosť.
+        </p>
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Prieskumy sú aktualizované manuálne po zverejnení nových výsledkov. Každý prieskum obsahuje: agentúru, klienta, dátum zberu dát a percentuálne preferencie pre sledované strany.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
+          <div class="border-2 border-outline p-4 bg-surface-container-low">
+            <div class="font-mono text-[10px] text-outline uppercase mb-1">AGENCY_01</div>
+            <div class="font-black text-xl uppercase">Ipsos</div>
+          </div>
+          <div class="border-2 border-outline p-4 bg-surface-container-low">
+            <div class="font-mono text-[10px] text-outline uppercase mb-1">AGENCY_02</div>
+            <div class="font-black text-xl uppercase">AKO</div>
+          </div>
+          <div class="border-2 border-outline p-4 bg-surface-container-low">
+            <div class="font-mono text-[10px] text-outline uppercase mb-1">AGENCY_03</div>
+            <div class="font-black text-xl uppercase">Focus</div>
+          </div>
+          <div class="border-2 border-outline p-4 bg-surface-container-low">
+            <div class="font-mono text-[10px] text-outline uppercase mb-1">AGENCY_04</div>
+            <div class="font-black text-xl uppercase">NMS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKCIA 2 — HOUSE EFFECT -->
+  <section class="border-b-2 border-outline">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
+        <div>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">02</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">HOUSE<br/>EFFECT</h2>
+        </div>
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed">
+          Korekcia systematického biasu agentúr
+        </div>
+      </div>
+      <div class="lg:col-span-9 p-8 space-y-6">
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Rôzne agentúry systematicky nadhodnocujú alebo podhodnocujú určité strany. Model aplikuje korekčné koeficienty aby znížil tento bias:
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full font-mono text-sm border-collapse border-2 border-outline">
+            <thead>
+              <tr class="bg-surface-container-low border-b-2 border-outline">
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Agentúra</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Koeficient</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
+                <td class="py-4 px-5 font-bold">Ipsos</td>
+                <td class="py-4 px-5 text-[#acc7ff] font-bold">1.00</td>
+                <td class="py-4 px-5 text-outline">referenčná agentúra</td>
+              </tr>
+              <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
+                <td class="py-4 px-5 font-bold">AKO</td>
+                <td class="py-4 px-5 text-[#acc7ff] font-bold">0.95</td>
+                <td class="py-4 px-5 text-outline">mierne nadhodnocuje</td>
+              </tr>
+              <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
+                <td class="py-4 px-5 font-bold">NMS</td>
+                <td class="py-4 px-5 text-[#acc7ff] font-bold">0.92</td>
+                <td class="py-4 px-5 text-outline">konzervatívnejšie odhady</td>
+              </tr>
+              <tr class="hover:bg-surface-container-high transition-none">
+                <td class="py-4 px-5 font-bold">Focus</td>
+                <td class="py-4 px-5 text-[#acc7ff] font-bold">0.90</td>
+                <td class="py-4 px-5 text-outline">najväčší korekčný faktor</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="font-mono text-xs text-outline">
+          Koeficienty sú experimentálne a budú kalibrované po voľbách.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKCIA 3 — EXPONENCIÁLNY DECAY -->
+  <section class="border-b-2 border-outline">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
+        <div>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">03</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">EXPONEN&shy;CIÁLNY<br/>DECAY</h2>
+        </div>
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed">
+          Polčas 21 dní
+        </div>
+      </div>
+      <div class="lg:col-span-9 p-8 space-y-6">
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Novšie prieskumy majú vyššiu váhu. Model používa exponenciálny decay s polčasom 21 dní — prieskum starý 21 dní má polovičnú váhu oproti dnešnému.
+        </p>
+        <div class="border-2 border-[#acc7ff] p-6 bg-surface-container-lowest">
+          <div class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest mb-4">Formula</div>
+          <div class="font-mono text-xl md:text-2xl font-bold text-[#e5e2e1] space-y-2">
+            <div>váha = e<sup class="text-sm text-[#acc7ff]">(−λ × dni)</sup></div>
+            <div class="text-outline text-sm mt-3">kde λ = ln(2) / 21</div>
+          </div>
+        </div>
+        <p class="font-mono text-xs text-outline">
+          Prieskumy staršie ako 90 dní sú automaticky vylúčené z agregátu.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKCIA 4 — MONTE CARLO -->
+  <section class="border-b-2 border-outline">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
+        <div>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">04</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">MONTE<br/>CARLO</h2>
+        </div>
+        <div class="border-2 border-outline p-4 bg-surface-container-low mt-8">
+          <div class="font-mono font-black text-4xl text-[#acc7ff]">10K</div>
+          <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Simulácií</div>
+        </div>
+      </div>
+      <div class="lg:col-span-9 p-8 space-y-4">
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Predikčný model spúšťa 10 000 simulácií volebného výsledku. V každej simulácii je vážený agregát narušený náhodným šumom (Gaussovo rozdelenie, σ = 2.5 %) ktorý modeluje prieskumnú nepresnosť a volatilitu voličov.
+        </p>
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Pre každú simuláciu sa aplikuje 5% parlamentný prah a Hagenbach-Bischoff metóda prepočtu na 150 kresiel. Výsledkom je rozdelenie pravdepodobnosti pre počet kresiel každej strany a pravdepodobnosť koaličných väčšín.
+        </p>
+        <p class="font-mono text-sm text-on-surface leading-relaxed">
+          Simulácie bežia priamo v prehliadači v JavaScripte.
+        </p>
+        <div class="grid grid-cols-3 gap-3 pt-2">
+          <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
+            <div class="font-mono font-bold text-2xl text-[#acc7ff]">σ 2.5%</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Gaussov šum</div>
+          </div>
+          <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
+            <div class="font-mono font-bold text-2xl text-[#acc7ff]">5%</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Parlamentný prah</div>
+          </div>
+          <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
+            <div class="font-mono font-bold text-2xl text-[#acc7ff]">150</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Kresiel v parlamente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEKCIA 5 — OBMEDZENIA -->
+  <section class="border-b-2 border-[#acc7ff] border-2">
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+      <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-[#acc7ff] p-8 flex flex-col justify-between bg-surface-container-lowest">
+        <div>
+          <span class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest block mb-3">05</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none text-[#acc7ff]">OBMEDZE&shy;NIA<br/>&amp;<br/>DISCLAIMER</h2>
+        </div>
+        <div class="mt-8 font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest leading-relaxed">
+          Hobby projekt · nie profesionálna predpoveď
+        </div>
+      </div>
+      <div class="lg:col-span-9 p-8 bg-surface-container-lowest">
+        <p class="font-mono text-sm text-on-surface leading-relaxed mb-6">
+          voll.by je hobby projekt a nie profesionálna predpoveď. Model má tieto obmedzenia:
+        </p>
+        <ul class="space-y-4 font-mono text-sm">
+          <li class="flex gap-4 items-start">
+            <span class="text-[#acc7ff] font-bold shrink-0">—</span>
+            <span class="text-outline leading-relaxed">Prieskumy nezachytávajú posledné dni kampane</span>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="text-[#acc7ff] font-bold shrink-0">—</span>
+            <span class="text-outline leading-relaxed">House effect koeficienty sú odhadnuté, nie empiricky kalibrované</span>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="text-[#acc7ff] font-bold shrink-0">—</span>
+            <span class="text-outline leading-relaxed">Model neuvažuje strategické hlasovanie ani transfer hlasov pri stranách pod prahom</span>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="text-[#acc7ff] font-bold shrink-0">—</span>
+            <span class="text-outline leading-relaxed">Vzorka prieskumov (~1000 respondentov) má inherentnú štatistickú chybu ±3%</span>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="text-[#acc7ff] font-bold shrink-0">—</span>
+            <span class="text-outline leading-relaxed">Výsledky sú citlivé na aktuálnosť a počet dostupných prieskumov</span>
+          </li>
+        </ul>
+        <div class="mt-8 border-t-2 border-outline-variant pt-6">
+          <p class="font-mono text-xs text-outline uppercase tracking-widest">
+            Tento model neslúži ako návod na hlasovanie.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPÄŤ -->
+  <section class="py-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff] border-2 border-[#acc7ff] px-6 py-3 hover:bg-[#acc7ff] hover:text-[#131313] transition-none">
+      ← Späť na dashboard
+    </a>
+    <p class="font-mono text-[10px] text-outline uppercase tracking-widest">
+      voll.by — hobby projekt | dáta: Wikipedia CC BY-SA
+    </p>
+  </section>
+
+</main>
+
+<footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e]">
+  <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
+    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2">DATA JOURNALISM</span></div>
+    <div class="flex flex-wrap justify-center gap-6">
+      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#acc7ff]">Metodológia</a>
+      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Zdroj dát</a>
+    </div>
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 VOLL.BY</div>
+  </div>
+</footer>
+
+<script>
+function toggleMobileNav() {
+  document.getElementById("mobile-nav").classList.toggle("open");
+}
+</script>
+</body>
+</html>
