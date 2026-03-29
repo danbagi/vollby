@@ -70,14 +70,7 @@ body {
       </nav>
     </div>
     <div class="flex items-center gap-4">
-      <select id="agency-filter" class="hidden md:block bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer">
-        <option value="all">Všetky agentúry</option>
-        <option value="AKO">AKO</option>
-        <option value="Focus">Focus</option>
-        <option value="Ipsos">Ipsos</option>
-        <option value="NMS">NMS</option>
-      </select>
-      <span class="font-mono text-[10px] text-[#8c909e] uppercase tracking-widest hidden sm:block" id="last-poll-date">–</span>
+      <a href="https://buymeacoffee.com/voll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
       <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
         <span class="material-symbols-outlined" style="font-size:20px">menu</span>
       </button>
@@ -87,15 +80,6 @@ body {
   <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
     <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]">Prehľad</a>
     <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Model</a>
-    <div class="pt-3 border-t border-outline-variant">
-      <select id="agency-filter-mobile" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer">
-        <option value="all">Všetky agentúry</option>
-        <option value="AKO">AKO</option>
-        <option value="Focus">Focus</option>
-        <option value="Ipsos">Ipsos</option>
-        <option value="NMS">NMS</option>
-      </select>
-    </div>
   </div>
 </header>
 
@@ -107,20 +91,31 @@ body {
       <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Vývoj volebných preferencií SR</span>
       <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none">VOLEBNÉ<br/>PREFERENCIE</h1>
     </div>
-    <div class="text-right space-y-1">
+    <div class="text-right">
       <div class="font-mono text-xs uppercase tracking-widest text-outline">Posledný prieskum</div>
       <div class="font-mono text-xl font-bold text-on-surface" id="hero-last-poll">NAČÍTAVAM...</div>
-      <div class="flex gap-2 justify-end flex-wrap" id="time-btns">
-        <button onclick="setRange(6)"  class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
-        <button onclick="setRange(12)" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
-        <button onclick="setRange(99)" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
-      </div>
     </div>
   </section>
 
-  <!-- PARTY FILTER PILLS -->
-  <div class="overflow-x-auto pb-1">
-    <div class="flex gap-0 border-2 border-outline w-max" id="party-pills"></div>
+  <!-- FILTER BAR -->
+  <div class="flex flex-col gap-2" id="time-btns">
+    <div class="flex items-start justify-between gap-4 flex-wrap">
+      <div class="overflow-x-auto pb-1 flex-1 min-w-0">
+        <div class="flex gap-0 border-2 border-outline w-max" id="party-pills"></div>
+      </div>
+      <div class="flex gap-2 flex-wrap justify-end shrink-0">
+        <button onclick="setRange(6)"  data-range="6"  class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
+        <button onclick="setRange(12)" data-range="12" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
+        <button onclick="setRange(99)" data-range="99" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
+      </div>
+    </div>
+    <div class="flex gap-2 flex-wrap justify-end">
+      <button onclick="setAgencyFilter('all')"   data-agency="all"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">Všetky</button>
+      <button onclick="setAgencyFilter('Ipsos')" data-agency="Ipsos" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Ipsos</button>
+      <button onclick="setAgencyFilter('AKO')"   data-agency="AKO"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">AKO</button>
+      <button onclick="setAgencyFilter('Focus')" data-agency="Focus" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Focus</button>
+      <button onclick="setAgencyFilter('NMS')"   data-agency="NMS"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">NMS</button>
+    </div>
   </div>
 
   <!-- SECTION 1: TREND CHART -->
@@ -161,42 +156,27 @@ body {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 border-2 border-outline border-t-0">
-      <!-- LEFT: HEMICYCLE + BARS -->
-      <div class="lg:col-span-8 border-b-2 lg:border-b-0 lg:border-r-2 border-outline">
-        <div class="p-4 md:p-8 border-b-2 border-outline">
-          <div class="flex justify-between items-center mb-4 md:mb-6 border-b-2 border-outline-variant pb-4">
-            <h3 class="font-black text-lg uppercase tracking-tight">Rozdelenie pléna</h3>
-            <div class="text-right">
-              <div class="font-mono text-[10px] text-outline uppercase tracking-widest">1 bod = 1 poslanec</div>
-              <div class="font-mono text-3xl md:text-5xl font-black text-on-surface leading-none tabular-nums" id="total-seats-display">150<span class="text-outline text-lg">/150</span></div>
-            </div>
+    <div class="border-2 border-outline border-t-0">
+      <div class="p-4 md:p-8 border-b-2 border-outline">
+        <div class="flex justify-between items-center mb-4 md:mb-6 border-b-2 border-outline-variant pb-4">
+          <h3 class="font-black text-lg uppercase tracking-tight">Rozdelenie pléna</h3>
+          <div class="text-right">
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest">1 bod = 1 poslanec</div>
+            <div class="font-mono text-3xl md:text-5xl font-black text-on-surface leading-none tabular-nums" id="total-seats-display">150<span class="text-outline text-lg">/150</span></div>
           </div>
-          <div class="relative flex justify-center">
-            <svg id="hemicycle-svg" viewBox="0 0 700 320" class="w-full max-w-2xl">
-              <text x="350" y="160" text-anchor="middle" fill="#8c909e" font-size="12"
-                font-family="JetBrains Mono,monospace" font-weight="700" letter-spacing="3">NAČÍTAVAM...</text>
-            </svg>
-          </div>
-          <div class="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-6 justify-center" id="majority-info"></div>
         </div>
-        <div class="p-4 md:p-8">
-          <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6">Distribúcia strán</h3>
-          <div class="space-y-3 md:space-y-4" id="seat-bars"></div>
+        <div class="relative flex justify-center">
+          <svg id="hemicycle-svg" viewBox="0 0 700 320" class="w-full h-[300px] md:h-auto">
+            <text x="350" y="160" text-anchor="middle" fill="#8c909e" font-size="12"
+              font-family="JetBrains Mono,monospace" font-weight="700" letter-spacing="3">NAČÍTAVAM...</text>
+          </svg>
         </div>
+        <div class="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-6 justify-center" id="majority-info"></div>
       </div>
-      <!-- RIGHT: COALITION SUMMARY -->
-      <aside class="lg:col-span-4 flex flex-col">
-        <div class="p-4 md:p-8 border-b-2 border-outline flex-1">
-          <div class="font-mono text-[10px] uppercase text-[#acc7ff] tracking-widest mb-2">Koaličný potenciál</div>
-          <h3 class="font-black text-xl md:text-2xl uppercase leading-tight mb-4 md:mb-6">Aktuálny stav</h3>
-          <div class="space-y-4" id="coalition-summary"></div>
-        </div>
-        <div class="p-4 md:p-8 bg-surface-container-lowest">
-          <div class="font-mono text-[10px] uppercase text-outline tracking-widest mb-3">Metodológia</div>
-          <p class="font-mono text-xs text-on-surface-variant leading-relaxed">Hagenbach-Bischoffova kvóta · 150 kresiel · prah 5%</p>
-        </div>
-      </aside>
+      <div class="p-4 md:p-8">
+        <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6">Distribúcia strán</h3>
+        <div class="space-y-3 md:space-y-4" id="seat-bars"></div>
+      </div>
     </div>
   </section>
 
@@ -268,11 +248,25 @@ body {
   </section>
 
   <!-- SECTION 5: RAW DATA LEDGER -->
-  <section>
-    <div class="flex items-center justify-between border-b-2 border-outline pb-4 mb-0 flex-wrap gap-4">
-      <div class="flex items-center gap-4">
+  <section id="raw-data">
+    <div class="border-b-2 border-outline pb-4 mb-0">
+      <div class="flex items-center gap-4 mb-5">
         <span class="material-symbols-outlined text-[#acc7ff]" style="font-variation-settings:'FILL' 1">analytics</span>
         <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Raw Data Ledger</h2>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="setRange(6)" data-range="6" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
+          <button onclick="setRange(12)" data-range="12" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
+          <button onclick="setRange(99)" data-range="99" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="setAgencyFilter('all')" data-agency="all" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">Všetky</button>
+          <button onclick="setAgencyFilter('Ipsos')" data-agency="Ipsos" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Ipsos</button>
+          <button onclick="setAgencyFilter('AKO')" data-agency="AKO" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">AKO</button>
+          <button onclick="setAgencyFilter('Focus')" data-agency="Focus" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Focus</button>
+          <button onclick="setAgencyFilter('NMS')" data-agency="NMS" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">NMS</button>
+        </div>
       </div>
     </div>
     <div class="overflow-x-auto border-2 border-outline border-t-0">
@@ -289,6 +283,7 @@ body {
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#660033">Hlas</th>
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#6600AA">Dem.</th>
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#003366">KDH</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#546E7A">SNS</th>
           </tr>
         </thead>
         <tbody id="polls-tbody"></tbody>
@@ -359,12 +354,12 @@ function toggleMobileNav() {
 
 function setAgencyFilter(val) {
   agencyFilter = val;
-  document.getElementById("agency-filter").value = val;
-  document.getElementById("agency-filter-mobile").value = val;
+  document.querySelectorAll(".agency-btn").forEach(b => {
+    const on = b.dataset.agency === val;
+    b.className = `agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 transition-none ${on?"border-outline bg-surface-container-highest text-on-surface":"border-outline-variant text-outline hover:border-outline hover:text-on-surface"}`;
+  });
   buildChart(); renderMedian(); renderPollsTable();
 }
-document.getElementById("agency-filter").addEventListener("change", e => setAgencyFilter(e.target.value));
-document.getElementById("agency-filter-mobile").addEventListener("change", e => setAgencyFilter(e.target.value));
 
 // ── PARTY PILLS ────────────────────────────────────────────────
 function renderPills() {
@@ -429,11 +424,11 @@ function buildChart() {
 
 function setRange(m) {
   rangeMonths = m;
-  document.querySelectorAll(".range-btn").forEach((b,i) => {
-    const on = [6,12,99][i] === m;
+  document.querySelectorAll(".range-btn").forEach(b => {
+    const on = +b.dataset.range === m;
     b.className = `range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 transition-none ${on?"border-outline bg-surface-container-highest text-on-surface":"border-outline-variant text-outline hover:border-outline hover:text-on-surface"}`;
   });
-  buildChart();
+  buildChart(); renderMedian(); renderPollsTable();
 }
 
 // ── MEDIAN CARDS ───────────────────────────────────────────────
@@ -444,7 +439,7 @@ function renderMedian() {
   grid.innerHTML = "";
   const visible = PARTIES
     .map(p => ({...p, med: median(recent.map(r=>r[p.key]).filter(v=>v!=null))}))
-    .filter(p => p.med != null && p.med >= 3)
+    .filter(p => p.med != null && p.med > 0)
     .sort((a,b) => b.med - a.med);
 
   visible.forEach((p, i) => {
@@ -468,7 +463,7 @@ function renderMedian() {
             : `<span class="font-mono text-xs bg-surface-container px-2 py-0.5 text-outline">0.0%</span>`
           : ""}
       </div>
-      <div class="font-black text-5xl md:text-7xl leading-none tracking-tighter">${p.med.toFixed(1)}<span class="text-outline text-xl md:text-2xl">%</span></div>
+      <div class="font-black text-5xl md:text-7xl leading-none tracking-tighter">${p.med.toFixed(1)}<span class="text-outline text-xl md:text-2xl" style="margin-left:3px">%</span></div>
       <div class="mt-3 h-1 bg-surface-container-lowest">
         <div style="width:${Math.min(p.med*2.5,100)}%;background:${p.color};height:100%"></div>
       </div>
@@ -517,13 +512,16 @@ function drawHemicycle() {
     }
   }
   all.sort((a,b)=>a.x-b.x);
+  // Dots grouped by zone with opacity
   const oC=[],nC=[],gC=[];
   currentSeats.forEach(p=>{
     const z=zoneMap[p.key]||'neutral';
+    const op=z==='gov'?1.0:z==='opp'?0.25:0.5;
     const arr=z==='gov'?gC:z==='opp'?oC:nC;
-    for(let i=0;i<p.seats;i++) arr.push(p.color);
+    for(let i=0;i<p.seats;i++) arr.push({color:p.color,op});
   });
   const cm=[...oC,...nC,...gC];
+  // Arc guide lines
   for(let ri=0;ri<rows;ri++){
     const r=radii[ri];
     const arc=document.createElementNS("http://www.w3.org/2000/svg","path");
@@ -531,14 +529,40 @@ function drawHemicycle() {
     arc.setAttribute("fill","none");arc.setAttribute("stroke","rgba(66,71,83,0.3)");arc.setAttribute("stroke-width","1");
     svg.appendChild(arc);
   }
+  // Coalition arc highlight (rendered before dots so dots appear on top)
+  const gS=currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
+  if(gS>0){
+    const arcColor=gS>=MAJ?"#66FF00":"#CC0000";
+    const arcR=rMax+40;
+    const aStart=Math.PI-MARG, aEnd=aStart-(gS/TOTAL)*(Math.PI-2*MARG);
+    const large=(aStart-aEnd)>Math.PI?1:0;
+    const x1=(cx+arcR*Math.cos(aStart)).toFixed(1),y1=(cy-arcR*Math.sin(aStart)).toFixed(1);
+    const x2=(cx+arcR*Math.cos(aEnd)).toFixed(1),y2=(cy-arcR*Math.sin(aEnd)).toFixed(1);
+    const arcEl=document.createElementNS("http://www.w3.org/2000/svg","path");
+    arcEl.setAttribute("d",`M${x1} ${y1} A${arcR} ${arcR} 0 ${large} 1 ${x2} ${y2}`);
+    arcEl.setAttribute("fill","none");arcEl.setAttribute("stroke",arcColor);
+    arcEl.setAttribute("stroke-width","5");arcEl.setAttribute("opacity","0.75");
+    svg.appendChild(arcEl);
+    const midA=(aStart+aEnd)/2;
+    const lx=(cx+(arcR+14)*Math.cos(midA)).toFixed(1),ly=(cy-(arcR+14)*Math.sin(midA)).toFixed(1);
+    const lbArc=document.createElementNS("http://www.w3.org/2000/svg","text");
+    lbArc.setAttribute("x",lx);lbArc.setAttribute("y",ly);
+    lbArc.setAttribute("fill",arcColor);lbArc.setAttribute("font-size","10");
+    lbArc.setAttribute("font-family","JetBrains Mono,monospace");lbArc.setAttribute("font-weight","700");
+    lbArc.setAttribute("text-anchor","middle");lbArc.textContent=gS;
+    svg.appendChild(lbArc);
+  }
+  // Dots (rendered after coalition arc so they appear on top)
   all.forEach((pos,i)=>{
     const c=document.createElementNS("http://www.w3.org/2000/svg","rect");
     const s=dotR*1.6;
     c.setAttribute("x",(pos.x-s/2).toFixed(1));c.setAttribute("y",(pos.y-s/2).toFixed(1));
     c.setAttribute("width",s);c.setAttribute("height",s);
-    c.setAttribute("fill",cm[i]||"#353534");
+    const dot=cm[i]||{color:"#353534",op:1.0};
+    c.setAttribute("fill",dot.color);c.setAttribute("opacity",dot.op);
     svg.appendChild(c);
   });
+  // Majority line
   const ln=document.createElementNS("http://www.w3.org/2000/svg","line");
   ln.setAttribute("x1",cx);ln.setAttribute("y1",cy-rMin+5);ln.setAttribute("x2",cx);ln.setAttribute("y2",cy-rMax-8);
   ln.setAttribute("stroke","rgba(255,255,255,0.3)");ln.setAttribute("stroke-width","2");ln.setAttribute("stroke-dasharray","6,4");
@@ -566,8 +590,8 @@ function renderBars() {
 
 
 function updateMajorityInfo() {
-  const gS = currentSeats.filter(p=>p.defaultZone==='gov').reduce((s,p)=>s+p.seats,0);
-  const oS = currentSeats.filter(p=>p.defaultZone==='opp').reduce((s,p)=>s+p.seats,0);
+  const gS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
+  const oS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='opp').reduce((s,p)=>s+p.seats,0);
   document.getElementById("majority-info").innerHTML = `
     <span class="font-mono text-xs text-outline">Vládna: <strong class="text-[#CC0000]">${gS}</strong></span>
     <span class="font-mono text-xs text-outline">Opozícia: <strong style="color:#acc7ff">${oS}</strong></span>
@@ -602,7 +626,7 @@ function onDragLeave(e){e.currentTarget.classList.remove("drag-over");}
 function onDrop(e,zone){
   e.preventDefault();e.currentTarget.classList.remove("drag-over");
   if(!dragKey) return;
-  zoneMap[dragKey]=zone; buildChips(); drawHemicycle();
+  zoneMap[dragKey]=zone; buildChips(); drawHemicycle(); updateMajorityInfo();
 }
 
 function updateCoalitionTotals() {
@@ -628,7 +652,9 @@ function resetCoalitions() { initZone(); buildChips(); drawHemicycle(); }
 
 // ── POLLS TABLE ────────────────────────────────────────────────
 function renderPollsTable() {
-  const data = getFiltered().slice(0, 20);
+  const cutoff = new Date();
+  if(rangeMonths !== 99) cutoff.setMonth(cutoff.getMonth() - rangeMonths);
+  const data = getFiltered().filter(p => rangeMonths === 99 || p.date >= cutoff);
   const tbody = document.getElementById("polls-tbody");
   tbody.innerHTML = "";
   data.forEach((poll, i) => {
@@ -637,7 +663,7 @@ function renderPollsTable() {
     tr.innerHTML = `
       <td class="py-3 px-4 font-mono font-bold text-sm whitespace-nowrap">${poll.firm}</td>
       <td class="py-3 px-4 font-mono text-xs text-outline whitespace-nowrap">${poll.dateStr}</td>
-      ${["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem","KDH"].map(k => {
+      ${["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem","KDH","SNS"].map(k => {
         const v = poll[k];
         if(v==null) return `<td class="py-3 px-4 font-mono text-xs text-right text-outline/30">–</td>`;
         const p = PARTIES.find(x=>x.key===k);
@@ -649,26 +675,9 @@ function renderPollsTable() {
 }
 
 // ── SEATS RENDER ───────────────────────────────────────────────
-function renderCoalitionSummary() {
-  const el = document.getElementById("coalition-summary"); el.innerHTML = "";
-  const gS = currentSeats.filter(p=>p.defaultZone==='gov').reduce((s,p)=>s+p.seats,0);
-  const oS = currentSeats.filter(p=>p.defaultZone==='opp').reduce((s,p)=>s+p.seats,0);
-  [{label:"Smer + Hlas + SNS",seats:gS,color:"#CC0000"},{label:"Opozícia",seats:oS,color:"#acc7ff"}]
-  .forEach(item=>{
-    const div = document.createElement("div");
-    div.className = "border-2 border-outline p-4 flex justify-between items-center";
-    div.innerHTML = `<span class="font-mono text-xs uppercase tracking-wider text-outline">${item.label}</span><span class="font-mono font-black text-2xl" style="color:${item.color}">${item.seats}</span>`;
-    el.appendChild(div);
-  });
-  const maj = document.createElement("div");
-  maj.className = `border-2 p-4 mt-2 ${gS>=76?"border-[#66FF00] bg-[#66FF00]/10":"border-[#CC0000] bg-[#CC0000]/10"}`;
-  maj.innerHTML = `<span class="font-mono font-bold text-xs uppercase tracking-wider ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?"✓ VLÁDNA KOALÍCIA MÁ VÄČŠINU":"✗ VLÁDNA KOALÍCIA NEMÁ VÄČŠINU — CHÝBA "+(76-gS)}</span>`;
-  el.appendChild(maj);
-}
-
 function renderSeats(idx) {
   currentSeats = allocateSeats(POLLS[idx]);
-  initZone(); drawHemicycle(); renderBars(); buildChips(); updateMajorityInfo(); renderCoalitionSummary();
+  initZone(); drawHemicycle(); renderBars(); buildChips(); updateMajorityInfo();
 }
 
 // ── INIT ───────────────────────────────────────────────────────
@@ -680,7 +689,6 @@ async function init() {
     POLLS = (await res.json()).map(mapPoll);
 
     const latest = POLLS[0];
-    document.getElementById("last-poll-date").textContent = latest.firm + " · " + latest.dateStr;
     document.getElementById("hero-last-poll").textContent = latest.firm + " — " + latest.dateStr;
 
     const sel = document.getElementById("poll-select");

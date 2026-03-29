@@ -50,7 +50,7 @@ body {
         <a href="model.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1">Model</a>
       </nav>
     </div>
-    <div class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest" id="last-update">–</div>
+    <a href="https://buymeacoffee.com/voll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
   </div>
 </header>
 
@@ -285,8 +285,6 @@ function renderAll(){
   const agg=computeAggregate();
   simResults=runMC(agg);
   document.getElementById("poll-count-sm").textContent=polls.length;
-  document.getElementById("last-update").textContent=new Date().toLocaleString("sk-SK",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}).toUpperCase();
-
   const gP=parseFloat(simResults.govPct),oP=parseFloat(simResults.oppPct),hP=parseFloat(simResults.hungPct);
   document.getElementById("opp-prob-big").textContent=oP.toFixed(1)+"%";
   const govBar=document.getElementById("prob-gov-bar");
