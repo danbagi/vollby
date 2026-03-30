@@ -37,9 +37,12 @@ body {
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(172,199,255,.3);border-top-color:#acc7ff;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:#0e0e0e;} ::-webkit-scrollbar-thumb{background:#424753;border:2px solid #0e0e0e;}
+.calc-cb{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:2px solid #8c909e;background:#131313;cursor:pointer;flex-shrink:0;position:relative;border-radius:0!important;}
+.calc-cb:checked{background:#acc7ff;border-color:#acc7ff;}
+.calc-cb:checked::after{content:'';position:absolute;left:3px;top:0px;width:5px;height:9px;border:2px solid #131313;border-top:none;border-left:none;transform:rotate(45deg);}
 </style>
 </head>
-<body class="text-on-surface min-h-screen">
+<body class="text-on-surface min-h-screen flex flex-col">
 
 <header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
@@ -54,140 +57,138 @@ body {
   </div>
 </header>
 
-<main class="max-w-screen-2xl mx-auto px-6 py-12 space-y-0">
+<div class="flex flex-col flex-1">
 
   <!-- HERO -->
-  <section class="border-b-2 border-outline pb-10 mb-0 flex flex-col md:flex-row justify-between items-end gap-6">
-    <div>
-      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Volebná predikcia SR 2027</span>
-      <h1 class="font-black text-7xl md:text-9xl uppercase tracking-tighter leading-none">PREDIKČNÝ<br/>MODEL</h1>
-    </div>
-    <div class="flex flex-col items-end gap-3">
-      <div class="flex items-baseline gap-3">
-        <span class="font-mono font-black text-5xl text-[#acc7ff]" id="opp-prob-big">–</span>
-        <div class="text-right">
-          <div class="font-mono text-[10px] uppercase tracking-widest text-outline">Opozícia má väčšinu</div>
-          <div class="font-mono text-[10px] uppercase tracking-widest text-outline">Monte Carlo N=10 000</div>
+  <section class="border-b-2 border-outline">
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-6 py-8 md:py-10 flex flex-col md:flex-row justify-between items-end gap-6">
+      <div>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Volebná predikcia SR 2027</span>
+        <h1 class="font-black text-7xl md:text-9xl uppercase tracking-tighter leading-none">PREDIKČNÝ<br/>MODEL</h1>
+      </div>
+      <div class="flex flex-col items-end gap-3">
+        <div class="flex gap-2 flex-wrap justify-end">
+          <button id="btn-fetch" onclick="fetchFromWiki()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] text-[#acc7ff] hover:bg-[#acc7ff] hover:text-[#131313] transition-none">↻ NAČÍTAŤ Z WIKI</button>
+          <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:border-on-surface hover:text-on-surface transition-none">+ MANUÁLNE</button>
         </div>
+        <div class="font-mono text-[10px] text-outline" id="status-line">NAČÍTAVAM...</div>
       </div>
-      <div class="flex gap-2 flex-wrap justify-end">
-        <button id="btn-fetch" onclick="fetchFromWiki()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] text-[#acc7ff] hover:bg-[#acc7ff] hover:text-[#131313] transition-none">↻ NAČÍTAŤ Z WIKI</button>
-        <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:border-on-surface hover:text-on-surface transition-none">+ MANUÁLNE</button>
-      </div>
-      <div class="font-mono text-[10px] text-outline" id="status-line">NAČÍTAVAM...</div>
     </div>
   </section>
 
   <!-- MANUAL INPUT -->
-  <section id="manual-panel" class="hidden border-b-2 border-outline p-8 bg-surface-container-lowest space-y-6">
-    <h3 class="font-black text-2xl uppercase tracking-tight">Pridať prieskum manuálne</h3>
-    <div class="grid grid-cols-3 gap-4">
-      <div class="space-y-2">
-        <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Agentúra</label>
-        <select id="m-firm" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase px-3 py-2 outline-none">
-          <option>AKO</option><option>Focus</option><option>Ipsos</option><option>NMS</option>
-        </select>
-      </div>
-      <div class="space-y-2">
-        <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Dátum</label>
-        <input type="date" id="m-date" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
-      </div>
-      <div class="space-y-2">
-        <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Popis dátumu</label>
-        <input type="text" id="m-datestr" placeholder="napr. 1–5 Mar 2026" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
-      </div>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="manual-inputs"></div>
-    <div class="flex gap-3">
-      <button onclick="addManualPoll()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] bg-[#acc7ff] text-[#131313] hover:bg-transparent hover:text-[#acc7ff] transition-none">Pridať prieskum</button>
-      <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:text-on-surface transition-none">Zrušiť</button>
-    </div>
-    <div id="manual-error" class="hidden font-mono text-xs text-[#CC0000]"></div>
-  </section>
-
-  <!-- PROBABILITY BAR -->
-  <section class="border-b-2 border-outline">
-    <div class="p-8 border-b-2 border-outline flex justify-between items-center flex-wrap gap-4">
-      <div>
-        <h2 class="font-black text-2xl uppercase tracking-tight">Koaličná pravdepodobnosť</h2>
-        <p class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Šanca na získanie väčšiny 76+ kresiel</p>
-      </div>
-      <div id="prob-legend" class="flex gap-6 font-mono text-xs flex-wrap"></div>
-    </div>
-    <div class="h-16 w-full flex">
-      <div id="prob-gov-bar" class="h-full flex items-center justify-center font-mono font-bold text-sm transition-none" style="width:0%;background:#CC0000;color:#e5e2e1"></div>
-      <div id="prob-hung-bar" class="h-full flex items-center justify-center font-mono text-xs transition-none" style="width:0%;background:#353534;color:#8c909e"></div>
-      <div id="prob-opp-bar" class="h-full flex items-center justify-center font-mono font-bold text-sm transition-none flex-1" style="background:#CC0000;color:#acc7ff"></div>
-    </div>
-    <div class="flex justify-between px-4 py-2 font-mono text-[10px] text-outline uppercase tracking-widest border-t-2 border-outline-variant">
-      <span>0 kresiel</span><span>76 = majorita</span><span>150 kresiel</span>
-    </div>
-  </section>
-
-  <!-- MAIN GRID -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 border-b-2 border-outline">
-
-    <!-- LEFT: FORECAST CARDS -->
-    <aside class="lg:col-span-4 border-r-2 border-outline">
-      <div class="p-6 border-b-2 border-outline">
-        <h2 class="font-black text-xl uppercase tracking-tight border-b-2 border-outline pb-2 mb-2">Strany: Očakávaný zisk</h2>
-        <p class="font-mono text-[10px] text-outline uppercase tracking-widest">Vážený agregát · polož. 21 dní</p>
-      </div>
-      <div id="forecast-sidebar" class="divide-y-2 divide-outline-variant"></div>
-      <div class="p-6 border-t-2 border-outline bg-primary text-[#131313]">
-        <h3 class="font-black text-lg uppercase leading-tight mb-2">MODELOVÁ LOGIKA</h3>
-        <p class="text-xs font-medium leading-relaxed">Simulácia prebieha 10 000-krát. Váha prieskumov klesá exponenciálne — polčas 21 dní. House effect agentúr korigovaný podľa volieb 2023.</p>
-        <div class="flex justify-between mt-4 font-mono text-xs font-bold">
-          <span>Prieskumy: <span id="poll-count-sm">–</span></span>
-          <span>Chyba: ±2.5%</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- RIGHT: HISTOGRAM + SCENARIOS -->
-    <div class="lg:col-span-8 flex flex-col">
-
-      <!-- Coalition scenarios -->
-      <div class="p-8 border-b-2 border-outline">
-        <span class="font-mono text-[10px] uppercase tracking-widest text-outline block mb-4">Koaličné scenáre</span>
-        <ul class="space-y-3" id="coalition-scenarios"></ul>
-      </div>
-
-      <!-- Histogram -->
-      <div class="flex-1 border-b-2 border-outline">
-        <div class="p-6 border-b-2 border-outline flex justify-between items-center flex-wrap gap-3">
-          <h2 class="font-black text-xl uppercase tracking-tight">Distribúcia simulácií</h2>
-          <select id="sim-party-sel" onchange="renderSimChart()" class="bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase px-3 py-2 outline-none">
-            <option value="PS">PS</option><option value="Smer">Smer</option>
-            <option value="Rep">Republika</option><option value="OLaNO">OĽaNO</option>
-            <option value="Hlas">Hlas</option><option value="Dem">Demokrati</option><option value="SaS">SaS</option>
+  <section id="manual-panel" class="hidden border-b-2 border-outline bg-surface-container-lowest">
+    <div class="max-w-screen-2xl mx-auto px-6 py-8 space-y-6">
+      <h3 class="font-black text-2xl uppercase tracking-tight">Pridať prieskum manuálne</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="space-y-2">
+          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Agentúra</label>
+          <select id="m-firm" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase px-3 py-2 outline-none">
+            <option>AKO</option><option>Focus</option><option>Ipsos</option><option>NMS</option>
           </select>
         </div>
-        <div class="p-6 relative h-64"><canvas id="sim-chart"></canvas></div>
-        <div class="px-6 pb-4 font-mono text-[10px] text-outline uppercase tracking-widest border-t-2 border-outline-variant pt-3">10 000 Monte Carlo simulácií · zvislá čiara = stredná hodnota</div>
+        <div class="space-y-2">
+          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Dátum</label>
+          <input type="date" id="m-date" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
+        </div>
+        <div class="space-y-2">
+          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Popis dátumu</label>
+          <input type="text" id="m-datestr" placeholder="napr. 1–5 Mar 2026" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="manual-inputs"></div>
+      <div class="flex gap-3">
+        <button onclick="addManualPoll()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] bg-[#acc7ff] text-[#131313] hover:bg-transparent hover:text-[#acc7ff] transition-none">Pridať prieskum</button>
+        <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:text-on-surface transition-none">Zrušiť</button>
+      </div>
+      <div id="manual-error" class="hidden font-mono text-xs text-[#CC0000]"></div>
+    </div>
+  </section>
+
+  <!-- MAIN: SIDEBAR + CONTENT -->
+  <div class="flex flex-col md:flex-row flex-1 max-w-screen-2xl mx-auto w-full">
+
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-72 lg:w-80 shrink-0 border-b-2 md:border-b-0 md:border-r-2 border-[#8c909e] flex flex-col md:sticky md:top-16 md:h-[calc(100vh-64px)] bg-[#131313]">
+      <div class="p-4 border-b-2 border-outline flex justify-between items-end">
+        <h2 class="font-black text-xl uppercase leading-tight">STRANY:<br/>OČAKÁVANÝ ZISK</h2>
+        <span class="font-mono text-[10px] text-outline mb-1">N=10k · <span id="poll-count-sm">–</span></span>
+      </div>
+      <div id="forecast-sidebar" class="flex-grow overflow-y-auto"></div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <section class="flex-grow flex flex-col min-w-0">
+
+      <!-- DISTRIBÚCIA SIMULÁCIÍ -->
+      <div class="p-6 border-b-2 border-outline">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div>
+            <h2 class="font-black text-2xl md:text-3xl uppercase tracking-tighter">DISTRIBÚCIA SIMULÁCIÍ</h2>
+            <p class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">10 000 Monte Carlo simulácií · zvislá čiara = stredná hodnota</p>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="font-mono text-[10px] text-outline uppercase">Zobraziť:</span>
+            <select id="sim-party-sel" onchange="renderSimChart()" class="bg-[#131313] border-2 border-[#8c909e] text-[#e5e2e1] font-mono font-bold text-xs uppercase px-4 py-2 outline-none focus:border-[#acc7ff]">
+              <option value="PS">PS</option>
+              <option value="Smer">Smer</option>
+              <option value="Rep">Republika</option>
+              <option value="OLaNO">OĽaNO</option>
+              <option value="Hlas">Hlas</option>
+              <option value="Dem">Demokrati</option>
+              <option value="SaS">SaS</option>
+            </select>
+          </div>
+        </div>
+        <div class="relative h-56 md:h-72"><canvas id="sim-chart"></canvas></div>
       </div>
 
-      <!-- Data correction notes -->
-      <div class="grid grid-cols-2">
-        <div class="p-6 border-r-2 border-outline border-b-2 border-outline flex items-start gap-4">
-          <span class="material-symbols-outlined text-[#acc7ff]">analytics</span>
-          <div>
-            <h4 class="font-black uppercase text-sm mb-1">Dátová korekcia</h4>
-            <p class="font-mono text-xs text-outline leading-relaxed">Model penalizuje house effect agentúr na základe ich historickej presnosti na voľbách 2023.</p>
+      <!-- MODELOVÁ LOGIKA -->
+      <div class="px-6 py-4 border-b-2 border-outline flex flex-col md:flex-row justify-between items-center gap-4 bg-[#0e0e0e]">
+        <div class="flex items-center gap-4 overflow-x-auto w-full pb-1 md:pb-0">
+          <span class="font-black text-xs uppercase tracking-wider whitespace-nowrap">MODELOVÁ LOGIKA:</span>
+          <div class="flex gap-4 font-mono text-[11px] text-outline uppercase whitespace-nowrap">
+            <span><span class="text-[#acc7ff]">■</span> 10 000 simulácií</span>
+            <span><span class="text-[#acc7ff]">■</span> váhovanie podľa mesiaca</span>
+            <span><span class="text-[#acc7ff]">■</span> house effect 2023</span>
           </div>
         </div>
-        <div class="p-6 border-b-2 border-outline flex items-start gap-4">
-          <span class="material-symbols-outlined text-[#acc7ff]">history</span>
+        <a href="metodologia.html" class="font-black text-xs uppercase text-[#acc7ff] border-b border-[#acc7ff] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-none flex items-center gap-1 shrink-0">
+          METODOLÓGIA <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+        </a>
+      </div>
+
+      <!-- KOALIČNÁ KALKULAČKA -->
+      <div class="p-6 flex-grow flex flex-col">
+        <h2 class="font-black text-2xl uppercase tracking-tighter mb-2">KOALIČNÁ KALKULAČKA</h2>
+        <p class="font-mono text-[10px] text-outline uppercase tracking-widest mb-6">Zaškrtni strany · prepočet z 10 000 simulácií</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8" id="calc-checkboxes"></div>
+        <div class="border-2 border-[#acc7ff] bg-[#0e0e0e] p-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
-            <h4 class="font-black uppercase text-sm mb-1">Váhovanie</h4>
-            <p class="font-mono text-xs text-outline leading-relaxed">Exponenciálny decay: prieskum starý 21 dní má polovičnú váhu oproti najnovšiemu.</p>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-1">Suma mandátov</div>
+            <div class="flex items-baseline gap-3">
+              <span class="font-black text-6xl text-[#acc7ff] leading-none" id="calc-seats">–</span>
+              <span class="font-black text-2xl text-outline leading-none">/ 150</span>
+            </div>
           </div>
+          <div class="hidden md:block w-px h-16 bg-[#424753]"></div>
+          <div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-2">Pravdepodobnosť väčšiny</div>
+            <div class="flex items-center gap-3">
+              <span class="font-black text-4xl leading-none" id="calc-prob">–</span>
+              <div class="h-2 w-32 bg-surface-container-low border border-[#424753] overflow-hidden">
+                <div class="h-full transition-none" id="calc-progress-bar" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="font-black text-xl px-6 py-4 border-2 uppercase tracking-widest" id="calc-verdict">–</div>
         </div>
       </div>
-    </div>
+
+    </section>
   </div>
 
-</main>
+</div>
 
 <footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e]">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
@@ -235,9 +236,23 @@ const PARTIES=[
   {key:"MA",label:"MA",color:"#FF8800",gov:false},
 ];
 
-const HALF_LIFE=21,SIGMA=2.5,SIM_N=10000,TOTAL=150,MAJ=76;
-const HOUSE={AKO:0.95,Focus:0.90,Ipsos:1.0,NMS:0.92};
+const SIM_N=10000,TOTAL=150,MAJ=76;
+const HOUSE={AKO:1.00,Focus:0.96,Ipsos:0.97,NMS:0.89};
 let polls=[],simResults=null,simChart=null;
+
+function partySigma(value){const p=value/100;const se=Math.sqrt(p*(1-p)/1000)*100;return Math.max(0.8,2*se);}
+
+function monthWeight(pollDate){
+  const now=new Date();
+  const pollMonth=new Date(pollDate.getFullYear(),pollDate.getMonth(),1);
+  const currentMonth=new Date(now.getFullYear(),now.getMonth(),1);
+  const monthsAgo=Math.round((currentMonth-pollMonth)/(1000*60*60*24*30.44));
+  if(monthsAgo===0)return 1.00;
+  if(monthsAgo===1)return 0.75;
+  if(monthsAgo===2)return 0.50;
+  if(monthsAgo===3)return 0.25;
+  return 0.10;
+}
 
 function allocateSeats(pct){
   const cands=PARTIES.map(p=>({...p,pct:pct[p.key]||0})).filter(p=>p.pct>=5);
@@ -253,8 +268,7 @@ function computeAggregate(){
   const now=new Date(),W={},TW={};
   PARTIES.forEach(p=>{W[p.key]=0;TW[p.key]=0;});
   polls.forEach(poll=>{
-    const age=(now-poll.date)/86400000;
-    const tw=Math.pow(0.5,age/HALF_LIFE)*(HOUSE[poll.firm]||0.9);
+    const tw=monthWeight(poll.date)*(HOUSE[poll.firm]||0.9);
     PARTIES.forEach(p=>{const v=poll[p.key];if(v!=null&&v>0){W[p.key]+=v*tw;TW[p.key]+=tw;}});
   });
   const agg={};PARTIES.forEach(p=>{agg[p.key]=TW[p.key]>0?W[p.key]/TW[p.key]:0;});
@@ -265,40 +279,23 @@ function randn(){const u=1-Math.random(),v=Math.random();return Math.sqrt(-2*Mat
 
 function runMC(agg){
   const byParty={};PARTIES.forEach(p=>{byParty[p.key]=[];});
-  let govMaj=0,oppMaj=0,hung=0;
   for(let i=0;i<SIM_N;i++){
-    const pct={};PARTIES.forEach(p=>{pct[p.key]=Math.max(0,agg[p.key]+randn()*SIGMA);});
+    const pct={};PARTIES.forEach(p=>{pct[p.key]=Math.max(0,agg[p.key]+randn()*partySigma(agg[p.key]));});
     const sm=allocateSeats(pct);
     PARTIES.forEach(p=>{byParty[p.key].push(sm[p.key]||0);});
-    const gS=PARTIES.filter(p=>p.gov).reduce((s,p)=>s+(sm[p.key]||0),0);
-    if(gS>=MAJ)govMaj++;else if(TOTAL-gS>=MAJ)oppMaj++;else hung++;
   }
   const stats={};
   PARTIES.forEach(p=>{
     const a=[...byParty[p.key]].sort((x,y)=>x-y);
-    stats[p.key]={mean:a.reduce((s,v)=>s+v,0)/SIM_N,p025:a[Math.floor(SIM_N*.025)],p975:a[Math.floor(SIM_N*.975)],arr:byParty[p.key]};
+    stats[p.key]={mean:a.reduce((s,v)=>s+v,0)/SIM_N,p025:a[Math.floor(SIM_N*.025)],p975:a[Math.floor(SIM_N*.975)]};
   });
-  return{stats,govPct:(govMaj/SIM_N*100).toFixed(1),oppPct:(oppMaj/SIM_N*100).toFixed(1),hungPct:(hung/SIM_N*100).toFixed(1),byParty};
+  return{stats,byParty};
 }
 
 function renderAll(){
   const agg=computeAggregate();
   simResults=runMC(agg);
   document.getElementById("poll-count-sm").textContent=polls.length;
-  const gP=parseFloat(simResults.govPct),oP=parseFloat(simResults.oppPct),hP=parseFloat(simResults.hungPct);
-  document.getElementById("opp-prob-big").textContent=oP.toFixed(1)+"%";
-  const govBar=document.getElementById("prob-gov-bar");
-  const hungBar=document.getElementById("prob-hung-bar");
-  const oppBar=document.getElementById("prob-opp-bar");
-  govBar.style.width=gP+"%"; govBar.textContent=gP>8?gP.toFixed(0)+"%":"";
-  hungBar.style.width=hP+"%"; hungBar.textContent=hP>5?hP.toFixed(0)+"%":"";
-  oppBar.style.width=oP+"%"; oppBar.textContent=oP>8?oP.toFixed(0)+"%":"";
-
-  document.getElementById("prob-legend").innerHTML=`
-    <span class="flex items-center gap-2"><span style="width:10px;height:10px;display:inline-block;background:#CC0000"></span>Vláda ${gP}%</span>
-    <span class="flex items-center gap-2"><span style="width:10px;height:10px;display:inline-block;background:#353534"></span>Patová ${hP}%</span>
-    <span class="flex items-center gap-2"><span style="width:10px;height:10px;display:inline-block;background:#CC0000"></span>Opozícia ${oP}%</span>`;
-
   const smAgg=allocateSeats(agg);
   const prevAgg=computePrevAgg();
   const sidebar=document.getElementById("forecast-sidebar");sidebar.innerHTML="";
@@ -306,46 +303,55 @@ function renderAll(){
   sorted.forEach(p=>{
     const pct=agg[p.key],ci=simResults.stats[p.key];
     const seats=smAgg[p.key]||0;
+    const above5=pct>=5;
     const diff=prevAgg?pct-(prevAgg[p.key]||pct):null;
-    const diffHtml=diff!=null
-      ?diff>0.3?`<span class="font-mono text-[10px] bg-[#66FF00] text-[#131313] px-2 py-0.5">+${diff.toFixed(1)}</span>`
-      :diff<-0.3?`<span class="font-mono text-[10px] bg-[#CC0000] text-white px-2 py-0.5">${diff.toFixed(1)}</span>`
-      :`<span class="font-mono text-[10px] bg-surface-container text-outline px-2 py-0.5">0.0</span>`
-      :"";
+    const diffHtml=above5
+      ?(diff!=null
+        ?diff>0.3?`<span class="font-mono text-[10px] bg-[#66FF00] text-[#131313] px-2 py-0.5">+${diff.toFixed(1)}</span>`
+        :diff<-0.3?`<span class="font-mono text-[10px] bg-[#CC0000] text-white px-2 py-0.5">${diff.toFixed(1)}</span>`
+        :`<span class="font-mono text-[10px] bg-surface-container text-outline px-2 py-0.5">0.0</span>`
+        :"")
+      :`<span class="font-mono text-[10px] text-[#CC0000] border border-[#CC0000] px-1">OUT</span>`;
     const row=document.createElement("div");
-    row.className="p-5 space-y-3 border-b border-outline-variant hover:bg-surface-container-low transition-none";
-    row.innerHTML=`
-      <div class="flex justify-between items-end">
-        <span class="font-mono font-bold text-sm uppercase" style="color:${p.color}">${p.label}</span>
-        ${diffHtml}
-      </div>
-      <div class="flex items-baseline gap-2">
-        <span class="font-black text-4xl">${pct.toFixed(1)}</span>
-        <span class="font-mono text-outline text-lg">%</span>
-        <span class="font-mono text-xs text-outline ml-auto">${seats>0?seats+" kr.":""}</span>
-      </div>
-      <div class="h-6 w-full bg-surface-container-lowest border-2 border-outline-variant relative">
-        <div class="absolute left-0 top-0 bottom-0 opacity-20" style="width:${(ci.p975-ci.p025)*2}%;left:${ci.p025*2}%;background:${p.color}"></div>
-        <div class="absolute top-0 bottom-0 w-0.5" style="left:${pct*2}%;background:${p.color}"></div>
-        <div class="absolute -bottom-5 left-0 right-0 flex justify-between font-mono text-[9px] text-outline">
-          <span>RANGE: ${ci.p025}–${ci.p975} kr.</span>
+    if(above5){
+      row.className="p-4 border-b-2 border-outline hover:bg-[#1c1b1b] transition-none";
+      row.innerHTML=`
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-black text-xl leading-none uppercase" style="color:${p.color}">${p.label}</span>
+          <div class="flex flex-col items-end gap-1">
+            <span class="font-mono font-bold text-xl leading-none" style="color:${p.color}">${pct.toFixed(1)}%</span>
+            ${diffHtml}
+          </div>
         </div>
-      </div>`;
+        <div class="space-y-1.5">
+          <div class="flex justify-between font-mono text-[10px] text-outline uppercase">
+            <span>Kresiel: ${seats}</span><span>Prah: 5.0%</span>
+          </div>
+          <div class="relative h-4 bg-[#0e0e0e] border border-[#424753]">
+            <div class="absolute inset-y-0" style="left:${(ci.p025/150*100).toFixed(1)}%;right:${(100-ci.p975/150*100).toFixed(1)}%;background:${p.color}30;border-left:1px solid ${p.color};border-right:1px solid ${p.color}"></div>
+            <div class="absolute top-0 bottom-0 w-[2px]" style="left:${(seats/150*100).toFixed(1)}%;background:${p.color}"></div>
+          </div>
+          <div class="font-mono text-[9px] text-outline">RANGE: ${ci.p025}–${ci.p975} kr.</div>
+        </div>`;
+    }else{
+      row.className="p-4 border-b-2 border-outline opacity-50";
+      row.innerHTML=`
+        <div class="flex justify-between items-start mb-2">
+          <span class="font-black text-xl leading-none uppercase text-outline">${p.label}</span>
+          <div class="flex flex-col items-end gap-1">
+            <span class="font-mono font-bold text-xl leading-none text-outline">${pct.toFixed(1)}%</span>
+            ${diffHtml}
+          </div>
+        </div>
+        <div class="relative h-4 bg-[#0e0e0e] border border-[#424753]">
+          <div class="absolute top-0 bottom-0 w-[2px]" style="left:${(pct/30*100).toFixed(1)}%;background:#CC0000"></div>
+        </div>`;
+    }
     sidebar.appendChild(row);
   });
 
-  document.getElementById("coalition-scenarios").innerHTML=`
-    <li class="flex justify-between font-mono text-xs border-b border-outline-variant pb-2">
-      <span class="text-outline uppercase">Smer + Hlas + SNS</span><span class="font-bold text-[#CC0000]">${simResults.govPct}%</span>
-    </li>
-    <li class="flex justify-between font-mono text-xs border-b border-outline-variant pb-2">
-      <span class="text-outline uppercase">Opozícia má väčšinu</span><span class="font-bold text-[#acc7ff]">${simResults.oppPct}%</span>
-    </li>
-    <li class="flex justify-between font-mono text-xs">
-      <span class="text-outline uppercase">Patová situácia</span><span class="font-bold text-outline">${simResults.hungPct}%</span>
-    </li>`;
-
   renderSimChart();
+  renderCoalitionCalc();
 }
 
 function computePrevAgg(){
@@ -403,6 +409,76 @@ function renderSimChart(){
       c.fillText(`→ ${mean.toFixed(1)}`,xp+5,top+14);c.restore();
     }}]
   });
+}
+
+// ── COALITION CALC ─────────────────────────────────────────────────────────
+function renderCoalitionCalc(){
+  if(!simResults)return;
+  const agg=computeAggregate();
+  const smAgg=allocateSeats(agg);
+  const above=PARTIES.filter(p=>agg[p.key]>=5).sort((a,b)=>agg[b.key]-agg[a.key]);
+  const container=document.getElementById("calc-checkboxes");
+  container.innerHTML="";
+  above.forEach(p=>{
+    const seats=smAgg[p.key]||0;
+    const row=document.createElement("label");
+    row.className="flex items-center p-3 border-2 cursor-pointer transition-none";
+    row.style.borderColor=p.color;
+    row.style.backgroundColor="#1c1b1b";
+    row.dataset.color=p.color;
+    row.innerHTML=`
+      <input type="checkbox" class="hidden" data-key="${p.key}" checked onchange="onCalcChange(this)"/>
+      <div class="w-5 h-5 border-2 flex items-center justify-center mr-3 shrink-0 cb-box" style="border-color:${p.color}">
+        <div class="w-2.5 h-2.5 check-fill" style="background:${p.color}"></div>
+      </div>
+      <span class="font-mono font-bold text-sm uppercase flex-grow" style="color:${p.color}">${p.label}</span>
+      <span class="font-mono font-bold text-sm" style="color:${p.color}">${seats}</span>`;
+    container.appendChild(row);
+  });
+  calcCoalition();
+}
+
+function onCalcChange(cb){
+  const label=cb.closest("label");
+  const color=label.dataset.color;
+  const fill=label.querySelector(".check-fill");
+  if(cb.checked){
+    label.style.borderColor=color;
+    label.style.backgroundColor="#1c1b1b";
+    fill.style.display="block";
+  }else{
+    label.style.borderColor="#424753";
+    label.style.backgroundColor="transparent";
+    fill.style.display="none";
+  }
+  calcCoalition();
+}
+
+function calcCoalition(){
+  if(!simResults)return;
+  const checked=new Set([...document.querySelectorAll("#calc-checkboxes input:checked")].map(c=>c.dataset.key));
+  const agg=computeAggregate();
+  const smAgg=allocateSeats(agg);
+  const meanSeats=[...checked].reduce((s,k)=>s+(smAgg[k]||0),0);
+  let majCount=0;
+  for(let i=0;i<SIM_N;i++){
+    const total=[...checked].reduce((s,k)=>s+(simResults.byParty[k]?.[i]||0),0);
+    if(total>=MAJ)majCount++;
+  }
+  const prob=(majCount/SIM_N*100);
+  const hasMaj=prob>50;
+  document.getElementById("calc-seats").textContent=meanSeats;
+  const probEl=document.getElementById("calc-prob");
+  probEl.textContent=prob.toFixed(1)+"%";
+  probEl.style.color=hasMaj?"#66FF00":"#CC0000";
+  const bar=document.getElementById("calc-progress-bar");
+  bar.style.width=prob.toFixed(1)+"%";
+  bar.style.background=hasMaj?"#66FF00":"#CC0000";
+  const verdict=document.getElementById("calc-verdict");
+  verdict.textContent=hasMaj?"✓ VÄČŠINA":"✗ MENŠINOVÁ";
+  verdict.style.borderColor=hasMaj?"#66FF00":"#CC0000";
+  verdict.style.color=hasMaj?"#66FF00":"#CC0000";
+  verdict.style.backgroundColor=hasMaj?"rgba(102,255,0,0.05)":"rgba(204,0,0,0.05)";
 }
 
 // ── Wiki fetch via backend ──────────────────────────────────────────────────
@@ -498,7 +574,6 @@ function showErr(msg){
 // ── Boot ────────────────────────────────────────────────────────────────────
 async function init(){
   document.getElementById("status-line").textContent="NAČÍTAVAM...";
-  document.getElementById("opp-prob-big").textContent="–";
   try{
     const res=await fetch(`${API}/polls`);
     if(!res.ok)throw new Error(`HTTP ${res.status}`);
