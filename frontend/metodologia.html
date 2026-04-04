@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>VOLL.BY | METODOLÓGIA</title>
+<title>WOLL.BY | METODOLÓGIA</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -48,20 +50,25 @@ body {
 <header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
     <div class="flex items-center gap-10">
-      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY</a>
+      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY</a>
       <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
-        <a href="index.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Prehľad</a>
-        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Model</a>
+        <a href="index.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none" data-i18n="nav.overview">Prehľad</a>
+        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none" data-i18n="nav.model">Model</a>
       </nav>
     </div>
-    <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
-      <span class="material-symbols-outlined" style="font-size:20px">menu</span>
-    </button>
+    <div class="flex items-center gap-4">
+      <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-outline text-on-surface hover:border-[#acc7ff] hover:text-[#acc7ff] transition-none hidden md:block">EN</button>
+      <a href="https://buymeacoffee.com/woll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
+      <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
+        <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+      </button>
+    </div>
   </div>
   <!-- Mobile nav -->
   <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
-    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Prehľad</a>
-    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Model</a>
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]" data-i18n="nav.overview">Prehľad</a>
+    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]" data-i18n="nav.model">Model</a>
+    <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e] text-left">EN</button>
   </div>
 </header>
 
@@ -70,11 +77,11 @@ body {
   <!-- HERO -->
   <section class="border-b-2 border-outline pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
     <div>
-      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Dokumentácia predikčného modelu</span>
-      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none">METODOLÓGIA</h1>
+      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block" data-i18n="met.hero.subtitle">Dokumentácia predikčného modelu</span>
+      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none" data-i18n="met.hero.h1">METODOLÓGIA</h1>
     </div>
     <div class="text-right">
-      <p class="font-mono text-sm text-outline max-w-xs leading-relaxed">Ako funguje predikčný model voll.by</p>
+      <p class="font-mono text-sm text-outline max-w-xs leading-relaxed" data-i18n="met.hero.desc">Ako funguje predikčný model woll.by</p>
     </div>
   </section>
 
@@ -83,19 +90,19 @@ body {
     <div class="grid grid-cols-1 lg:grid-cols-12">
       <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
         <div>
-          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">01</span>
-          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">ZDROJE<br/>DÁT</h2>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3" data-i18n="met.01.num">01</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none" data-i18n-html="met.01.title">ZDROJE<br/>DÁT</h2>
         </div>
-        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest">
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="met.01.agencies">
           Ipsos · AKO · Focus · NMS
         </div>
       </div>
       <div class="lg:col-span-9 p-8 space-y-4">
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          voll.by agreguje verejne dostupné prieskumy volebných preferencií zo stránky Wikipedia – Opinion polling for the next Slovak parliamentary election. Dáta zahŕňajú prieskumy agentúr Ipsos, AKO, Focus a NMS od roku 2023 po súčasnosť.
+          <span data-i18n="met.01.p1">woll.by agreguje verejne dostupné prieskumy volebných preferencií zo stránky Wikipedia – Opinion polling for the next Slovak parliamentary election. Dáta zahŕňajú prieskumy agentúr Ipsos, AKO, Focus a NMS od roku 2023 po súčasnosť.</span>
         </p>
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Prieskumy sú aktualizované manuálne po zverejnení nových výsledkov. Každý prieskum obsahuje: agentúru, klienta, dátum zberu dát a percentuálne preferencie pre sledované strany.
+          <span data-i18n="met.01.p2">Prieskumy sú aktualizované manuálne po zverejnení nových výsledkov. Každý prieskum obsahuje: agentúru, klienta, dátum zberu dát a percentuálne preferencie pre sledované strany.</span>
         </p>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
           <div class="border-2 border-outline p-4 bg-surface-container-low">
@@ -124,25 +131,25 @@ body {
     <div class="grid grid-cols-1 lg:grid-cols-12">
       <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
         <div>
-          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">02</span>
-          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">HOUSE<br/>EFFECT</h2>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3" data-i18n="met.02.num">02</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none" data-i18n-html="met.02.title">HOUSE<br/>EFFECT</h2>
         </div>
-        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed">
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed" data-i18n="met.02.subtitle">
           Korekcia systematického biasu agentúr
         </div>
       </div>
       <div class="lg:col-span-9 p-8 space-y-6">
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Rôzne agentúry systematicky nadhodnocujú alebo podhodnocujú určité strany. Model aplikuje korekčné koeficienty aby znížil tento bias. Koeficienty boli kalibrované porovnaním posledných predvolebných prieskumov každej agentúry s oficiálnymi výsledkami parlamentných volieb zo 30. septembra 2023.
+          <span data-i18n="met.02.p1">Rôzne agentúry systematicky nadhodnocujú alebo podhodnocujú určité strany. Model aplikuje korekčné koeficienty aby znížil tento bias. Koeficienty boli kalibrované porovnaním posledných predvolebných prieskumov každej agentúry s oficiálnymi výsledkami parlamentných volieb zo 30. septembra 2023.</span>
         </p>
         <div class="overflow-x-auto">
           <table class="w-full font-mono text-sm border-collapse border-2 border-outline">
             <thead>
               <tr class="bg-surface-container-low border-b-2 border-outline">
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Agentúra</th>
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Koeficient</th>
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">MAE 2023</th>
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Poznámka</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.02.th.agency">Agentúra</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.02.th.coef">Koeficient</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.02.th.mae">MAE 2023</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.02.th.note">Poznámka</th>
               </tr>
             </thead>
             <tbody>
@@ -150,31 +157,31 @@ body {
                 <td class="py-4 px-5 font-bold">AKO</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">1.00</td>
                 <td class="py-4 px-5 text-outline">1.08 %</td>
-                <td class="py-4 px-5 text-outline">referenčná agentúra (najpresnejšia)</td>
+                <td class="py-4 px-5 text-outline" data-i18n="met.02.ako.note">referenčná agentúra (najpresnejšia)</td>
               </tr>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
                 <td class="py-4 px-5 font-bold">Focus</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.96</td>
                 <td class="py-4 px-5 text-outline">1.14 %</td>
-                <td class="py-4 px-5 text-outline">mierne podhodnocuje</td>
+                <td class="py-4 px-5 text-outline" data-i18n="met.02.focus.note">mierne podhodnocuje</td>
               </tr>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
                 <td class="py-4 px-5 font-bold">Ipsos</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.97</td>
                 <td class="py-4 px-5 text-outline">1.37 %</td>
-                <td class="py-4 px-5 text-outline">mierne podhodnocuje</td>
+                <td class="py-4 px-5 text-outline" data-i18n="met.02.ipsos.note">mierne podhodnocuje</td>
               </tr>
               <tr class="hover:bg-surface-container-high transition-none">
                 <td class="py-4 px-5 font-bold">NMS</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.89</td>
                 <td class="py-4 px-5 text-outline">1.69 %</td>
-                <td class="py-4 px-5 text-outline">väčšia systematická chyba</td>
+                <td class="py-4 px-5 text-outline" data-i18n="met.02.nms.note">väčšia systematická chyba</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p class="font-mono text-xs text-outline">
-          MAE = priemerná absolútna chyba oproti výsledku volieb 2023. Koeficient upravuje celkovú váhu prieskumu agentúry v agregáte — nie individuálne hodnoty strán. Kalibrácia vychádza z jediných volieb (2023), čo je štatisticky obmedzená vzorka. Koeficienty budú spresnené po ďalších voľbách.
+          <span data-i18n="met.02.footnote">MAE = priemerná absolútna chyba oproti výsledku volieb 2023. Koeficient upravuje celkovú váhu prieskumu agentúry v agregáte — nie individuálne hodnoty strán. Kalibrácia vychádza z jediných volieb (2023), čo je štatisticky obmedzená vzorka. Koeficienty budú spresnené po ďalších voľbách.</span>
         </p>
       </div>
     </div>
@@ -185,51 +192,51 @@ body {
     <div class="grid grid-cols-1 lg:grid-cols-12">
       <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
         <div>
-          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">03</span>
-          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">VÁHOVANIE<br/>PRIESKUMOV</h2>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3" data-i18n="met.03.num">03</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none" data-i18n-html="met.03.title">VÁHOVANIE<br/>PRIESKUMOV</h2>
         </div>
-        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed">
+        <div class="mt-8 font-mono text-[10px] text-outline uppercase tracking-widest leading-relaxed" data-i18n="met.03.subtitle">
           Mesačné váhovanie
         </div>
       </div>
       <div class="lg:col-span-9 p-8 space-y-6">
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Agentúry vydávajú prieskumy spravidla raz mesačne. Model preto váhuje prieskumy podľa kalendárneho mesiaca — nie podľa presného počtu dní. Prieskumy z rovnakého mesiaca majú rovnakú váhu bez ohľadu na to, či boli zverejnené na začiatku alebo konci mesiaca.
+          <span data-i18n="met.03.p1">Agentúry vydávajú prieskumy spravidla raz mesačne. Model preto váhuje prieskumy podľa kalendárneho mesiaca — nie podľa presného počtu dní. Prieskumy z rovnakého mesiaca majú rovnakú váhu bez ohľadu na to, či boli zverejnené na začiatku alebo konci mesiaca.</span>
         </p>
         <div class="overflow-x-auto">
           <table class="w-full font-mono text-sm border-collapse border-2 border-outline">
             <thead>
               <tr class="bg-surface-container-low border-b-2 border-outline">
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Mesiac</th>
-                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline">Váha</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.03.th.month">Mesiac</th>
+                <th class="py-3 px-5 text-left font-bold uppercase tracking-widest text-[10px] text-outline" data-i18n="met.03.th.weight">Váha</th>
               </tr>
             </thead>
             <tbody>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
-                <td class="py-4 px-5 font-bold">Aktuálny</td>
+                <td class="py-4 px-5 font-bold" data-i18n="met.03.m0">Aktuálny</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">1.00</td>
               </tr>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
-                <td class="py-4 px-5 font-bold">Pred 1 mes.</td>
+                <td class="py-4 px-5 font-bold" data-i18n="met.03.m1">Pred 1 mes.</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.75</td>
               </tr>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
-                <td class="py-4 px-5 font-bold">Pred 2 mes.</td>
+                <td class="py-4 px-5 font-bold" data-i18n="met.03.m2">Pred 2 mes.</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.50</td>
               </tr>
               <tr class="border-b border-outline-variant hover:bg-surface-container-high transition-none">
-                <td class="py-4 px-5 font-bold">Pred 3 mes.</td>
+                <td class="py-4 px-5 font-bold" data-i18n="met.03.m3">Pred 3 mes.</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.25</td>
               </tr>
               <tr class="hover:bg-surface-container-high transition-none">
-                <td class="py-4 px-5 font-bold">Staršie</td>
+                <td class="py-4 px-5 font-bold" data-i18n="met.03.mOld">Staršie</td>
                 <td class="py-4 px-5 text-[#acc7ff] font-bold">0.10</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p class="font-mono text-xs text-outline">
-          Prieskumy staršie ako 3 mesiace sú zahrnuté s váhou 0.10 — prispievajú minimálne ale stabilizujú agregát v obdobiach keď je dostupných menej prieskumov. Výsledná váha každého prieskumu je súčin mesačnej váhy a house effect koeficientu príslušnej agentúry.
+          <span data-i18n="met.03.footnote">Prieskumy staršie ako 3 mesiace sú zahrnuté s váhou 0.10 — prispievajú minimálne ale stabilizujú agregát v obdobiach keď je dostupných menej prieskumov. Výsledná váha každého prieskumu je súčin mesačnej váhy a house effect koeficientu príslušnej agentúry.</span>
         </p>
       </div>
     </div>
@@ -240,46 +247,46 @@ body {
     <div class="grid grid-cols-1 lg:grid-cols-12">
       <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-outline p-8 flex flex-col justify-between">
         <div>
-          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3">04</span>
-          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none">MONTE<br/>CARLO</h2>
+          <span class="font-mono text-[10px] text-outline uppercase tracking-widest block mb-3" data-i18n="met.04.num">04</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none" data-i18n-html="met.04.title">MONTE<br/>CARLO</h2>
         </div>
         <div class="border-2 border-outline p-4 bg-surface-container-low mt-8">
           <div class="font-mono font-black text-4xl text-[#acc7ff]">10K</div>
-          <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Simulácií</div>
+          <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1" data-i18n="met.04.simLabel">Simulácií</div>
         </div>
       </div>
       <div class="lg:col-span-9 p-8 space-y-4">
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Predikčný model spúšťa 10 000 simulácií volebného výsledku. V každej simulácii je vážený agregát narušený náhodným šumom ktorý modeluje prieskumnú nepresnosť a volatilitu voličov.
+          <span data-i18n="met.04.p1">Predikčný model spúšťa 10 000 simulácií volebného výsledku. V každej simulácii je vážený agregát narušený náhodným šumom ktorý modeluje prieskumnú nepresnosť a volatilitu voličov.</span>
         </p>
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Na rozdiel od jednoduchých modelov, šum nie je rovnaký pre všetky strany — väčšie strany majú väčšiu absolútnu neistotu, menšie strany menšiu. Sigma každej strany sa počíta zo štatistickej chyby merania pre vzorku 1000 respondentov, násobenej koeficientom 2 ktorý zachytáva reálnu volatilitu voličov nad rámec čistej štatistickej chyby:
+          <span data-i18n="met.04.p2">Na rozdiel od jednoduchých modelov, šum nie je rovnaký pre všetky strany — väčšie strany majú väčšiu absolútnu neistotu, menšie strany menšiu. Sigma každej strany sa počíta zo štatistickej chyby merania pre vzorku 1000 respondentov, násobenej koeficientom 2 ktorý zachytáva reálnu volatilitu voličov nad rámec čistej štatistickej chyby:</span>
         </p>
         <div class="border-2 border-[#acc7ff] p-6 bg-surface-container-lowest">
-          <div class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest mb-4">Formula</div>
+          <div class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest mb-4" data-i18n="met.04.formula.lbl">Formula</div>
           <div class="font-mono text-xl md:text-2xl font-bold text-[#e5e2e1] space-y-2">
             <div>σ = 2 × √(p × (1−p) / 1000) × 100</div>
-            <div class="text-outline text-sm mt-3">minimum σ = 0.8 %&nbsp;&nbsp;·&nbsp;&nbsp;p = podiel strany v agregáte</div>
+            <div class="text-outline text-sm mt-3" data-i18n-html="met.04.formula.note">minimum σ = 0.8 %&nbsp;&nbsp;·&nbsp;&nbsp;p = podiel strany v agregáte</div>
           </div>
         </div>
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Príklady: strana s 20% má σ ≈ 2.5%, strana s 5% má σ ≈ 1.4%. Koeficient 2 bol zvolený na základe porovnania predvolebných prieskumov s výsledkami volieb 2023, kde priemerná absolútna chyba agentúr bola 1.1–1.7%.
+          <span data-i18n="met.04.p3">Príklady: strana s 20% má σ ≈ 2.5%, strana s 5% má σ ≈ 1.4%. Koeficient 2 bol zvolený na základe porovnania predvolebných prieskumov s výsledkami volieb 2023, kde priemerná absolútna chyba agentúr bola 1.1–1.7%.</span>
         </p>
         <p class="font-mono text-sm text-on-surface leading-relaxed">
-          Pre každú simuláciu sa aplikuje 5% parlamentný prah a Hagenbach-Bischoff metóda prepočtu na 150 kresiel. Simulácie bežia priamo v prehliadači v JavaScripte.
+          <span data-i18n="met.04.p4">Pre každú simuláciu sa aplikuje 5% parlamentný prah a Hagenbach-Bischoff metóda prepočtu na 150 kresiel. Simulácie bežia priamo v prehliadači v JavaScripte.</span>
         </p>
         <div class="grid grid-cols-3 gap-3 pt-2">
           <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
             <div class="font-mono font-bold text-2xl text-[#acc7ff]">σ(p)</div>
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Adaptívny šum</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1" data-i18n="met.04.stat1.lbl">Adaptívny šum</div>
           </div>
           <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
             <div class="font-mono font-bold text-2xl text-[#acc7ff]">5%</div>
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Parlamentný prah</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1" data-i18n="met.04.stat2.lbl">Parlamentný prah</div>
           </div>
           <div class="border-2 border-outline p-4 bg-surface-container-low text-center">
             <div class="font-mono font-bold text-2xl text-[#acc7ff]">150</div>
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">Kresiel v parlamente</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1" data-i18n="met.04.stat3.lbl">Kresiel v parlamente</div>
           </div>
         </div>
       </div>
@@ -291,42 +298,42 @@ body {
     <div class="grid grid-cols-1 lg:grid-cols-12">
       <div class="lg:col-span-3 border-b-2 lg:border-b-0 lg:border-r-2 border-[#acc7ff] p-8 flex flex-col justify-between bg-surface-container-lowest">
         <div>
-          <span class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest block mb-3">05</span>
-          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none text-[#acc7ff]">OBMEDZE&shy;NIA<br/>&amp;<br/>DISCLAIMER</h2>
+          <span class="font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest block mb-3" data-i18n="met.05.num">05</span>
+          <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter leading-none text-[#acc7ff]" data-i18n-html="met.05.title">OBMEDZE&shy;NIA<br/>&amp;<br/>DISCLAIMER</h2>
         </div>
-        <div class="mt-8 font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest leading-relaxed">
+        <div class="mt-8 font-mono text-[10px] text-[#acc7ff] uppercase tracking-widest leading-relaxed" data-i18n="met.05.subtitle">
           Hobby projekt · nie profesionálna predpoveď
         </div>
       </div>
       <div class="lg:col-span-9 p-8 bg-surface-container-lowest">
         <p class="font-mono text-sm text-on-surface leading-relaxed mb-6">
-          voll.by je hobby projekt a nie profesionálna predpoveď. Model má tieto obmedzenia:
+          <span data-i18n="met.05.intro">woll.by je hobby projekt a nie profesionálna predpoveď. Model má tieto obmedzenia:</span>
         </p>
         <ul class="space-y-4 font-mono text-sm">
           <li class="flex gap-4 items-start">
             <span class="text-[#acc7ff] font-bold shrink-0">—</span>
-            <span class="text-outline leading-relaxed">Prieskumy nezachytávajú posledné dni kampane</span>
+            <span class="text-outline leading-relaxed" data-i18n="met.05.li1">Prieskumy nezachytávajú posledné dni kampane</span>
           </li>
           <li class="flex gap-4 items-start">
             <span class="text-[#acc7ff] font-bold shrink-0">—</span>
-            <span class="text-outline leading-relaxed">House effect koeficienty sú kalibrované na jediných voľbách (2023) — štatisticky obmedzená vzorka</span>
+            <span class="text-outline leading-relaxed" data-i18n="met.05.li2">House effect koeficienty sú kalibrované na jediných voľbách (2023) — štatisticky obmedzená vzorka</span>
           </li>
           <li class="flex gap-4 items-start">
             <span class="text-[#acc7ff] font-bold shrink-0">—</span>
-            <span class="text-outline leading-relaxed">Model neuvažuje strategické hlasovanie ani transfer hlasov pri stranách pod prahom</span>
+            <span class="text-outline leading-relaxed" data-i18n="met.05.li3">Model neuvažuje strategické hlasovanie ani transfer hlasov pri stranách pod prahom</span>
           </li>
           <li class="flex gap-4 items-start">
             <span class="text-[#acc7ff] font-bold shrink-0">—</span>
-            <span class="text-outline leading-relaxed">Vzorka prieskumov (~1000 respondentov) má inherentnú štatistickú chybu ±3%</span>
+            <span class="text-outline leading-relaxed" data-i18n="met.05.li4">Vzorka prieskumov (~1000 respondentov) má inherentnú štatistickú chybu ±3%</span>
           </li>
           <li class="flex gap-4 items-start">
             <span class="text-[#acc7ff] font-bold shrink-0">—</span>
-            <span class="text-outline leading-relaxed">Výsledky sú citlivé na aktuálnosť a počet dostupných prieskumov</span>
+            <span class="text-outline leading-relaxed" data-i18n="met.05.li5">Výsledky sú citlivé na aktuálnosť a počet dostupných prieskumov</span>
           </li>
         </ul>
         <div class="mt-8 border-t-2 border-outline-variant pt-6">
           <p class="font-mono text-xs text-outline uppercase tracking-widest">
-            Tento model neslúži ako návod na hlasovanie.
+            <span data-i18n="met.05.disclaimer">Tento model neslúži ako návod na hlasovanie.</span>
           </p>
         </div>
       </div>
@@ -335,11 +342,11 @@ body {
 
   <!-- SPÄŤ -->
   <section class="py-12 flex flex-col md:flex-row justify-between items-center gap-4">
-    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff] border-2 border-[#acc7ff] px-6 py-3 hover:bg-[#acc7ff] hover:text-[#131313] transition-none">
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff] border-2 border-[#acc7ff] px-6 py-3 hover:bg-[#acc7ff] hover:text-[#131313] transition-none" data-i18n="met.back">
       ← Späť na dashboard
     </a>
-    <p class="font-mono text-[10px] text-outline uppercase tracking-widest">
-      voll.by — hobby projekt | dáta: Wikipedia CC BY-SA
+    <p class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="met.footerNote">
+      woll.by — hobby projekt | dáta: Wikipedia CC BY-SA
     </p>
   </section>
 
@@ -347,12 +354,12 @@ body {
 
 <footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e]">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
-    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2">DATA JOURNALISM</span></div>
+    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2" data-i18n="data.journalism">DATA JOURNALISM</span></div>
     <div class="flex flex-wrap justify-center gap-6">
-      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#acc7ff]">Metodológia</a>
-      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Zdroj dát</a>
+      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#acc7ff]" data-i18n="nav.methodology">Metodológia</a>
+      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="footer.source">Zdroj dát</a>
     </div>
-    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 VOLL.BY</div>
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 WOLL.BY</div>
   </div>
 </footer>
 

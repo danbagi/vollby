@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>VOLL.BY | PREDIKČNÝ MODEL</title>
+<title>WOLL.BY | PREDIKČNÝ MODEL</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=snap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=snap" rel="stylesheet"/>
 <script>
@@ -47,13 +49,25 @@ body {
 <header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
     <div class="flex items-center gap-10">
-      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY</a>
+      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY</a>
       <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
-        <a href="index.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Prehľad</a>
-        <a href="model.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1">Model</a>
+        <a href="index.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none" data-i18n="nav.overview">Prehľad</a>
+        <a href="model.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1" data-i18n="nav.model">Model</a>
       </nav>
     </div>
-    <a href="https://buymeacoffee.com/voll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
+    <div class="flex items-center gap-4">
+      <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-outline text-on-surface hover:border-[#acc7ff] hover:text-[#acc7ff] transition-none hidden md:block">EN</button>
+      <a href="https://buymeacoffee.com/woll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
+      <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
+        <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile nav -->
+  <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]" data-i18n="nav.overview">Prehľad</a>
+    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]" data-i18n="nav.model">Model</a>
+    <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e] text-left">EN</button>
   </div>
 </header>
 
@@ -63,45 +77,10 @@ body {
   <section class="border-b-2 border-outline">
     <div class="max-w-screen-2xl mx-auto px-4 md:px-6 py-8 md:py-10 flex flex-col md:flex-row justify-between items-end gap-6">
       <div>
-        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Volebná predikcia SR 2027</span>
-        <h1 class="font-black text-7xl md:text-9xl uppercase tracking-tighter leading-none">PREDIKČNÝ<br/>MODEL</h1>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block" data-i18n="model.hero.subtitle">Volebná predikcia SR 2027</span>
+        <h1 class="font-black text-7xl md:text-9xl uppercase tracking-tighter leading-none" data-i18n-html="model.hero.h1">PREDIKČNÝ<br/>MODEL</h1>
       </div>
-      <div class="flex flex-col items-end gap-3">
-        <div class="flex gap-2 flex-wrap justify-end">
-          <button id="btn-fetch" onclick="fetchFromWiki()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] text-[#acc7ff] hover:bg-[#acc7ff] hover:text-[#131313] transition-none">↻ NAČÍTAŤ Z WIKI</button>
-          <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:border-on-surface hover:text-on-surface transition-none">+ MANUÁLNE</button>
-        </div>
-        <div class="font-mono text-[10px] text-outline" id="status-line">NAČÍTAVAM...</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MANUAL INPUT -->
-  <section id="manual-panel" class="hidden border-b-2 border-outline bg-surface-container-lowest">
-    <div class="max-w-screen-2xl mx-auto px-6 py-8 space-y-6">
-      <h3 class="font-black text-2xl uppercase tracking-tight">Pridať prieskum manuálne</h3>
-      <div class="grid grid-cols-3 gap-4">
-        <div class="space-y-2">
-          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Agentúra</label>
-          <select id="m-firm" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase px-3 py-2 outline-none">
-            <option>AKO</option><option>Focus</option><option>Ipsos</option><option>NMS</option>
-          </select>
-        </div>
-        <div class="space-y-2">
-          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Dátum</label>
-          <input type="date" id="m-date" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
-        </div>
-        <div class="space-y-2">
-          <label class="font-mono text-[10px] uppercase tracking-widest text-outline block">Popis dátumu</label>
-          <input type="text" id="m-datestr" placeholder="napr. 1–5 Mar 2026" class="w-full bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs px-3 py-2 outline-none focus:border-[#acc7ff]"/>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="manual-inputs"></div>
-      <div class="flex gap-3">
-        <button onclick="addManualPoll()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-[#acc7ff] bg-[#acc7ff] text-[#131313] hover:bg-transparent hover:text-[#acc7ff] transition-none">Pridať prieskum</button>
-        <button onclick="toggleManual()" class="font-mono font-bold text-xs uppercase tracking-widest px-5 py-2.5 border-2 border-outline text-outline hover:text-on-surface transition-none">Zrušiť</button>
-      </div>
-      <div id="manual-error" class="hidden font-mono text-xs text-[#CC0000]"></div>
+      <div class="font-mono text-[10px] text-outline" id="status-line">NAČÍTAVAM...</div>
     </div>
   </section>
 
@@ -111,7 +90,7 @@ body {
     <!-- SIDEBAR -->
     <aside class="w-full md:w-72 lg:w-80 shrink-0 border-b-2 md:border-b-0 md:border-r-2 border-[#8c909e] flex flex-col md:sticky md:top-16 md:h-[calc(100vh-64px)] bg-[#131313]">
       <div class="p-4 border-b-2 border-outline flex justify-between items-end">
-        <h2 class="font-black text-xl uppercase leading-tight">STRANY:<br/>OČAKÁVANÝ ZISK</h2>
+        <h2 class="font-black text-xl uppercase leading-tight" data-i18n-html="model.sidebar.title">STRANY:<br/>OČAKÁVANÝ ZISK</h2>
         <span class="font-mono text-[10px] text-outline mb-1">N=10k · <span id="poll-count-sm">–</span></span>
       </div>
       <div id="forecast-sidebar" class="flex-grow overflow-y-auto"></div>
@@ -124,11 +103,11 @@ body {
       <div class="p-6 border-b-2 border-outline">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <div>
-            <h2 class="font-black text-2xl md:text-3xl uppercase tracking-tighter">DISTRIBÚCIA SIMULÁCIÍ</h2>
-            <p class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1">10 000 Monte Carlo simulácií · zvislá čiara = stredná hodnota</p>
+            <h2 class="font-black text-2xl md:text-3xl uppercase tracking-tighter" data-i18n="model.sim.title">DISTRIBÚCIA SIMULÁCIÍ</h2>
+            <p class="font-mono text-[10px] text-outline uppercase tracking-widest mt-1" data-i18n="model.sim.subtitle">10 000 Monte Carlo simulácií · zvislá čiara = stredná hodnota</p>
           </div>
           <div class="flex items-center gap-3 shrink-0">
-            <span class="font-mono text-[10px] text-outline uppercase">Zobraziť:</span>
+            <span class="font-mono text-[10px] text-outline uppercase" data-i18n="model.sim.show">Zobraziť:</span>
             <select id="sim-party-sel" onchange="renderSimChart()" class="bg-[#131313] border-2 border-[#8c909e] text-[#e5e2e1] font-mono font-bold text-xs uppercase px-4 py-2 outline-none focus:border-[#acc7ff]">
               <option value="PS">PS</option>
               <option value="Smer">Smer</option>
@@ -146,34 +125,34 @@ body {
       <!-- MODELOVÁ LOGIKA -->
       <div class="px-6 py-4 border-b-2 border-outline flex flex-col md:flex-row justify-between items-center gap-4 bg-[#0e0e0e]">
         <div class="flex items-center gap-4 overflow-x-auto w-full pb-1 md:pb-0">
-          <span class="font-black text-xs uppercase tracking-wider whitespace-nowrap">MODELOVÁ LOGIKA:</span>
+          <span class="font-black text-xs uppercase tracking-wider whitespace-nowrap" data-i18n="model.logic.label">MODELOVÁ LOGIKA:</span>
           <div class="flex gap-4 font-mono text-[11px] text-outline uppercase whitespace-nowrap">
-            <span><span class="text-[#acc7ff]">■</span> 10 000 simulácií</span>
-            <span><span class="text-[#acc7ff]">■</span> váhovanie podľa mesiaca</span>
-            <span><span class="text-[#acc7ff]">■</span> house effect 2023</span>
+            <span><span class="text-[#acc7ff]">■</span> <span data-i18n="model.logic.sims">10 000 simulácií</span></span>
+            <span><span class="text-[#acc7ff]">■</span> <span data-i18n="model.logic.weighting">váhovanie podľa mesiaca</span></span>
+            <span><span class="text-[#acc7ff]">■</span> <span data-i18n="model.logic.house">house effect 2023</span></span>
           </div>
         </div>
         <a href="metodologia.html" class="font-black text-xs uppercase text-[#acc7ff] border-b border-[#acc7ff] hover:text-[#e5e2e1] hover:border-[#e5e2e1] transition-none flex items-center gap-1 shrink-0">
-          METODOLÓGIA <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+          <span data-i18n="model.logic.link">METODOLÓGIA</span> <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
         </a>
       </div>
 
       <!-- KOALIČNÁ KALKULAČKA -->
       <div class="p-6 flex-grow flex flex-col">
-        <h2 class="font-black text-2xl uppercase tracking-tighter mb-2">KOALIČNÁ KALKULAČKA</h2>
-        <p class="font-mono text-[10px] text-outline uppercase tracking-widest mb-6">Zaškrtni strany · prepočet z 10 000 simulácií</p>
+        <h2 class="font-black text-2xl uppercase tracking-tighter mb-2" data-i18n="model.calc.title">KOALIČNÁ KALKULAČKA</h2>
+        <p class="font-mono text-[10px] text-outline uppercase tracking-widest mb-6" data-i18n="model.calc.subtitle">Zaškrtni strany · prepočet z 10 000 simulácií</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8" id="calc-checkboxes"></div>
         <div class="border-2 border-[#acc7ff] bg-[#0e0e0e] p-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-1">Suma mandátov</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-1" data-i18n="model.calc.seatsLbl">Suma mandátov</div>
             <div class="flex items-baseline gap-3">
               <span class="font-black text-6xl text-[#acc7ff] leading-none" id="calc-seats">–</span>
-              <span class="font-black text-2xl text-outline leading-none">/ 150</span>
+              <span class="font-black text-2xl text-outline leading-none" data-i18n="model.calc.total">/ 150</span>
             </div>
           </div>
           <div class="hidden md:block w-px h-16 bg-[#424753]"></div>
           <div>
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-2">Pravdepodobnosť väčšiny</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest mb-2" data-i18n="model.calc.probLbl">Pravdepodobnosť väčšiny</div>
             <div class="flex items-center gap-3">
               <span class="font-black text-4xl leading-none" id="calc-prob">–</span>
               <div class="h-2 w-32 bg-surface-container-low border border-[#424753] overflow-hidden">
@@ -192,17 +171,21 @@ body {
 
 <footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e]">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
-    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2">DATA JOURNALISM</span></div>
+    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2" data-i18n="data.journalism">DATA JOURNALISM</span></div>
     <div class="flex flex-wrap justify-center gap-6">
-      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Metodológia</a>
-      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Zdroj dát</a>
+      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="nav.methodology">Metodológia</a>
+      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="footer.source">Zdroj dát</a>
     </div>
-    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 VOLL.BY</div>
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 WOLL.BY</div>
   </div>
 </footer>
 
 <script>
 const API = "http://localhost:8000";
+
+function toggleMobileNav() {
+  document.getElementById("mobile-nav").classList.toggle("open");
+}
 
 function mapPoll(p) {
   return {
@@ -325,13 +308,13 @@ function renderAll(){
         </div>
         <div class="space-y-1.5">
           <div class="flex justify-between font-mono text-[10px] text-outline uppercase">
-            <span>Kresiel: ${seats}</span><span>Prah: 5.0%</span>
+            <span>${T('model.sidebar.seats')} ${seats}</span><span>${T('model.sidebar.threshold')}</span>
           </div>
           <div class="relative h-4 bg-[#0e0e0e] border border-[#424753]">
             <div class="absolute inset-y-0" style="left:${(ci.p025/150*100).toFixed(1)}%;right:${(100-ci.p975/150*100).toFixed(1)}%;background:${p.color}30;border-left:1px solid ${p.color};border-right:1px solid ${p.color}"></div>
             <div class="absolute top-0 bottom-0 w-[2px]" style="left:${(seats/150*100).toFixed(1)}%;background:${p.color}"></div>
           </div>
-          <div class="font-mono text-[9px] text-outline">RANGE: ${ci.p025}–${ci.p975} kr.</div>
+          <div class="font-mono text-[9px] text-outline">RANGE: ${ci.p025}–${ci.p975} ${T('model.sidebar.rangeUnit')}</div>
         </div>`;
     }else{
       row.className="p-4 border-b-2 border-outline opacity-50";
@@ -392,7 +375,7 @@ function renderSimChart(){
         titleColor:"#e5e2e1",bodyColor:"#8c909e",
         titleFont:{family:"JetBrains Mono",weight:"700",size:11},
         bodyFont:{family:"JetBrains Mono",size:11},
-        callbacks:{title:i=>`${i[0].label}–${+i[0].label+bSz-1} KRESIEL`,label:i=>` ${i.raw.toLocaleString("sk")} SIMULÁCIÍ`}
+        callbacks:{title:i=>`${i[0].label}–${+i[0].label+bSz-1} ${T('model.sim.seats')}`,label:i=>` ${i.raw.toLocaleString(getCurrentLang()==='en'?'en-GB':'sk')} ${T('model.sim.sims')}`}
       }},
       scales:{
         x:{grid:{color:"rgba(66,71,83,0.3)"},ticks:{color:"#8c909e",font:{family:"JetBrains Mono",size:10}}},
@@ -475,105 +458,15 @@ function calcCoalition(){
   bar.style.width=prob.toFixed(1)+"%";
   bar.style.background=hasMaj?"#66FF00":"#CC0000";
   const verdict=document.getElementById("calc-verdict");
-  verdict.textContent=hasMaj?"✓ VÄČŠINA":"✗ MENŠINOVÁ";
+  verdict.textContent=hasMaj?T('model.calc.maj'):T('model.calc.min');
   verdict.style.borderColor=hasMaj?"#66FF00":"#CC0000";
   verdict.style.color=hasMaj?"#66FF00":"#CC0000";
   verdict.style.backgroundColor=hasMaj?"rgba(102,255,0,0.05)":"rgba(204,0,0,0.05)";
 }
 
-// ── Wiki fetch via backend ──────────────────────────────────────────────────
-async function fetchFromWiki(){
-  const btn=document.getElementById("btn-fetch");
-  btn.disabled=true;
-  btn.innerHTML='<span class="spinner"></span>NAČÍTAVAM...';
-  document.getElementById("status-line").textContent="SŤAHUJEM DÁTA Z WIKIPEDIA...";
-  try{
-    const r=await fetch(`${API}/polls/fetch-wiki`,{method:"POST"});
-    if(!r.ok){
-      const err=await r.json().catch(()=>({}));
-      throw new Error(err.detail||`HTTP ${r.status}`);
-    }
-    const result=await r.json();
-    const res=await fetch(`${API}/polls`);
-    polls=(await res.json()).map(mapPoll);
-    document.getElementById("status-line").textContent=
-      `✓ ${result.added} NOVÝCH · SPOLU ${result.total} PRIESKUMOV`;
-    renderAll();
-  }catch(e){
-    document.getElementById("status-line").textContent=
-      `⚠ CHYBA: ${e.message} — POUŽÍVAM LOKÁLNE DÁTA`;
-    if(polls.length>0)renderAll();
-  }finally{
-    btn.disabled=false;
-    btn.innerHTML='↻ NAČÍTAŤ Z WIKI';
-  }
-}
-
-// ── Manual poll form ────────────────────────────────────────────────────────
-function toggleManual(){
-  const p=document.getElementById("manual-panel");p.classList.toggle("hidden");
-  if(!p.classList.contains("hidden")){
-    const g=document.getElementById("manual-inputs");g.innerHTML="";
-    const keys=["PS","Smer","Hlas","OLaNO","SaS","Rep","Dem","KDH","SNS","MA"];
-    const colors={PS:"#00CCFF",Smer:"#CC0000",Hlas:"#660033",OLaNO:"#99AA00",SaS:"#66FF00",Rep:"#8B4513",Dem:"#6600AA",KDH:"#003366",SNS:"#546E7A",MA:"#FF8800"};
-    keys.forEach(k=>{
-      const d=document.createElement("div");d.className="space-y-1";
-      d.innerHTML=`<label class="font-mono text-[9px] uppercase tracking-widest block font-bold" style="color:${colors[k]}">${k} %</label><input type="number" id="mi-${k}" min="0" max="50" step="0.1" class="w-full bg-surface-container-high border-2 border-outline-variant text-on-surface font-mono text-sm px-3 py-2 outline-none focus:border-[#acc7ff]" placeholder="0.0"/>`;
-      g.appendChild(d);
-    });
-    document.getElementById("m-date").value=new Date().toISOString().split("T")[0];
-  }
-}
-
-const KEY_MAP={PS:"ps",Smer:"smer",Hlas:"hlas",OLaNO:"olano",SaS:"sas",Rep:"rep",Dem:"dem",KDH:"kdh",SNS:"sns",MA:"ma"};
-
-async function addManualPoll(){
-  const firm=document.getElementById("m-firm").value;
-  const dateVal=document.getElementById("m-date").value;
-  const ds=document.getElementById("m-datestr").value||dateVal;
-  if(!dateVal){showErr("Zadaj dátum.");return;}
-
-  const body={firm,date_str:ds,date:dateVal,source:"manual"};
-  let has=false;
-  Object.entries(KEY_MAP).forEach(([k,bk])=>{
-    const v=parseFloat(document.getElementById("mi-"+k)?.value);
-    body[bk]=isNaN(v)?null:v;
-    if(!isNaN(v)&&v>0)has=true;
-  });
-  if(!has){showErr("Zadaj aspoň niekoľko hodnôt.");return;}
-
-  try{
-    const r=await fetch(`${API}/polls`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(body),
-    });
-    if(!r.ok){
-      const err=await r.json().catch(()=>({}));
-      const msg=Array.isArray(err.detail)?err.detail[0]?.msg:err.detail;
-      showErr(msg||"Chyba pri ukladaní.");
-      return;
-    }
-    const res=await fetch(`${API}/polls`);
-    polls=(await res.json()).map(mapPoll);
-    document.getElementById("manual-panel").classList.add("hidden");
-    document.getElementById("status-line").textContent=
-      `PRIDANÝ: ${firm.toUpperCase()} (${ds}) · SPOLU ${polls.length}`;
-    renderAll();
-  }catch{
-    showErr("Chyba pri komunikácii so serverom.");
-  }
-}
-
-function showErr(msg){
-  const e=document.getElementById("manual-error");
-  e.textContent=msg;e.classList.remove("hidden");
-  setTimeout(()=>e.classList.add("hidden"),3000);
-}
-
 // ── Boot ────────────────────────────────────────────────────────────────────
 async function init(){
-  document.getElementById("status-line").textContent="NAČÍTAVAM...";
+  document.getElementById("status-line").textContent=T('status.loading');
   try{
     const res=await fetch(`${API}/polls`);
     if(!res.ok)throw new Error(`HTTP ${res.status}`);
@@ -582,8 +475,12 @@ async function init(){
     renderAll();
   }catch{
     document.getElementById("status-line").textContent=
-      "CHYBA: Backend nedostupný — spustite server";
+      T('status.error');
   }
+}
+
+function onLangChange() {
+  if(simResults) renderAll();
 }
 
 init();

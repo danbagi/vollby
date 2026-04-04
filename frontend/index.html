@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>VOLL.BY | VOLEBNÉ PREFERENCIE</title>
+<title>WOLL.BY | VOLEBNÉ PREFERENCIE</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="i18n.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -63,14 +65,15 @@ body {
 <header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
     <div class="flex items-center gap-10">
-      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY</a>
+      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY</a>
       <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
-        <a href="index.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1">Prehľad</a>
-        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none">Model</a>
+        <a href="index.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1" data-i18n="nav.overview">Prehľad</a>
+        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none" data-i18n="nav.model">Model</a>
       </nav>
     </div>
     <div class="flex items-center gap-4">
-      <a href="https://buymeacoffee.com/voll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
+      <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-outline text-on-surface hover:border-[#acc7ff] hover:text-[#acc7ff] transition-none hidden md:block">EN</button>
+      <a href="https://buymeacoffee.com/woll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
       <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
         <span class="material-symbols-outlined" style="font-size:20px">menu</span>
       </button>
@@ -78,8 +81,9 @@ body {
   </div>
   <!-- Mobile nav -->
   <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
-    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]">Prehľad</a>
-    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]">Model</a>
+    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]" data-i18n="nav.overview">Prehľad</a>
+    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]" data-i18n="nav.model">Model</a>
+    <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e] text-left">EN</button>
   </div>
 </header>
 
@@ -88,11 +92,11 @@ body {
   <!-- HERO -->
   <section class="border-b-2 border-outline pb-8 md:pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
     <div>
-      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block">Vývoj volebných preferencií SR</span>
-      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none">VOLEBNÉ<br/>PREFERENCIE</h1>
+      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block" data-i18n="index.hero.subtitle">Vývoj volebných preferencií SR</span>
+      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none" data-i18n-html="index.hero.h1">VOLEBNÉ<br/>PREFERENCIE</h1>
     </div>
     <div class="text-right">
-      <div class="font-mono text-xs uppercase tracking-widest text-outline">Posledný prieskum</div>
+      <div class="font-mono text-xs uppercase tracking-widest text-outline" data-i18n="index.hero.lastLabel">Posledný prieskum</div>
       <div class="font-mono text-xl font-bold text-on-surface" id="hero-last-poll">NAČÍTAVAM...</div>
     </div>
   </section>
@@ -121,8 +125,8 @@ body {
   <!-- SECTION 1: TREND CHART -->
   <section class="border-2 border-outline bg-surface">
     <div class="p-5 border-b-2 border-outline flex justify-between items-center flex-wrap gap-4">
-      <h2 class="font-black text-xl uppercase tracking-tight">Trend vývoja</h2>
-      <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Zdroj: AKO / Focus / Ipsos / NMS · Wikipedia</span>
+      <h2 class="font-black text-xl uppercase tracking-tight" data-i18n="index.trend.title">Trend vývoja</h2>
+      <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.trend.source">Zdroj: AKO / Focus / Ipsos / NMS · Wikipedia</span>
     </div>
     <div class="p-4 md:p-6 relative h-[250px] md:h-[400px]">
       <canvas id="trend-chart"></canvas>
@@ -132,12 +136,12 @@ body {
   <!-- SECTION 2: AKTUÁLNY ODHAD -->
   <section>
     <div class="flex items-end justify-between border-b-2 border-outline pb-4 mb-0 flex-wrap gap-4">
-      <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Aktuálny odhad</h2>
+      <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.estimate.title">Aktuálny odhad</h2>
       <div class="flex items-center gap-3 flex-wrap">
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Posledných</span>
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.estimate.last">Posledných</span>
         <input type="range" id="median-slider" min="3" max="15" value="5" class="w-20 md:w-24 accent-[#acc7ff]"/>
         <span class="font-mono text-sm font-bold text-[#acc7ff]" id="median-n">5</span>
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">prieskumov</span>
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.estimate.polls">prieskumov</span>
       </div>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-0 border-2 border-outline border-t-0" id="median-cards"></div>
@@ -147,11 +151,11 @@ body {
   <section>
     <div class="border-b-2 border-outline pb-4 mb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-1 block">Projekcia mandátov NRSR</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Prepočet na sedadlá</h2>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-1 block" data-i18n="index.seats.subtitle">Projekcia mandátov NRSR</span>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.seats.title">Prepočet na sedadlá</h2>
       </div>
       <div class="flex items-center gap-3 flex-wrap">
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest">Hagenbach-Bischoff</span>
+        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.seats.method">Hagenbach-Bischoff</span>
         <select id="poll-select" class="bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer"></select>
       </div>
     </div>
@@ -159,9 +163,9 @@ body {
     <div class="border-2 border-outline border-t-0">
       <div class="p-4 md:p-8 border-b-2 border-outline">
         <div class="flex justify-between items-center mb-4 md:mb-6 border-b-2 border-outline-variant pb-4">
-          <h3 class="font-black text-lg uppercase tracking-tight">Rozdelenie pléna</h3>
+          <h3 class="font-black text-lg uppercase tracking-tight" data-i18n="index.seats.hemi.title">Rozdelenie pléna</h3>
           <div class="text-right">
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest">1 bod = 1 poslanec</div>
+            <div class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.seats.hemi.dot">1 bod = 1 poslanec</div>
             <div class="font-mono text-3xl md:text-5xl font-black text-on-surface leading-none tabular-nums" id="total-seats-display">150<span class="text-outline text-lg">/150</span></div>
           </div>
         </div>
@@ -174,7 +178,7 @@ body {
         <div class="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-6 justify-center" id="majority-info"></div>
       </div>
       <div class="p-4 md:p-8">
-        <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6">Distribúcia strán</h3>
+        <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6" data-i18n="index.seats.bars.title">Distribúcia strán</h3>
         <div class="space-y-3 md:space-y-4" id="seat-bars"></div>
       </div>
     </div>
@@ -184,17 +188,17 @@ body {
   <section class="border-2 border-outline">
     <div class="p-4 md:p-8 border-b-2 border-outline flex justify-between items-end flex-wrap gap-4">
       <div>
-        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-2 block">Interaktívny kalkulátor</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Koaličná skladba</h2>
+        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-2 block" data-i18n="index.coalition.subtitle">Interaktívny kalkulátor</span>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.coalition.title">Koaličná skladba</h2>
       </div>
-      <button onclick="resetCoalitions()" class="font-mono font-bold text-xs uppercase tracking-widest px-6 py-3 border-2 border-on-surface bg-on-surface text-surface hover:bg-[#acc7ff] hover:border-[#acc7ff] hover:text-[#131313] transition-none">↺ Resetovať</button>
+      <button onclick="resetCoalitions()" class="font-mono font-bold text-xs uppercase tracking-widest px-6 py-3 border-2 border-on-surface bg-on-surface text-surface hover:bg-[#acc7ff] hover:border-[#acc7ff] hover:text-[#131313] transition-none" data-i18n="index.coalition.reset">↺ Resetovať</button>
     </div>
 
     <!-- Progress bars -->
     <div class="grid grid-cols-2 border-b-2 border-outline">
       <div class="p-4 md:p-6 border-r-2 border-outline">
         <div class="flex justify-between items-center mb-3">
-          <span class="font-mono text-[10px] uppercase tracking-widest text-outline">Vládna koalícia</span>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-outline" data-i18n="index.coalition.govBar">Vládna koalícia</span>
           <span class="font-mono font-bold text-lg" id="gov-num" style="color:#CC0000">0</span>
         </div>
         <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
@@ -205,7 +209,7 @@ body {
       </div>
       <div class="p-4 md:p-6">
         <div class="flex justify-between items-center mb-3">
-          <span class="font-mono text-[10px] uppercase tracking-widest text-outline">Opozícia</span>
+          <span class="font-mono text-[10px] uppercase tracking-widest text-outline" data-i18n="index.coalition.oppBar">Opozícia</span>
           <span class="font-mono font-bold text-lg" id="opp-num" style="color:#acc7ff">0</span>
         </div>
         <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
@@ -222,7 +226,7 @@ body {
            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'gov')">
         <div class="mb-4 md:mb-6">
           <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#CC0000]" id="big-gov">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Vládna koalícia</h3>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.govZone">Vládna koalícia</h3>
         </div>
         <div class="flex flex-wrap gap-2" id="chips-gov"></div>
       </div>
@@ -230,17 +234,17 @@ body {
            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'neutral')">
         <div class="mb-4 md:mb-6">
           <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-outline" id="big-neutral">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Nezaradené</h3>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.neutral">Nezaradené</h3>
         </div>
         <div class="flex flex-wrap gap-2" id="chips-neutral">
-          <div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">Preneste strany sem</div>
+          <div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center" data-i18n="index.coalition.dragHint">Preneste strany sem</div>
         </div>
       </div>
       <div id="zone-opp" class="drop-zone p-4 md:p-8 min-h-40 md:min-h-64 bg-surface-container-low"
            ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'opp')">
         <div class="mb-4 md:mb-6">
           <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#acc7ff]" id="big-opp">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2">Opozícia</h3>
+          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.oppZone">Opozícia</h3>
         </div>
         <div class="flex flex-wrap gap-2" id="chips-opp"></div>
       </div>
@@ -252,7 +256,7 @@ body {
     <div class="border-b-2 border-outline pb-4 mb-0">
       <div class="flex items-center gap-4 mb-5">
         <span class="material-symbols-outlined text-[#acc7ff]" style="font-variation-settings:'FILL' 1">analytics</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter">Raw Data Ledger</h2>
+        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="rawdata.title">Raw Data Ledger</h2>
       </div>
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex gap-2 flex-wrap">
@@ -273,8 +277,8 @@ body {
       <table class="w-full text-left font-mono text-xs">
         <thead>
           <tr class="border-b-2 border-outline bg-surface-container-low">
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap">Agentúra</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap">Dátum</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="table.agency">Agentúra</th>
+            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="table.date">Dátum</th>
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#00CCFF">PS</th>
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#CC0000">Smer</th>
             <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#8B4513">Rep.</th>
@@ -295,12 +299,12 @@ body {
 
 <footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e] mt-16 md:mt-20">
   <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
-    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">VOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2">DATA JOURNALISM</span></div>
+    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2" data-i18n="data.journalism">DATA JOURNALISM</span></div>
     <div class="flex flex-wrap justify-center gap-6">
-      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Metodológia</a>
-      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]">Zdroj dát</a>
+      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="nav.methodology">Metodológia</a>
+      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="footer.source">Zdroj dát</a>
     </div>
-    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 VOLL.BY</div>
+    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 WOLL.BY</div>
   </div>
 </footer>
 
@@ -388,7 +392,8 @@ function buildChart() {
   const cutoff = new Date();
   if(rangeMonths !== 99) cutoff.setMonth(cutoff.getMonth() - rangeMonths);
   const filtered = getFiltered().filter(p=>rangeMonths===99||p.date>=cutoff).slice().reverse();
-  const labels = filtered.map(p => p.date.toLocaleDateString("sk-SK",{month:"short",year:"2-digit"}));
+  const locale = getCurrentLang()==='en' ? 'en-GB' : 'sk-SK';
+  const labels = filtered.map(p => p.date.toLocaleDateString(locale,{month:"short",year:"2-digit"}));
   const datasets = PARTIES.filter(p=>activeParties.has(p.key)).map(p => ({
     label: p.label,
     data: filtered.map(r=>r[p.key]),
@@ -434,7 +439,7 @@ function setRange(m) {
 // ── MEDIAN CARDS ───────────────────────────────────────────────
 function renderMedian() {
   const recent = getFiltered().slice(0, medianN);
-  const old = getFiltered().slice(10, 25);
+  const old    = getFiltered().slice(medianN, medianN * 2);
   const grid = document.getElementById("median-cards");
   grid.innerHTML = "";
   const visible = PARTIES
@@ -467,7 +472,7 @@ function renderMedian() {
       <div class="mt-3 h-1 bg-surface-container-lowest">
         <div style="width:${Math.min(p.med*2.5,100)}%;background:${p.color};height:100%"></div>
       </div>
-      <div class="mt-2 font-mono text-[10px] uppercase tracking-widest ${above?"text-[#66FF00]":"text-[#CC0000]"}">${above?"▲ NAD PRAHOM":"▼ POD PRAHOM"}</div>`;
+      <div class="mt-2 font-mono text-[10px] uppercase tracking-widest ${above?"text-[#66FF00]":"text-[#CC0000]"}">${above?T('threshold.above'):T('threshold.below')}</div>`;
     grid.appendChild(card);
   });
 }
@@ -570,7 +575,7 @@ function drawHemicycle() {
   const lbl=document.createElementNS("http://www.w3.org/2000/svg","text");
   lbl.setAttribute("x",cx+8);lbl.setAttribute("y",cy-rMax-10);
   lbl.setAttribute("fill","rgba(255,255,255,0.4)");lbl.setAttribute("font-size","10");lbl.setAttribute("font-family","JetBrains Mono, monospace");lbl.setAttribute("font-weight","700");
-  lbl.textContent="76 MAJORITA"; svg.appendChild(lbl);
+  lbl.textContent=T('index.seats.majority76'); svg.appendChild(lbl);
 }
 
 function renderBars() {
@@ -593,10 +598,10 @@ function updateMajorityInfo() {
   const gS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
   const oS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='opp').reduce((s,p)=>s+p.seats,0);
   document.getElementById("majority-info").innerHTML = `
-    <span class="font-mono text-xs text-outline">Vládna: <strong class="text-[#CC0000]">${gS}</strong></span>
-    <span class="font-mono text-xs text-outline">Opozícia: <strong style="color:#acc7ff">${oS}</strong></span>
-    <span class="font-mono text-xs text-outline">Väčšina: <strong class="text-white">76</strong></span>
-    <span class="font-mono text-xs font-bold ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?"✓ VÄČŠINA":"✗ BEZ VÄČŠINY"}</span>`;
+    <span class="font-mono text-xs text-outline">${T('majority.gov')} <strong class="text-[#CC0000]">${gS}</strong></span>
+    <span class="font-mono text-xs text-outline">${T('majority.opp')} <strong style="color:#acc7ff">${oS}</strong></span>
+    <span class="font-mono text-xs text-outline">${T('majority.threshold')} <strong class="text-white">76</strong></span>
+    <span class="font-mono text-xs font-bold ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?T('majority.has'):T('majority.no')}</span>`;
 }
 
 // ── COALITION BUILDER ──────────────────────────────────────────
@@ -605,7 +610,7 @@ function buildChips() {
     const el = document.getElementById(`chips-${zone}`); el.innerHTML = "";
     const inZone = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')===zone);
     if(zone==='neutral' && !inZone.length){
-      el.innerHTML = `<div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">Sem preneste strany</div>`;
+      el.innerHTML = `<div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">${T('index.coalition.dragHint')}</div>`;
       return;
     }
     inZone.forEach(p=>{
@@ -642,9 +647,9 @@ function updateCoalitionTotals() {
   document.getElementById("opp-bar").style.width = Math.min(oS/TOTAL*100,100)+"%";
   document.getElementById("gov-bar").style.background = gS>=MAJ?"#66FF00":"#CC0000";
   document.getElementById("opp-bar").style.background = oS>=MAJ?"#66FF00":"#acc7ff";
-  document.getElementById("gov-status").textContent = gS>=MAJ?"✓ MÁ VÄČŠINU":"✗ CHÝBA "+(MAJ-gS)+" KRESIEL";
+  document.getElementById("gov-status").textContent = gS>=MAJ?T('coalition.hasMaj'):T('coalition.noMaj.prefix')+' '+(MAJ-gS)+' '+T('coalition.noMaj.suffix');
   document.getElementById("gov-status").style.color = gS>=MAJ?"#66FF00":"#CC0000";
-  document.getElementById("opp-status").textContent = oS>=MAJ?"✓ MÁ VÄČŠINU":"✗ CHÝBA "+(MAJ-oS)+" KRESIEL";
+  document.getElementById("opp-status").textContent = oS>=MAJ?T('coalition.hasMaj'):T('coalition.noMaj.prefix')+' '+(MAJ-oS)+' '+T('coalition.noMaj.suffix');
   document.getElementById("opp-status").style.color = oS>=MAJ?"#66FF00":"#acc7ff";
 }
 
@@ -682,7 +687,7 @@ function renderSeats(idx) {
 
 // ── INIT ───────────────────────────────────────────────────────
 async function init() {
-  document.getElementById("hero-last-poll").textContent = "NAČÍTAVAM...";
+  document.getElementById("hero-last-poll").textContent = T('status.loading');
   try {
     const res = await fetch(`${API}/polls`);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -708,13 +713,20 @@ async function init() {
     renderSeats(0);
   } catch {
     document.getElementById("hero-last-poll").innerHTML =
-      `<span style="color:#CC0000">CHYBA: Backend nedostupný — spustite server</span>`;
+      `<span style="color:#CC0000">${T('status.error')}</span>`;
     document.getElementById("hemicycle-svg").innerHTML =
       `<text x="350" y="160" text-anchor="middle" fill="#CC0000" font-size="11"
         font-family="JetBrains Mono,monospace" font-weight="700">
         CHYBA: Backend nedostupný — spustite server
       </text>`;
   }
+}
+
+function onLangChange() {
+  buildChart();
+  renderMedian();
+  if(currentSeats.length) { drawHemicycle(); updateMajorityInfo(); buildChips(); }
+  renderPollsTable();
 }
 
 init();
