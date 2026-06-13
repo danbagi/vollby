@@ -1,735 +1,884 @@
-<!DOCTYPE html>
-<html class="dark" lang="sk">
+<!doctype html>
+<html lang="sk" data-theme="light">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>WOLL.BY | VOLEBNÉ PREFERENCIE</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="i18n.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: { extend: {
-    colors: {
-      "surface-container-lowest":"#0e0e0e","surface-container-low":"#1c1b1b",
-      "surface-container":"#201f1f","surface-container-high":"#2a2a2a",
-      "surface-container-highest":"#353534","surface-variant":"#353534",
-      "surface":"#131313","background":"#131313",
-      "on-surface":"#e5e2e1","on-surface-variant":"#c2c6d5","on-background":"#e5e2e1",
-      "outline":"#8c909e","outline-variant":"#424753",
-      "primary":"#acc7ff","primary-container":"#508ff8",
-      "on-primary":"#002f68","on-primary-fixed":"#001a40","on-primary-container":"#00285b",
-      "tertiary":"#acc7ff","tertiary-container":"#508ff8",
-      "error":"#ffb4ab","error-container":"#93000a",
-      "inverse-surface":"#e5e2e1","inverse-primary":"#005bbf",
-    },
-    fontFamily: {"headline":["Space Grotesk"],"body":["Space Grotesk"],"label":["Space Grotesk"],"mono":["JetBrains Mono"]},
-    borderRadius: {"DEFAULT":"0px","lg":"0px","xl":"0px","2xl":"0px","full":"0px"},
-  }}
-}
-</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WOLL.BY — Volebný prieskum</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700;6..72,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-* { border-radius: 0 !important; }
-body {
-  background-color: #131313;
-  background-image: radial-gradient(circle at 2px 2px, #2a2a2a 1px, transparent 0);
-  background-size: 32px 32px;
-  font-family: 'Space Grotesk', sans-serif;
-}
-.material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24 }
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0e0e0e; }
-::-webkit-scrollbar-thumb { background: #424753; border: 2px solid #0e0e0e; }
-.pchip {
-  display:inline-flex; align-items:center; gap:6px;
-  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
-  padding:6px 12px; cursor:grab; border:2px solid; user-select:none;
-  text-transform:uppercase; letter-spacing:.06em;
-  transition:opacity .15s; border-radius:0 !important;
-}
-.pchip:hover { opacity:.8; }
-.pchip.dragging { opacity:.3; cursor:grabbing; }
-.drop-zone { transition: background .1s, border-color .1s; }
-.drop-zone.drag-over { background: rgba(172,199,255,0.05) !important; border-color: #acc7ff !important; }
-#mobile-nav { display: none; }
-#mobile-nav.open { display: flex; }
+  :root {
+    --paper:      #F3EEE3;
+    --paper-2:    #ECE6D8;
+    --ink:        #1A1814;
+    --ink-2:      #3A352D;
+    --muted:      #807868;
+    --hairline:   #D6CFBE;
+    --hairline-2: #C2BAA5;
+    --accent-pos: #1F7A4E;
+    --accent-neg: #B23A28;
+    --highlight:  #F1E9D2;
+
+    --p-ps:      #1F5BD0;
+    --p-smer:    #C8102E;
+    --p-hlas:    #E07A1F;
+    --p-rep:     #2F2F2F;
+    --p-kdh:     #E8B403;
+    --p-sas:     #00857A;
+    --p-slov:    #6E2D8E;
+    --p-sns:     #1F7A4E;
+    --p-rodina:  #B8336A;
+    --p-demo:    #0B3A6F;
+    --p-msz:     #88A33F;
+  }
+  [data-theme="dark"] {
+    --paper:      #14161A;
+    --paper-2:    #1B1E24;
+    --ink:        #E8E5DE;
+    --ink-2:      #BFBBAF;
+    --muted:      #807A6E;
+    --hairline:   #2A2D34;
+    --hairline-2: #3A3E47;
+    --accent-pos: #5BBE8B;
+    --accent-neg: #E6735C;
+    --highlight:  #232733;
+
+    --p-ps:      #5E92F2;
+    --p-smer:    #E5526A;
+    --p-hlas:    #F39A4E;
+    --p-rep:     #B5B5B5;
+    --p-kdh:     #F2C740;
+    --p-sas:     #2FB6A7;
+    --p-slov:    #B074D0;
+    --p-sns:     #4DC082;
+    --p-rodina:  #E26A98;
+    --p-demo:    #5B8FD0;
+    --p-msz:     #B6CF6A;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+  /* MASTHEAD */
+  .masthead { border-bottom: 1px solid var(--ink); background: var(--paper); }
+  .masthead-inner {
+    max-width: 1480px; margin: 0 auto; padding: 14px 32px 12px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 24px;
+  }
+  .wordmark {
+    font-family: "Newsreader", Georgia, serif; font-weight: 800; font-size: 32px;
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .wordmark .dot { color: var(--accent-neg); display: inline-block; transform: translateY(-0.05em); }
+  .wordmark .tld { font-weight: 400; font-style: italic; color: var(--ink-2); }
+  .masthead-meta {
+    text-align: center; text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 10.5px; font-weight: 500; color: var(--muted);
+  }
+  .masthead-tools { display: flex; gap: 16px; align-items: center; justify-content: flex-end; }
+  .toggle-group { display: inline-flex; border: 1px solid var(--hairline-2); border-radius: 1px; }
+  .toggle-group button {
+    appearance: none; background: transparent; border: 0; padding: 5px 10px;
+    font: 500 11px/1 "IBM Plex Mono", monospace; letter-spacing: 0.08em;
+    color: var(--ink-2); cursor: pointer;
+  }
+  .toggle-group button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .icon-btn {
+    appearance: none; background: transparent; border: 1px solid var(--hairline-2); color: var(--ink);
+    width: 28px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0;
+  }
+  .icon-btn:hover { background: var(--paper-2); }
+
+  /* NAVSTRIP */
+  .navstrip { border-bottom: 1px solid var(--hairline); background: var(--paper); }
+  .navstrip-inner {
+    max-width: 1480px; margin: 0 auto; padding: 8px 32px;
+    display: flex; gap: 28px; align-items: center;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  }
+  .navstrip a { color: var(--ink); text-decoration: none; padding: 4px 0; border-bottom: 1px solid transparent; }
+  .navstrip a.active { border-bottom-color: var(--ink); }
+  .navstrip a:hover { color: var(--accent-neg); }
+  .navstrip .spacer { flex: 1; }
+  .navstrip .stamp { font: 500 10.5px/1 "IBM Plex Mono", monospace; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* PAGE */
+  .page { max-width: 1480px; margin: 0 auto; padding: 28px 32px 64px; }
+
+  /* LEDE */
+  .lede {
+    display: grid; grid-template-columns: minmax(0,2.3fr) minmax(0,1fr); gap: 40px;
+    border-bottom: 1px solid var(--hairline); padding-bottom: 24px; margin-bottom: 24px;
+  }
+  .kicker { text-transform: uppercase; letter-spacing: 0.18em; font-size: 10.5px; font-weight: 600; color: var(--accent-neg); margin-bottom: 10px; }
+  .headline {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(28px, 3.2vw, 48px); line-height: 1.06;
+    letter-spacing: -0.018em; margin: 0 0 14px;
+  }
+  .dek { font-family: "Newsreader", Georgia, serif; font-size: 17px; line-height: 1.45; color: var(--ink-2); max-width: 62ch; }
+  .byline { margin-top: 14px; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .byline span + span::before { content: "·"; margin: 0 8px; color: var(--hairline-2); }
+  .kicker-stats { display: grid; grid-template-columns: 1fr; gap: 0; align-self: end; border-left: 1px solid var(--hairline); padding-left: 28px; }
+  .kstat { display: grid; grid-template-columns: 1fr auto; align-items: baseline; padding: 8px 0; border-bottom: 1px dotted var(--hairline-2); }
+  .kstat:last-child { border-bottom: 0; }
+  .kstat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .kstat-value { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 18px; font-weight: 500; }
+  .kstat-sub { grid-column: 1 / -1; font-size: 11px; color: var(--ink-2); margin-top: 2px; }
+
+  /* SECTION HEADER */
+  .section { margin-top: 36px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 6px; margin-bottom: 16px; }
+  .section-num { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+  .section-title { font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; line-height: 1; }
+  .section-note { margin-left: auto; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* AGGREGATE TABLE */
+  .agg-grid { display: grid; grid-template-columns: minmax(0,2.2fr) minmax(0,1fr); gap: 40px; }
+  .agg-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .agg-table th {
+    text-align: left; font-weight: 500; font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--hairline);
+  }
+  .agg-table th.num-col, .agg-table td.num-col { text-align: right; }
+  .agg-table td { padding: 9px 8px; border-bottom: 1px solid var(--hairline); vertical-align: middle; }
+  .agg-table tr.below-thresh td:first-child,
+  .agg-table tr.below-thresh td:nth-child(2) { color: var(--muted); }
+  .agg-table tr:hover { background: var(--highlight); }
+  .agg-table td.party { width: 24%; font-weight: 500; white-space: nowrap; position: relative; padding-left: 22px; }
+  .agg-table td.party::before {
+    content: ""; position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+    width: 8px; height: 8px; background: var(--swatch, var(--muted));
+  }
+  .agg-table td.party small { display: block; font-weight: 400; color: var(--muted); font-size: 11px; margin-top: 1px; }
+  .bar-cell { width: 44%; padding-right: 12px !important; }
+  .bar { position: relative; height: 14px; background: linear-gradient(to right, var(--hairline-2) 0 1px, transparent 1px) 0 0 / 10% 100%; }
+  .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--swatch, var(--muted)); }
+  .bar-tick { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--ink); opacity: 0.75; }
+  .bar-tick::after {
+    content: attr(data-label); position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    font: 500 9px/1 "IBM Plex Mono", monospace; color: var(--muted); letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .pct { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 500; width: 12%; }
+  .seats { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--ink-2); width: 8%; }
+  .diff { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 12px; font-weight: 500; display: inline-flex; align-items: baseline; gap: 4px; width: 12%; justify-content: flex-end; }
+  .diff .arrow { font-size: 10px; transform: translateY(-1px); }
+  .diff.pos { color: var(--accent-pos); }
+  .diff.neg { color: var(--accent-neg); }
+  .diff.zero { color: var(--muted); }
+  .diff.nodata { color: var(--muted); font-size: 11px; }
+
+  /* SIDE BOX */
+  .side-box { border: 1px solid var(--hairline); padding: 18px 18px 16px; background: var(--paper-2); }
+  .side-box + .side-box { margin-top: 18px; }
+  .side-title { font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 16px; margin: 0 0 10px; display: flex; align-items: baseline; gap: 8px; }
+  .side-title small { font: 500 10px/1 "IBM Plex Mono", monospace; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .side-sub { font-size: 12px; color: var(--ink-2); margin-bottom: 14px; line-height: 1.5; }
+  .seat-bar { display: flex; height: 18px; border: 1px solid var(--ink); margin-bottom: 8px; }
+  .seat-bar div { height: 100%; }
+  .seat-bar div:hover { filter: brightness(0.9); }
+  .seat-majority { position: relative; height: 8px; margin-bottom: 16px; }
+  .seat-majority::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink); }
+  .seat-majority::after {
+    content: "76 / 150"; position: absolute; left: 50%; top: 0; transform: translate(-50%, 2px);
+    font: 500 9px/1 "IBM Plex Mono", monospace; color: var(--muted); letter-spacing: 0.08em;
+    background: var(--paper-2); padding: 0 4px;
+  }
+  .coalition { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; border-top: 1px solid var(--hairline); padding-top: 10px; margin-top: 2px; font-size: 12.5px; }
+  .coalition .label { color: var(--ink-2); }
+  .coalition .badge { display: inline-flex; align-items: center; gap: 6px; }
+  .coalition .swatches { display: inline-flex; gap: 2px; }
+  .coalition .swatches span { width: 7px; height: 10px; display: inline-block; }
+  .coalition .val { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  .coalition .val.ok { color: var(--accent-pos); }
+  .coalition .val.no { color: var(--accent-neg); }
+  .coalition .val small { color: var(--muted); margin-left: 6px; }
+  .moe-row { display: grid; grid-template-columns: 1fr auto; gap: 6px; font-size: 12px; padding: 6px 0; border-bottom: 1px dotted var(--hairline-2); }
+  .moe-row:last-child { border-bottom: 0; }
+  .moe-row .val { font-family: "IBM Plex Mono", monospace; color: var(--ink-2); }
+
+  /* TREND */
+  .trend-wrap { display: grid; grid-template-columns: minmax(0,1fr) 220px; gap: 32px; }
+  .chart-frame { border: 1px solid var(--hairline); background: var(--paper); padding: 12px 12px 4px; }
+  .chart-frame svg { display: block; width: 100%; height: auto; }
+  .axis-line { stroke: var(--hairline-2); stroke-width: 1; }
+  .axis-line.major { stroke: var(--hairline); }
+  .axis-zero { stroke: var(--ink); stroke-width: 1; }
+  .axis-text { font: 500 10px "IBM Plex Mono", monospace; fill: var(--muted); letter-spacing: 0.05em; }
+  .axis-text.major { fill: var(--ink-2); }
+  .threshold { stroke: var(--ink); stroke-dasharray: 2 3; stroke-width: 1; }
+  .trend-line { fill: none; stroke-width: 1.6; }
+  .trend-dot { stroke: var(--paper); stroke-width: 1; }
+  .trend-label { font: 600 10.5px "IBM Plex Sans", sans-serif; }
+  .trend-legend { display: grid; grid-template-columns: 1fr; gap: 0; align-self: start; border-left: 1px solid var(--hairline); padding-left: 18px; }
+  .trend-legend .leg-item { display: grid; grid-template-columns: 14px 1fr auto auto; align-items: baseline; gap: 8px; padding: 6px 0; border-bottom: 1px dotted var(--hairline-2); }
+  .trend-legend .leg-item:last-child { border-bottom: 0; }
+  .trend-legend .leg-item .sw { width: 10px; height: 10px; }
+  .trend-legend .leg-item .ttl { font-weight: 500; font-size: 12.5px; }
+  .trend-legend .leg-item .now { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 12px; }
+  .trend-legend .leg-item .delta { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--muted); }
+
+  /* SMALL MULTIPLES */
+  .mults { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0; border-top: 1px solid var(--hairline); border-left: 1px solid var(--hairline); }
+  .mult { border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 14px 16px 10px; display: flex; flex-direction: column; gap: 8px; }
+  .mult-head { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 8px; }
+  .mult-head .sw { width: 10px; height: 10px; }
+  .mult-head .name { font-weight: 600; font-size: 13.5px; }
+  .mult-head .now { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .mult-sub { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: -4px; }
+  .mult svg { display: block; width: 100%; height: 56px; }
+  .spark-area { fill-opacity: 0.10; }
+
+  /* POLLSTER TABLE */
+  .src-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .src-table th, .src-table td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--hairline); }
+  .src-table th { font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); border-bottom: 1px solid var(--ink); }
+  .src-table tr:hover td { background: var(--highlight); }
+  .src-table .pollster { font-weight: 600; }
+  .src-top3 { display: inline-flex; gap: 3px; align-items: center; flex-wrap: wrap; }
+  .src-top3 .chip { font-family: "IBM Plex Mono", monospace; font-size: 11px; padding: 1px 5px; color: var(--paper); letter-spacing: 0.02em; }
+
+  /* ERROR BANNER */
+  .error-banner { background: var(--accent-neg); color: #fff; padding: 10px 32px; font: 500 12px/1.4 "IBM Plex Mono", monospace; letter-spacing: 0.06em; display: none; }
+  .error-banner.visible { display: block; }
+
+  /* FOOTER */
+  .footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; font-size: 11.5px; color: var(--ink-2); }
+  .footer h4 { font: 600 10.5px/1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .footer p { margin: 0 0 8px; max-width: 56ch; line-height: 1.55; }
+  .footer .colophon { font-family: "Newsreader", serif; font-style: italic; color: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .lede, .agg-grid, .trend-wrap { grid-template-columns: 1fr; gap: 24px; }
+    .kicker-stats { border-left: 0; padding-left: 0; border-top: 1px solid var(--hairline); padding-top: 14px; }
+    .trend-legend { border-left: 0; border-top: 1px solid var(--hairline); padding: 12px 0 0; }
+    .mults { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .page { padding: 18px 18px 48px; }
+    .navstrip-inner { flex-wrap: wrap; gap: 14px; padding: 8px 18px; }
+    .masthead-inner { grid-template-columns: 1fr; gap: 10px; padding: 14px 18px; }
+    .masthead-meta, .masthead-tools { justify-content: flex-start; text-align: left; }
+    .mults { grid-template-columns: 1fr; }
+    .footer { grid-template-columns: 1fr; }
+    .bar-cell { display: none; }
+    .seats { display: none; }
+  }
 </style>
 </head>
-<body class="text-on-surface min-h-screen">
+<body>
 
-<!-- HEADER -->
-<header class="bg-[#131313] border-b-2 border-[#8c909e] sticky top-0 z-50">
-  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
-    <div class="flex items-center gap-10">
-      <a href="index.html" class="text-2xl font-black uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY</a>
-      <nav class="hidden md:flex gap-8 items-center font-mono font-bold uppercase tracking-widest text-xs">
-        <a href="index.html" class="text-[#acc7ff] border-b-2 border-[#acc7ff] pb-1" data-i18n="nav.overview">Prehľad</a>
-        <a href="model.html" class="text-[#8c909e] hover:text-[#e5e2e1] transition-none" data-i18n="nav.model">Model</a>
-      </nav>
-    </div>
-    <div class="flex items-center gap-4">
-      <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-outline text-on-surface hover:border-[#acc7ff] hover:text-[#acc7ff] transition-none hidden md:block">EN</button>
-      <a href="https://buymeacoffee.com/woll.by" target="_blank" rel="noopener" class="font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-2 border-[#131313] bg-[#FFD700] text-[#131313] hover:opacity-90 transition-none whitespace-nowrap"><span class="hidden sm:inline">☕ BUY ME A COFFEE</span><span class="sm:hidden">☕</span></a>
-      <button id="hamburger" class="md:hidden p-2 border-2 border-outline text-on-surface" onclick="toggleMobileNav()">
-        <span class="material-symbols-outlined" style="font-size:20px">menu</span>
+<div class="error-banner" id="error-banner"></div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="wordmark">WOLL<span class="dot">.</span><span class="tld">by</span></div>
+    <div class="masthead-meta" data-sk="Volebné prieskumy · Slovensko" data-en="Election polling · Slovakia">Volebné prieskumy · Slovensko</div>
+    <div class="masthead-tools">
+      <div class="toggle-group" role="group" aria-label="Jazyk">
+        <button data-lang="sk" aria-pressed="true">SK</button>
+        <button data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="icon-btn" id="theme-toggle" aria-label="Tmavý režim">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 13a9 9 0 1 1-10-10 7 7 0 0 0 10 10z"/></svg>
       </button>
     </div>
   </div>
-  <!-- Mobile nav -->
-  <div id="mobile-nav" class="md:hidden flex-col border-t-2 border-outline bg-[#131313] px-6 py-4 gap-4">
-    <a href="index.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#acc7ff]" data-i18n="nav.overview">Prehľad</a>
-    <a href="model.html" class="font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e]" data-i18n="nav.model">Model</a>
-    <button onclick="setLang(getCurrentLang()==='sk'?'en':'sk')" class="lang-toggle font-mono font-bold text-sm uppercase tracking-widest text-[#8c909e] text-left">EN</button>
-  </div>
 </header>
 
-<main class="max-w-screen-2xl mx-auto px-4 md:px-6 py-8 md:py-12 space-y-16 md:space-y-20">
-
-  <!-- HERO -->
-  <section class="border-b-2 border-outline pb-8 md:pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
-    <div>
-      <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-4 block" data-i18n="index.hero.subtitle">Vývoj volebných preferencií SR</span>
-      <h1 class="font-black text-5xl md:text-9xl uppercase tracking-tighter leading-none" data-i18n-html="index.hero.h1">VOLEBNÉ<br/>PREFERENCIE</h1>
-    </div>
-    <div class="text-right">
-      <div class="font-mono text-xs uppercase tracking-widest text-outline" data-i18n="index.hero.lastLabel">Posledný prieskum</div>
-      <div class="font-mono text-xl font-bold text-on-surface" id="hero-last-poll">NAČÍTAVAM...</div>
-    </div>
-  </section>
-
-  <!-- FILTER BAR -->
-  <div class="flex flex-col gap-2" id="time-btns">
-    <div class="flex items-start justify-between gap-4 flex-wrap">
-      <div class="overflow-x-auto pb-1 flex-1 min-w-0">
-        <div class="flex gap-0 border-2 border-outline w-max" id="party-pills"></div>
-      </div>
-      <div class="flex gap-2 flex-wrap justify-end shrink-0">
-        <button onclick="setRange(6)"  data-range="6"  class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
-        <button onclick="setRange(12)" data-range="12" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
-        <button onclick="setRange(99)" data-range="99" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
-      </div>
-    </div>
-    <div class="flex gap-2 flex-wrap justify-end">
-      <button onclick="setAgencyFilter('all')"   data-agency="all"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">Všetky</button>
-      <button onclick="setAgencyFilter('Ipsos')" data-agency="Ipsos" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Ipsos</button>
-      <button onclick="setAgencyFilter('AKO')"   data-agency="AKO"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">AKO</button>
-      <button onclick="setAgencyFilter('Focus')" data-agency="Focus" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Focus</button>
-      <button onclick="setAgencyFilter('NMS')"   data-agency="NMS"   class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">NMS</button>
-    </div>
+<nav class="navstrip">
+  <div class="navstrip-inner">
+    <a href="#agregat" class="active" data-sk="Agregát" data-en="Aggregate">Agregát</a>
+    <a href="#trend" data-sk="Trendy" data-en="Trends">Trendy</a>
+    <a href="#multiples" data-sk="Po stranách" data-en="By party">Po stranách</a>
+    <a href="#agentury" data-sk="Agentúry" data-en="Pollsters">Agentúry</a>
+    <a href="#metodika" data-sk="Metodika" data-en="Methodology">Metodika</a>
+    <span class="spacer"></span>
+    <span class="stamp num" id="stamp"></span>
   </div>
+</nav>
 
-  <!-- SECTION 1: TREND CHART -->
-  <section class="border-2 border-outline bg-surface">
-    <div class="p-5 border-b-2 border-outline flex justify-between items-center flex-wrap gap-4">
-      <h2 class="font-black text-xl uppercase tracking-tight" data-i18n="index.trend.title">Trend vývoja</h2>
-      <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.trend.source">Zdroj: AKO / Focus / Ipsos / NMS · Wikipedia</span>
-    </div>
-    <div class="p-4 md:p-6 relative h-[250px] md:h-[400px]">
-      <canvas id="trend-chart"></canvas>
-    </div>
-  </section>
+<main class="page">
 
-  <!-- SECTION 2: AKTUÁLNY ODHAD -->
-  <section>
-    <div class="flex items-end justify-between border-b-2 border-outline pb-4 mb-0 flex-wrap gap-4">
-      <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.estimate.title">Aktuálny odhad</h2>
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.estimate.last">Posledných</span>
-        <input type="range" id="median-slider" min="3" max="15" value="5" class="w-20 md:w-24 accent-[#acc7ff]"/>
-        <span class="font-mono text-sm font-bold text-[#acc7ff]" id="median-n">5</span>
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.estimate.polls">prieskumov</span>
+  <section class="lede">
+    <div>
+      <div class="kicker" id="lede-kicker" data-sk="Vážený agregát" data-en="Weighted aggregate">Vážený agregát</div>
+      <h1 class="headline" id="lede-headline">…</h1>
+      <p class="dek" id="lede-dek">…</p>
+      <div class="byline">
+        <span id="byline-date">—</span>
+        <span id="byline-cov">—</span>
+        <span data-sk="Okno · 14 dní" data-en="Window · 14 days">Okno · 14 dní</span>
       </div>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-0 border-2 border-outline border-t-0" id="median-cards"></div>
-  </section>
-
-  <!-- SECTION 3: PREPOČET NA SEDADLÁ -->
-  <section>
-    <div class="border-b-2 border-outline pb-4 mb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-1 block" data-i18n="index.seats.subtitle">Projekcia mandátov NRSR</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.seats.title">Prepočet na sedadlá</h2>
+    <div class="kicker-stats">
+      <div class="kstat">
+        <span class="kstat-label" data-sk="Líder" data-en="Leader">Líder</span>
+        <span class="kstat-value" id="ks-leader">—</span>
+        <span class="kstat-sub" id="ks-leader-sub"></span>
       </div>
-      <div class="flex items-center gap-3 flex-wrap">
-        <span class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.seats.method">Hagenbach-Bischoff</span>
-        <select id="poll-select" class="bg-surface-container border-2 border-outline-variant text-on-surface font-mono text-xs uppercase tracking-wider px-3 py-2 outline-none cursor-pointer"></select>
+      <div class="kstat">
+        <span class="kstat-label" data-sk="V parlamente" data-en="In parliament">V parlamente</span>
+        <span class="kstat-value" id="ks-inparl">—</span>
+        <span class="kstat-sub" data-sk="Strany nad 5 % zo sledovaných" data-en="Parties above 5% of those tracked">Strany nad 5 % zo sledovaných</span>
       </div>
-    </div>
-
-    <div class="border-2 border-outline border-t-0">
-      <div class="p-4 md:p-8 border-b-2 border-outline">
-        <div class="flex justify-between items-center mb-4 md:mb-6 border-b-2 border-outline-variant pb-4">
-          <h3 class="font-black text-lg uppercase tracking-tight" data-i18n="index.seats.hemi.title">Rozdelenie pléna</h3>
-          <div class="text-right">
-            <div class="font-mono text-[10px] text-outline uppercase tracking-widest" data-i18n="index.seats.hemi.dot">1 bod = 1 poslanec</div>
-            <div class="font-mono text-3xl md:text-5xl font-black text-on-surface leading-none tabular-nums" id="total-seats-display">150<span class="text-outline text-lg">/150</span></div>
-          </div>
-        </div>
-        <div class="relative flex justify-center">
-          <svg id="hemicycle-svg" viewBox="0 0 700 320" class="w-full h-[300px] md:h-auto">
-            <text x="350" y="160" text-anchor="middle" fill="#8c909e" font-size="12"
-              font-family="JetBrains Mono,monospace" font-weight="700" letter-spacing="3">NAČÍTAVAM...</text>
-          </svg>
-        </div>
-        <div class="flex flex-wrap gap-4 md:gap-6 mt-4 md:mt-6 justify-center" id="majority-info"></div>
+      <div class="kstat">
+        <span class="kstat-label" id="ks-firms-label" data-sk="Agentúry" data-en="Agencies">Agentúry</span>
+        <span class="kstat-value" id="ks-firms">—</span>
+        <span class="kstat-sub" data-sk="Prieskumné firmy v agregáte" data-en="Polling firms in aggregate">Prieskumné firmy v agregáte</span>
       </div>
-      <div class="p-4 md:p-8">
-        <h3 class="font-black text-lg uppercase tracking-tight border-b-2 border-outline pb-4 mb-6" data-i18n="index.seats.bars.title">Distribúcia strán</h3>
-        <div class="space-y-3 md:space-y-4" id="seat-bars"></div>
+      <div class="kstat">
+        <span class="kstat-label" id="ks-lastdate-label" data-sk="Posledný zber" data-en="Last fielded">Posledný zber</span>
+        <span class="kstat-value" id="ks-lastdate">—</span>
+        <span class="kstat-sub" data-sk="Dátum posledného prieskumu" data-en="Date of most recent poll">Dátum posledného prieskumu</span>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 4: DRAG & DROP COALITION BUILDER -->
-  <section class="border-2 border-outline">
-    <div class="p-4 md:p-8 border-b-2 border-outline flex justify-between items-end flex-wrap gap-4">
-      <div>
-        <span class="font-mono text-[#acc7ff] text-xs uppercase tracking-[0.3em] mb-2 block" data-i18n="index.coalition.subtitle">Interaktívny kalkulátor</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="index.coalition.title">Koaličná skladba</h2>
-      </div>
-      <button onclick="resetCoalitions()" class="font-mono font-bold text-xs uppercase tracking-widest px-6 py-3 border-2 border-on-surface bg-on-surface text-surface hover:bg-[#acc7ff] hover:border-[#acc7ff] hover:text-[#131313] transition-none" data-i18n="index.coalition.reset">↺ Resetovať</button>
+  <section class="section" id="agregat">
+    <div class="section-head">
+      <span class="section-num">§ I</span>
+      <h2 class="section-title" data-sk="Aktuálny agregát" data-en="Current aggregate">Aktuálny agregát</h2>
+      <span class="section-note" id="agg-note">—</span>
     </div>
-
-    <!-- Progress bars -->
-    <div class="grid grid-cols-2 border-b-2 border-outline">
-      <div class="p-4 md:p-6 border-r-2 border-outline">
-        <div class="flex justify-between items-center mb-3">
-          <span class="font-mono text-[10px] uppercase tracking-widest text-outline" data-i18n="index.coalition.govBar">Vládna koalícia</span>
-          <span class="font-mono font-bold text-lg" id="gov-num" style="color:#CC0000">0</span>
-        </div>
-        <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
-          <div id="gov-bar" class="h-full transition-none" style="width:0%;background:#CC0000"></div>
-          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/20"></div>
-        </div>
-        <div class="font-mono text-[10px] mt-2" id="gov-status" style="color:#CC0000"></div>
-      </div>
-      <div class="p-4 md:p-6">
-        <div class="flex justify-between items-center mb-3">
-          <span class="font-mono text-[10px] uppercase tracking-widest text-outline" data-i18n="index.coalition.oppBar">Opozícia</span>
-          <span class="font-mono font-bold text-lg" id="opp-num" style="color:#acc7ff">0</span>
-        </div>
-        <div class="h-4 bg-surface-container-lowest border-2 border-outline-variant overflow-hidden relative">
-          <div id="opp-bar" class="h-full transition-none" style="width:0%;background:#acc7ff"></div>
-          <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/20"></div>
-        </div>
-        <div class="font-mono text-[10px] mt-2" id="opp-status" style="color:#acc7ff"></div>
-      </div>
-    </div>
-
-    <!-- Three zones: vertical on mobile, grid on md+ -->
-    <div class="grid grid-cols-1 md:grid-cols-3">
-      <div id="zone-gov" class="drop-zone border-b-2 md:border-b-0 md:border-r-2 border-outline p-4 md:p-8 min-h-40 md:min-h-64 bg-surface-container-low"
-           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'gov')">
-        <div class="mb-4 md:mb-6">
-          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#CC0000]" id="big-gov">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.govZone">Vládna koalícia</h3>
-        </div>
-        <div class="flex flex-wrap gap-2" id="chips-gov"></div>
-      </div>
-      <div id="zone-neutral" class="drop-zone border-b-2 md:border-b-0 md:border-r-2 border-outline p-4 md:p-8 min-h-40 md:min-h-64 bg-surface"
-           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'neutral')">
-        <div class="mb-4 md:mb-6">
-          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-outline" id="big-neutral">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.neutral">Nezaradené</h3>
-        </div>
-        <div class="flex flex-wrap gap-2" id="chips-neutral">
-          <div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center" data-i18n="index.coalition.dragHint">Preneste strany sem</div>
-        </div>
-      </div>
-      <div id="zone-opp" class="drop-zone p-4 md:p-8 min-h-40 md:min-h-64 bg-surface-container-low"
-           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'opp')">
-        <div class="mb-4 md:mb-6">
-          <div class="font-mono text-6xl md:text-8xl font-black leading-none tracking-tighter text-[#acc7ff]" id="big-opp">00</div>
-          <h3 class="font-black text-lg uppercase tracking-tight mt-2" data-i18n="index.coalition.oppZone">Opozícia</h3>
-        </div>
-        <div class="flex flex-wrap gap-2" id="chips-opp"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5: RAW DATA LEDGER -->
-  <section id="raw-data">
-    <div class="border-b-2 border-outline pb-4 mb-0">
-      <div class="flex items-center gap-4 mb-5">
-        <span class="material-symbols-outlined text-[#acc7ff]" style="font-variation-settings:'FILL' 1">analytics</span>
-        <h2 class="font-black text-3xl md:text-4xl uppercase tracking-tighter" data-i18n="rawdata.title">Raw Data Ledger</h2>
-      </div>
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div class="flex gap-2 flex-wrap">
-          <button onclick="setRange(6)" data-range="6" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">6M</button>
-          <button onclick="setRange(12)" data-range="12" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">12M</button>
-          <button onclick="setRange(99)" data-range="99" class="range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Všetko</button>
-        </div>
-        <div class="flex gap-2 flex-wrap">
-          <button onclick="setAgencyFilter('all')" data-agency="all" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline bg-surface-container-highest text-on-surface">Všetky</button>
-          <button onclick="setAgencyFilter('Ipsos')" data-agency="Ipsos" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Ipsos</button>
-          <button onclick="setAgencyFilter('AKO')" data-agency="AKO" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">AKO</button>
-          <button onclick="setAgencyFilter('Focus')" data-agency="Focus" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">Focus</button>
-          <button onclick="setAgencyFilter('NMS')" data-agency="NMS" class="agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 border-outline-variant text-outline hover:border-outline hover:text-on-surface">NMS</button>
-        </div>
-      </div>
-    </div>
-    <div class="overflow-x-auto border-2 border-outline border-t-0">
-      <table class="w-full text-left font-mono text-xs">
+    <div class="agg-grid">
+      <table class="agg-table" id="agg-table">
         <thead>
-          <tr class="border-b-2 border-outline bg-surface-container-low">
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="table.agency">Agentúra</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-outline whitespace-nowrap" data-i18n="table.date">Dátum</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#00CCFF">PS</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#CC0000">Smer</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#8B4513">Rep.</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#99AA00">OĽaNO</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#66FF00">SaS</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#660033">Hlas</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#6600AA">Dem.</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#003366">KDH</th>
-            <th class="py-3 px-4 font-bold uppercase tracking-widest text-right whitespace-nowrap" style="color:#546E7A">SNS</th>
+          <tr>
+            <th data-sk="Strana" data-en="Party">Strana</th>
+            <th class="num-col" data-sk="Podpora" data-en="Support">Podpora</th>
+            <th data-sk="Rozloženie · prah 5 %" data-en="Distribution · 5% threshold">Rozloženie · prah 5 %</th>
+            <th class="num-col" data-sk="Δ 14 dní" data-en="Δ 14 days">Δ 14 dní</th>
+            <th class="num-col" data-sk="Mandáty" data-en="Seats">Mandáty</th>
           </tr>
         </thead>
-        <tbody id="polls-tbody"></tbody>
+        <tbody id="agg-tbody"></tbody>
       </table>
+      <div>
+        <div class="side-box">
+          <h3 class="side-title" data-sk="Koaličná aritmetika" data-en="Coalition arithmetic">Koaličná aritmetika <small>· 150 mandátov</small></h3>
+          <p class="side-sub" data-sk="D'Hondtova metóda · strany pod 5 % nepostúpia." data-en="D'Hondt method · parties below 5% do not enter.">D'Hondtova metóda · strany pod 5 % nepostúpia.</p>
+          <div class="seat-bar" id="seat-bar"></div>
+          <div class="seat-majority"></div>
+          <div class="coalition" id="coalition"></div>
+        </div>
+        <div class="side-box">
+          <h3 class="side-title" data-sk="Štatistická chyba" data-en="Margin of error">Štatistická chyba <small>· ±95 % CI</small></h3>
+          <div class="moe-row"><span data-sk="Najväčšie strany (≥15 %)" data-en="Largest parties (≥15%)">Najväčšie strany (≥15 %)</span><span class="val">± 1,9 b.</span></div>
+          <div class="moe-row"><span data-sk="Stredné (5 – 15 %)" data-en="Mid (5 – 15%)">Stredné (5 – 15 %)</span><span class="val">± 1,4 b.</span></div>
+          <div class="moe-row"><span data-sk="Malé (&lt; 5 %)" data-en="Small (&lt; 5%)">Malé (&lt; 5 %)</span><span class="val">± 0,9 b.</span></div>
+          <div class="moe-row"><span data-sk="Vzorka (priemer)" data-en="Sample (avg)">Vzorka (priemer)</span><span class="val">≈ 1 000</span></div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <section class="section" id="trend">
+    <div class="section-head">
+      <span class="section-num">§ II</span>
+      <h2 class="section-title" data-sk="Trend" data-en="Trend">Trend</h2>
+      <span class="section-note" data-sk="Mesačné priemery · parlamentné strany" data-en="Monthly averages · parliamentary parties">Mesačné priemery · parlamentné strany</span>
+    </div>
+    <div class="trend-wrap">
+      <div class="chart-frame">
+        <svg viewBox="0 0 880 360" id="trend-chart" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="trend-legend" id="trend-legend"></div>
+    </div>
+  </section>
+
+  <section class="section" id="multiples">
+    <div class="section-head">
+      <span class="section-num">§ III</span>
+      <h2 class="section-title" data-sk="Po stranách" data-en="Party by party">Po stranách</h2>
+      <span class="section-note" id="mults-note">—</span>
+    </div>
+    <div class="mults" id="mults"></div>
+  </section>
+
+  <section class="section" id="agentury">
+    <div class="section-head">
+      <span class="section-num">§ IV</span>
+      <h2 class="section-title" data-sk="Zdroje prieskumov" data-en="Source polls">Zdroje prieskumov</h2>
+      <span class="section-note" id="src-note">—</span>
+    </div>
+    <table class="src-table" id="src-table">
+      <thead>
+        <tr>
+          <th data-sk="Agentúra" data-en="Agency">Agentúra</th>
+          <th data-sk="Dátum" data-en="Date">Dátum</th>
+          <th data-sk="Top 3 strany" data-en="Top 3 parties">Top 3 strany</th>
+        </tr>
+      </thead>
+      <tbody id="src-tbody"></tbody>
+    </table>
+  </section>
+
+  <footer class="footer" id="metodika">
+    <div>
+      <h4 data-sk="Metodika" data-en="Methodology">Metodika</h4>
+      <p data-sk="Agregát berie posledný prieskum od každej agentúry a vypočíta jednoduchý priemer. Diff (Δ 14 dní) porovnáva aktuálny agregát s tým, aký by bol pri pohľade iba na prieskumy staršie ako 14 dní. Mandáty sú rozdelené D'Hondtovou metódou pre strany nad 5 %." data-en="The aggregate takes the most recent poll from each agency and computes a simple mean. The diff (Δ 14 days) compares the current aggregate to what it would be using only polls older than 14 days. Seats are allocated by D'Hondt for parties above 5%.">Agregát berie posledný prieskum od každej agentúry a vypočíta jednoduchý priemer. Diff (Δ 14 dní) porovnáva aktuálny agregát s tým, aký by bol pri pohľade iba na prieskumy staršie ako 14 dní. Mandáty sú rozdelené D'Hondtovou metódou pre strany nad 5 %.</p>
+    </div>
+    <div>
+      <h4 data-sk="Zdroje" data-en="Sources">Zdroje</h4>
+      <p data-sk="AKO, Focus, Ipsos, NMS. Dáta z Wikipedie (CC BY-SA). Prieskumy sa zadávajú manuálne po zverejnení výsledkov." data-en="AKO, Focus, Ipsos, NMS. Data from Wikipedia (CC BY-SA). Polls are entered manually after results are published.">AKO, Focus, Ipsos, NMS. Dáta z Wikipedie (CC BY-SA). Prieskumy sa zadávajú manuálne po zverejnení výsledkov.</p>
+    </div>
+    <div>
+      <h4 data-sk="Tiráž" data-en="Colophon">Tiráž</h4>
+      <p class="colophon">WOLL.by · Bratislava · est. MMXXIV</p>
+      <p><a href="metodologia.html" style="color:var(--ink-2);" data-sk="Metodológia modelu →" data-en="Model methodology →">Metodológia modelu →</a></p>
+    </div>
+  </footer>
 
 </main>
 
-<footer class="bg-[#0e0e0e] border-t-2 border-[#8c909e] mt-16 md:mt-20">
-  <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 gap-4 max-w-screen-2xl mx-auto">
-    <div class="font-black text-lg uppercase tracking-tighter text-[#e5e2e1]">WOLL<span class="text-[#acc7ff]">.</span>BY <span class="font-mono text-[10px] tracking-widest text-outline ml-2" data-i18n="data.journalism">DATA JOURNALISM</span></div>
-    <div class="flex flex-wrap justify-center gap-6">
-      <a href="metodologia.html" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="nav.methodology">Metodológia</a>
-      <a href="https://en.wikipedia.org/wiki/Opinion_polling_for_the_next_Slovak_parliamentary_election" target="_blank" class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e] hover:text-[#acc7ff]" data-i18n="footer.source">Zdroj dát</a>
-    </div>
-    <div class="font-mono text-[10px] uppercase tracking-widest text-[#8c909e]">© 2026 WOLL.BY</div>
-  </div>
-</footer>
-
 <script>
 const API = "http://localhost:8000";
-let POLLS = [];
 
-function mapPoll(p) {
+/* Party metadata — keys match backend column names */
+const PARTY_META = [
+  { key:"ps",         short:"PS",     sk:"Progresívne Slovensko", en:"Progressive Slovakia",   color:"--p-ps"     },
+  { key:"smer",       short:"Smer",   sk:"Smer – SD",             en:"Smer – SD",              color:"--p-smer"   },
+  { key:"hlas",       short:"Hlas",   sk:"Hlas – SD",             en:"Hlas – SD",              color:"--p-hlas"   },
+  { key:"rep",        short:"Rep.",   sk:"Republika",             en:"Republika",              color:"--p-rep"    },
+  { key:"kdh",        short:"KDH",    sk:"KDH",                   en:"KDH",                    color:"--p-kdh"    },
+  { key:"sas",        short:"SaS",    sk:"Sloboda a Solidarita",  en:"Freedom and Solidarity", color:"--p-sas"    },
+  { key:"olano",      short:"Slov.",  sk:"Slovensko (OĽANO)",     en:"Slovensko (OĽANO)",      color:"--p-slov"   },
+  { key:"sns",        short:"SNS",    sk:"SNS",                   en:"SNS",                    color:"--p-sns"    },
+  { key:"ma",         short:"MSZ",    sk:"Maďarská aliancia",     en:"Hungarian Alliance",     color:"--p-msz"    },
+  { key:"sme_rodina", short:"Rodina", sk:"Sme rodina",            en:"Sme rodina",             color:"--p-rodina" },
+  { key:"dem",        short:"Dem.",   sk:"Demokrati",             en:"Demokrati",              color:"--p-demo"   },
+];
+
+let LANG = localStorage.getItem("wollby_lang") === "en" ? "en" : "sk";
+let _polls = [];
+let _agg = null, _prevAgg = null, _history = null;
+
+/* ── FORMATTERS ─────────────────────────────────────────────── */
+const fmt1 = n => LANG === "sk" ? n.toFixed(1).replace(".", ",") : n.toFixed(1);
+const fmtPct = n => fmt1(n) + " %";
+const fmtDiff = n => {
+  if (n == null || isNaN(n)) return "—";
+  if (Math.abs(n) < 0.05) return "—";
+  return (n > 0 ? "+" : "−") + fmt1(Math.abs(n));
+};
+
+/* ── AGGREGATE ──────────────────────────────────────────────── */
+function computeAggregate(polls) {
+  /* Most recent poll per firm */
+  const byFirm = {};
+  polls.forEach(p => {
+    const d = new Date(p.date + "T12:00:00");
+    if (!byFirm[p.firm] || d > new Date(byFirm[p.firm].date + "T12:00:00")) byFirm[p.firm] = p;
+  });
+  const selected = Object.values(byFirm);
+  if (!selected.length) return null;
+
+  const sums = {}, counts = {};
+  PARTY_META.forEach(pm => { sums[pm.key] = 0; counts[pm.key] = 0; });
+  selected.forEach(p => {
+    PARTY_META.forEach(pm => {
+      if (p[pm.key] != null) { sums[pm.key] += p[pm.key]; counts[pm.key]++; }
+    });
+  });
+
+  const res = {
+    _firms: selected.length,
+    _date: selected.reduce((best, p) => {
+      const d = new Date(p.date + "T12:00:00");
+      return !best || d > best ? d : best;
+    }, null),
+    _polls: selected,
+  };
+  PARTY_META.forEach(pm => { if (counts[pm.key] > 0) res[pm.key] = sums[pm.key] / counts[pm.key]; });
+  return res;
+}
+
+function computeAggBefore(polls, maxDate) {
+  return computeAggregate(polls.filter(p => new Date(p.date + "T12:00:00") <= maxDate));
+}
+
+/* ── MONTHLY HISTORY ────────────────────────────────────────── */
+function computeHistory(polls, nMonths = 12) {
+  const MO_SK = ["jan","feb","mar","apr","máj","jún","júl","aug","sep","okt","nov","dec"];
+  const MO_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  const byMonth = {};
+  polls.forEach(p => {
+    const d = new Date(p.date + "T12:00:00");
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+    if (!byMonth[key]) byMonth[key] = { month: d.getMonth(), sums: {}, counts: {} };
+    PARTY_META.forEach(pm => {
+      if (p[pm.key] != null) {
+        byMonth[key].sums[pm.key] = (byMonth[key].sums[pm.key] || 0) + p[pm.key];
+        byMonth[key].counts[pm.key] = (byMonth[key].counts[pm.key] || 0) + 1;
+      }
+    });
+  });
+
+  const keys = Object.keys(byMonth).sort().slice(-nMonths);
+  if (!keys.length) return null;
+
+  const data = {};
+  PARTY_META.forEach(pm => {
+    data[pm.key] = keys.map(k => byMonth[k].counts[pm.key] ? byMonth[k].sums[pm.key] / byMonth[k].counts[pm.key] : null);
+  });
+
   return {
-    id: p.id, firm: p.firm, dateStr: p.date_str,
-    date: new Date(p.date + "T12:00:00"),
-    PS: p.ps, Smer: p.smer, Hlas: p.hlas, OLaNO: p.olano,
-    KDH: p.kdh, SaS: p.sas, SNS: p.sns, Rep: p.rep, MA: p.ma, Dem: p.dem,
+    keys,
+    labels_sk: keys.map(k => MO_SK[byMonth[k].month]),
+    labels_en: keys.map(k => MO_EN[byMonth[k].month]),
+    data,
   };
 }
 
-const PARTIES = [
-  {key:"PS",   label:"PS",    color:"#00CCFF", defaultZone:"opp"},
-  {key:"Smer", label:"Smer",  color:"#CC0000", defaultZone:"gov"},
-  {key:"Rep",  label:"Rep.",  color:"#8B4513", defaultZone:"neutral"},
-  {key:"OLaNO",label:"OĽaNO", color:"#99AA00", defaultZone:"opp"},
-  {key:"SaS",  label:"SaS",   color:"#66FF00", defaultZone:"opp"},
-  {key:"Hlas", label:"Hlas",  color:"#660033", defaultZone:"gov"},
-  {key:"Dem",  label:"Dem.",  color:"#6600AA", defaultZone:"opp"},
-  {key:"KDH",  label:"KDH",   color:"#003366", defaultZone:"opp"},
-  {key:"SNS",  label:"SNS",   color:"#546E7A", defaultZone:"gov"},
-  {key:"MA",   label:"MA",    color:"#FF8800", defaultZone:"opp"},
-];
-const TOTAL = 150, MAJ = 76;
-
-let activeParties = new Set(["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem"]);
-let agencyFilter = "all";
-let medianN = 5;
-let rangeMonths = 6;
-let chart = null;
-let currentSeats = [], zoneMap = {};
-let dragKey = null;
-
-// ── HELPERS ────────────────────────────────────────────────────
-function median(arr) {
-  const v = arr.filter(x=>x!=null&&!isNaN(x)).sort((a,b)=>a-b);
-  if(!v.length) return null;
-  const m = Math.floor(v.length/2);
-  return v.length%2 ? v[m] : (v[m-1]+v[m])/2;
-}
-function getFiltered() { return agencyFilter==="all" ? POLLS : POLLS.filter(p=>p.firm===agencyFilter); }
-
-function toggleMobileNav() {
-  document.getElementById("mobile-nav").classList.toggle("open");
+/* ── D'HONDT ────────────────────────────────────────────────── */
+function allocateSeats(agg, total = 150, thresh = 5) {
+  const eligible = PARTY_META.filter(p => (agg[p.key] ?? 0) >= thresh);
+  const seats = Object.fromEntries(eligible.map(p => [p.key, 0]));
+  for (let s = 0; s < total; s++) {
+    let best = null, bestQ = -1;
+    eligible.forEach(p => { const q = (agg[p.key] ?? 0) / (seats[p.key] + 1); if (q > bestQ) { bestQ = q; best = p.key; } });
+    if (best) seats[best]++;
+  }
+  return seats;
 }
 
-function setAgencyFilter(val) {
-  agencyFilter = val;
-  document.querySelectorAll(".agency-btn").forEach(b => {
-    const on = b.dataset.agency === val;
-    b.className = `agency-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 transition-none ${on?"border-outline bg-surface-container-highest text-on-surface":"border-outline-variant text-outline hover:border-outline hover:text-on-surface"}`;
-  });
-  buildChart(); renderMedian(); renderPollsTable();
-}
+/* ── RENDER: LEDE ───────────────────────────────────────────── */
+function renderLede() {
+  if (!_agg) return;
+  const sorted = PARTY_META.filter(p => _agg[p.key] != null).sort((a, b) => (_agg[b.key] ?? 0) - (_agg[a.key] ?? 0));
+  const top = sorted[0], sec = sorted[1];
+  const inParl = PARTY_META.filter(p => (_agg[p.key] ?? 0) >= 5).length;
 
-// ── PARTY PILLS ────────────────────────────────────────────────
-function renderPills() {
-  const wrap = document.getElementById("party-pills");
-  wrap.innerHTML = "";
-  PARTIES.forEach(p => {
-    const on = activeParties.has(p.key);
-    const btn = document.createElement("button");
-    btn.className = "font-mono font-bold text-xs uppercase tracking-widest px-3 py-2 border-r-2 transition-none";
-    btn.style.cssText = on
-      ? `background:${p.color};color:#131313;border-right-color:#131313`
-      : `background:#131313;color:#8c909e;border-right-color:#424753`;
-    btn.textContent = p.label;
-    btn.onclick = () => {
-      if(on){if(activeParties.size>1)activeParties.delete(p.key);}
-      else activeParties.add(p.key);
-      renderPills(); buildChart();
-    };
-    wrap.appendChild(btn);
-  });
-  if(wrap.lastChild) wrap.lastChild.style.borderRight = "none";
-}
+  /* Kicker */
+  const d = _agg._date;
+  if (d) {
+    const ds = d.toLocaleDateString(LANG === "sk" ? "sk-SK" : "en-GB", { day:"numeric", month:"long", year:"numeric" });
+    const txt = LANG === "sk" ? `Vážený agregát · ${ds}` : `Weighted aggregate · ${ds}`;
+    document.getElementById("lede-kicker").textContent = txt;
+  }
 
-// ── TREND CHART ────────────────────────────────────────────────
-function buildChart() {
-  const cutoff = new Date();
-  if(rangeMonths !== 99) cutoff.setMonth(cutoff.getMonth() - rangeMonths);
-  const filtered = getFiltered().filter(p=>rangeMonths===99||p.date>=cutoff).slice().reverse();
-  const locale = getCurrentLang()==='en' ? 'en-GB' : 'sk-SK';
-  const labels = filtered.map(p => p.date.toLocaleDateString(locale,{month:"short",year:"2-digit"}));
-  const datasets = PARTIES.filter(p=>activeParties.has(p.key)).map(p => ({
-    label: p.label,
-    data: filtered.map(r=>r[p.key]),
-    borderColor: p.color,
-    backgroundColor: "transparent",
-    borderWidth: 2.5, pointRadius: 2, pointHoverRadius: 5,
-    tension: 0.35, spanGaps: true,
-  }));
-  if(chart) chart.destroy();
-  const ctx = document.getElementById("trend-chart").getContext("2d");
-  chart = new Chart(ctx, {
-    type: "line", data: {labels, datasets},
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: {mode:"index", intersect:false},
-      plugins: {
-        legend: {display:false},
-        tooltip: {
-          backgroundColor:"#201f1f", borderColor:"#424753", borderWidth:2,
-          titleColor:"#e5e2e1", bodyColor:"#8c909e", padding:10,
-          titleFont:{family:"Space Grotesk",weight:"700",size:13},
-          bodyFont:{family:"JetBrains Mono",size:11},
-          callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(1)+"%":"–"}`}
-        }
-      },
-      scales: {
-        x:{grid:{color:"rgba(66,71,83,0.4)"},ticks:{color:"#8c909e",font:{family:"JetBrains Mono",size:10},maxRotation:45}},
-        y:{grid:{color:"rgba(66,71,83,0.4)"},ticks:{color:"#8c909e",font:{family:"JetBrains Mono",size:11},callback:v=>v+"%"},min:0}
-      }
+  /* Headline */
+  if (top && sec) {
+    const diff = (_agg[top.key] ?? 0) - (_agg[sec.key] ?? 0);
+    const txt_sk = `${top.sk} vedie s ${fmtPct(_agg[top.key] ?? 0)}, náskok pred ${sec.sk} je ${fmt1(diff)} b.`;
+    const txt_en = `${top.en} leads at ${fmtPct(_agg[top.key] ?? 0)}, ${fmt1(diff)} pts ahead of ${sec.en}.`;
+    document.getElementById("lede-headline").textContent = LANG === "sk" ? txt_sk : txt_en;
+  }
+
+  /* Dek */
+  const dek_sk = `Priemer ${_agg._firms} agentúr. Do parlamentu by sa dostalo ${inParl} strán.`;
+  const dek_en = `Average of ${_agg._firms} agencies. ${inParl} parties would enter parliament.`;
+  document.getElementById("lede-dek").textContent = LANG === "sk" ? dek_sk : dek_en;
+
+  /* Byline */
+  if (d) {
+    const ds = d.toLocaleDateString(LANG === "sk" ? "sk-SK" : "en-GB", { day:"numeric", month:"short" });
+    document.getElementById("byline-date").textContent = LANG === "sk" ? `Aktualizované ${ds}` : `Updated ${ds}`;
+  }
+  document.getElementById("byline-cov").textContent = LANG === "sk" ? `Pokrytie · ${_agg._firms} agentúr` : `Coverage · ${_agg._firms} agencies`;
+
+  /* Kstats */
+  if (top) {
+    document.getElementById("ks-leader").textContent = `${top.short} · ${fmt1(_agg[top.key] ?? 0)}`;
+    if (sec) {
+      const diff = (_agg[top.key] ?? 0) - (_agg[sec.key] ?? 0);
+      document.getElementById("ks-leader-sub").textContent = LANG === "sk"
+        ? `Náskok ${fmt1(diff)} b. pred ${sec.sk}`
+        : `Lead ${fmt1(diff)} pts over ${sec.en}`;
     }
-  });
+  }
+  document.getElementById("ks-inparl").textContent = `${inParl} / ${PARTY_META.length}`;
+  document.getElementById("ks-firms").textContent = _agg._firms;
+  if (d) {
+    document.getElementById("ks-lastdate").textContent = d.toLocaleDateString(LANG === "sk" ? "sk-SK" : "en-GB", { day:"numeric", month:"short" });
+  }
 }
 
-function setRange(m) {
-  rangeMonths = m;
-  document.querySelectorAll(".range-btn").forEach(b => {
-    const on = +b.dataset.range === m;
-    b.className = `range-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border-2 transition-none ${on?"border-outline bg-surface-container-highest text-on-surface":"border-outline-variant text-outline hover:border-outline hover:text-on-surface"}`;
-  });
-  buildChart(); renderMedian(); renderPollsTable();
+/* ── RENDER: AGGREGATE TABLE ────────────────────────────────── */
+function renderAgg() {
+  if (!_agg) return;
+  const vals = PARTY_META.map(p => _agg[p.key] ?? 0);
+  const scaleMax = Math.ceil(Math.max(...vals) / 5) * 5 || 25;
+  const seats = allocateSeats(_agg);
+
+  document.getElementById("agg-tbody").innerHTML = PARTY_META.map(p => {
+    const pct = _agg[p.key];
+    if (pct == null) return "";
+    const below = pct < 5;
+    const widthPct = (pct / scaleMax) * 100;
+    const threshPos = (5 / scaleMax) * 100;
+    const diff = _prevAgg ? (pct - (_prevAgg[p.key] ?? 0)) : null;
+    const dClass = diff == null ? "nodata" : Math.abs(diff) < 0.05 ? "zero" : diff > 0 ? "pos" : "neg";
+    const dArrow = diff == null ? "" : Math.abs(diff) < 0.05 ? "•" : diff > 0 ? "▲" : "▼";
+    const dText = fmtDiff(diff);
+    return `<tr class="${below ? "below-thresh" : ""}" style="--swatch: var(${p.color});">
+      <td class="party">${LANG==="sk"?p.sk:p.en}${below ? `<small>${LANG==="sk"?"pod prahom 5 %":"below 5% threshold"}</small>` : ""}</td>
+      <td class="pct num-col">${fmtPct(pct)}</td>
+      <td class="bar-cell"><div class="bar">
+        <div class="bar-fill" style="width:${widthPct.toFixed(2)}%"></div>
+        <div class="bar-tick" style="left:${threshPos.toFixed(2)}%" data-label="5%"></div>
+      </div></td>
+      <td class="num-col"><span class="diff ${dClass}"><span class="arrow">${dArrow}</span>${dText}</span></td>
+      <td class="seats num-col">${below ? "—" : (seats[p.key] ?? "—")}</td>
+    </tr>`;
+  }).join("");
+
+  const n = _agg._firms;
+  document.getElementById("agg-note").textContent = LANG === "sk" ? `N = ${n} agentúr` : `N = ${n} agencies`;
 }
 
-// ── MEDIAN CARDS ───────────────────────────────────────────────
-function renderMedian() {
-  const recent = getFiltered().slice(0, medianN);
-  const old    = getFiltered().slice(medianN, medianN * 2);
-  const grid = document.getElementById("median-cards");
-  grid.innerHTML = "";
-  const visible = PARTIES
-    .map(p => ({...p, med: median(recent.map(r=>r[p.key]).filter(v=>v!=null))}))
-    .filter(p => p.med != null && p.med > 0)
-    .sort((a,b) => b.med - a.med);
+/* ── RENDER: SEAT BAR + COALITIONS ─────────────────────────── */
+function renderSeats() {
+  if (!_agg) return;
+  const seats = allocateSeats(_agg);
+  const order = ["ps","kdh","sas","olano","hlas","ma","sme_rodina","dem","smer","sns","rep"];
+  const eligible = order.filter(k => seats[k]);
+  const total = eligible.reduce((s, k) => s + seats[k], 0);
 
-  visible.forEach((p, i) => {
-    const oldVals = old.map(r=>r[p.key]).filter(v=>v!=null);
-    const oldMed = oldVals.length ? median(oldVals) : null;
-    const diff = oldMed != null ? p.med - oldMed : null;
-    const above = p.med >= 5;
-    const isLast = i === visible.length - 1;
-    const card = document.createElement("div");
-    card.className = `p-4 md:p-6 border-b-2 border-r-2 border-outline bg-surface hover:bg-surface-container-high transition-none ${isLast?"border-r-0":""}`;
-    card.style.borderTopWidth = "4px";
-    card.style.borderTopColor = p.color;
-    card.innerHTML = `
-      <div class="flex justify-between items-start mb-3">
-        <span class="font-mono font-bold text-sm uppercase" style="color:${p.color}">${p.label}</span>
-        ${diff!=null
-          ? diff > 0.3
-            ? `<span class="font-mono text-xs bg-[#66FF00] text-[#131313] px-2 py-0.5">+${diff.toFixed(1)}%</span>`
-            : diff < -0.3
-            ? `<span class="font-mono text-xs bg-[#CC0000] text-white px-2 py-0.5">${diff.toFixed(1)}%</span>`
-            : `<span class="font-mono text-xs bg-surface-container px-2 py-0.5 text-outline">0.0%</span>`
-          : ""}
+  document.getElementById("seat-bar").innerHTML = eligible.map(k => {
+    const p = PARTY_META.find(pp => pp.key === k);
+    return p ? `<div title="${p.short} · ${seats[k]}" style="width:${(seats[k]/total*100).toFixed(2)}%;background:var(${p.color});"></div>` : "";
+  }).join("");
+
+  const coalitions = [
+    { sk:"Smer · Hlas · SNS",       en:"Smer · Hlas · SNS",       parts:["smer","hlas","sns"] },
+    { sk:"PS · KDH · SaS",          en:"PS · KDH · SaS",          parts:["ps","kdh","sas"] },
+    { sk:"PS · KDH · SaS · Hlas",   en:"PS · KDH · SaS · Hlas",   parts:["ps","kdh","sas","hlas"] },
+    { sk:"Smer · Hlas · Republika", en:"Smer · Hlas · Republika", parts:["smer","hlas","rep"] },
+  ];
+  document.getElementById("coalition").innerHTML = coalitions.map(c => {
+    const tot = c.parts.reduce((s, k) => s + (seats[k] || 0), 0);
+    const margin = tot - 76;
+    const swatches = c.parts.map(k => { const p = PARTY_META.find(pp => pp.key === k); return p ? `<span style="background:var(${p.color});"></span>` : ""; }).join("");
+    return `<div class="label"><span class="badge"><span class="swatches">${swatches}</span> ${LANG==="sk"?c.sk:c.en}</span></div>
+            <div class="val ${tot>=76?"ok":"no"}">${tot}<small>${margin>=0?"+":"−"}${Math.abs(margin)}</small></div>`;
+  }).join("");
+}
+
+/* ── RENDER: TREND CHART ────────────────────────────────────── */
+function renderTrend() {
+  if (!_history) return;
+  const svg = document.getElementById("trend-chart");
+  const W = 880, H = 360, M = { l:32, r:56, t:16, b:28 };
+  const iW = W - M.l - M.r, iH = H - M.t - M.b;
+  const labels = LANG === "sk" ? _history.labels_sk : _history.labels_en;
+  const n = labels.length;
+  const yMax = 26;
+  const xi = i => M.l + (i / (n - 1)) * iW;
+  const yi = v => M.t + (1 - v / yMax) * iH;
+  const trendKeys = ["ps","smer","hlas","rep","kdh","sas"];
+
+  let s = "";
+  for (let v = 0; v <= yMax; v += 5) {
+    s += `<line class="axis-line" x1="${M.l}" x2="${W-M.r}" y1="${yi(v)}" y2="${yi(v)}"/>`;
+    s += `<text class="axis-text" x="${M.l-6}" y="${yi(v)+3}" text-anchor="end">${v}</text>`;
+  }
+  s += `<line class="threshold" x1="${M.l}" x2="${W-M.r}" y1="${yi(5)}" y2="${yi(5)}"/>`;
+  s += `<text class="axis-text" x="${W-M.r+4}" y="${yi(5)+3}" style="fill:var(--ink-2)">5%</text>`;
+
+  labels.forEach((lbl, i) => {
+    const maj = i === 0 || i === n - 1;
+    s += `<text class="axis-text ${maj?"major":""}" x="${xi(i)}" y="${H-M.b+16}" text-anchor="middle">${lbl}</text>`;
+    if (maj) s += `<line class="axis-line major" x1="${xi(i)}" x2="${xi(i)}" y1="${M.t}" y2="${H-M.b}"/>`;
+  });
+
+  trendKeys.forEach(k => {
+    const p = PARTY_META.find(pp => pp.key === k);
+    if (!p) return;
+    const pts = _history.data[k].map((v, i) => v != null ? {v, i} : null).filter(Boolean);
+    if (pts.length < 2) return;
+    const d = pts.map(({v, i}, j) => `${j===0?"M":"L"}${xi(i).toFixed(2)},${yi(v).toFixed(2)}`).join(" ");
+    s += `<path class="trend-line" d="${d}" stroke="var(${p.color})"/>`;
+    const last = pts[pts.length - 1];
+    s += `<circle class="trend-dot" cx="${xi(last.i).toFixed(2)}" cy="${yi(last.v).toFixed(2)}" r="2.6" fill="var(${p.color})"/>`;
+    s += `<text class="trend-label" x="${(xi(last.i)+6).toFixed(2)}" y="${(yi(last.v)+3.5).toFixed(2)}" fill="var(${p.color})">${p.short} ${fmt1(last.v)}</text>`;
+  });
+  svg.innerHTML = s;
+
+  document.getElementById("trend-legend").innerHTML = trendKeys.map(k => {
+    const p = PARTY_META.find(pp => pp.key === k);
+    if (!p) return "";
+    const vals = _history.data[k].filter(v => v != null);
+    if (!vals.length) return "";
+    const last = vals[vals.length - 1], first = vals[0];
+    const delta = last - first;
+    const dStr = (delta >= 0 ? "+" : "−") + fmt1(Math.abs(delta));
+    return `<div class="leg-item">
+      <span class="sw" style="background:var(${p.color});"></span>
+      <span class="ttl">${LANG==="sk"?p.sk:p.en}</span>
+      <span class="now">${fmt1(last)}</span>
+      <span class="delta">${dStr}</span>
+    </div>`;
+  }).join("");
+}
+
+/* ── RENDER: SMALL MULTIPLES ────────────────────────────────── */
+function renderMults() {
+  if (!_history) return;
+  const W = 200, H = 56, P = 4;
+  const order = ["ps","smer","hlas","rep","kdh","sas","olano","sns","ma","sme_rodina","dem"];
+  const firstLbl = LANG === "sk" ? _history.labels_sk[0] : _history.labels_en[0];
+  const lastLbl  = LANG === "sk" ? _history.labels_sk[_history.labels_sk.length-1] : _history.labels_en[_history.labels_en.length-1];
+
+  document.getElementById("mults-note").textContent = LANG === "sk"
+    ? `Mini-grafy · ${firstLbl} – ${lastLbl}`
+    : `Sparklines · ${firstLbl} – ${lastLbl}`;
+
+  document.getElementById("mults").innerHTML = order.map(k => {
+    const p = PARTY_META.find(pp => pp.key === k);
+    if (!p) return "";
+    const pts = _history.data[k].map((v, i) => v != null ? {v, i} : null).filter(Boolean);
+    if (pts.length < 2) return "";
+    const vals = pts.map(pt => pt.v);
+    const mn = Math.min(...vals), mx = Math.max(...vals);
+    const yMin = Math.max(0, Math.floor(mn - 1)), yMax = Math.ceil(mx + 1);
+    const n = _history.data[k].length;
+    const xi = i => P + (i / (n - 1)) * (W - P*2);
+    const yi = v => P + (1 - (v - yMin) / (yMax - yMin)) * (H - P*2);
+    const d = pts.map(({v,i},j) => `${j===0?"M":"L"}${xi(i).toFixed(1)},${yi(v).toFixed(1)}`).join(" ");
+    const fp = pts[0], lp = pts[pts.length-1];
+    const area = `M${xi(fp.i).toFixed(1)},${(H-P).toFixed(1)} ${pts.map(({v,i})=>`L${xi(i).toFixed(1)},${yi(v).toFixed(1)}`).join(" ")} L${xi(lp.i).toFixed(1)},${(H-P).toFixed(1)} Z`;
+    const delta = lp.v - fp.v;
+    const dStr = (delta >= 0 ? "+" : "−") + fmt1(Math.abs(delta));
+    const tY = (yMin <= 5 && yMax >= 5) ? yi(5) : null;
+    return `<div class="mult" style="--swatch:var(${p.color});">
+      <div class="mult-head">
+        <span class="sw" style="background:var(${p.color});"></span>
+        <span class="name">${LANG==="sk"?p.sk:p.en}</span>
+        <span class="now">${fmtPct(lp.v)}</span>
       </div>
-      <div class="font-black text-5xl md:text-7xl leading-none tracking-tighter">${p.med.toFixed(1)}<span class="text-outline text-xl md:text-2xl" style="margin-left:3px">%</span></div>
-      <div class="mt-3 h-1 bg-surface-container-lowest">
-        <div style="width:${Math.min(p.med*2.5,100)}%;background:${p.color};height:100%"></div>
-      </div>
-      <div class="mt-2 font-mono text-[10px] uppercase tracking-widest ${above?"text-[#66FF00]":"text-[#CC0000]"}">${above?T('threshold.above'):T('threshold.below')}</div>`;
-    grid.appendChild(card);
-  });
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+        ${tY != null ? `<line class="threshold" x1="${P}" x2="${W-P}" y1="${tY.toFixed(1)}" y2="${tY.toFixed(1)}"/>` : ""}
+        <path class="spark-area" d="${area}" fill="var(${p.color})"/>
+        <path d="${d}" fill="none" stroke="var(${p.color})" stroke-width="1.6"/>
+        <circle cx="${xi(lp.i).toFixed(1)}" cy="${yi(lp.v).toFixed(1)}" r="2.2" fill="var(${p.color})"/>
+      </svg>
+      <div class="mult-sub"><span>${firstLbl} – ${lastLbl}</span><span class="num">${dStr}</span></div>
+    </div>`;
+  }).join("");
 }
 
-document.getElementById("median-slider").addEventListener("input", e => {
-  medianN = +e.target.value;
-  document.getElementById("median-n").textContent = medianN;
-  renderMedian();
+/* ── RENDER: SOURCE TABLE ───────────────────────────────────── */
+function renderSrc() {
+  const rows = _polls.slice(0, 10);
+  document.getElementById("src-tbody").innerHTML = rows.map(p => {
+    const top3 = PARTY_META
+      .filter(pm => p[pm.key] != null)
+      .sort((a, b) => (p[b.key] ?? 0) - (p[a.key] ?? 0))
+      .slice(0, 3);
+    const chips = top3.map(pm => `<span class="chip" style="background:var(${pm.color});">${pm.short} ${fmt1(p[pm.key])}</span>`).join("");
+    return `<tr><td class="pollster">${p.firm}</td><td>${p.date_str}</td><td><span class="src-top3">${chips}</span></td></tr>`;
+  }).join("");
+
+  document.getElementById("src-note").textContent = LANG === "sk"
+    ? `Posledných ${rows.length} zberov`
+    : `Last ${rows.length} fieldings`;
+}
+
+/* ── RENDER: STAMP ──────────────────────────────────────────── */
+function renderStamp() {
+  const d = new Date();
+  const days_sk = ["NEĎ","PON","UTO","STR","ŠTV","PIA","SOB"];
+  const days_en = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+  const day = LANG === "sk" ? days_sk[d.getDay()] : days_en[d.getDay()];
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const hh = String(d.getHours()).padStart(2,"0");
+  const min = String(d.getMinutes()).padStart(2,"0");
+  document.getElementById("stamp").textContent = `${day} ${dd} · ${mm} · ${d.getFullYear()} · ${hh}:${min} ${LANG==="sk"?"SEČ":"CET"}`;
+}
+
+/* ── APPLY LANG ─────────────────────────────────────────────── */
+function applyLang() {
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-sk][data-en]").forEach(el => {
+    el.textContent = el.getAttribute("data-" + LANG);
+  });
+  document.querySelectorAll(".toggle-group button[data-lang]").forEach(b => {
+    b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false");
+  });
+  renderStamp();
+  if (_polls.length) renderAll();
+}
+
+/* ── RENDER ALL ─────────────────────────────────────────────── */
+function renderAll() {
+  renderLede();
+  renderAgg();
+  renderSeats();
+  renderTrend();
+  renderMults();
+  renderSrc();
+}
+
+/* ── THEME ──────────────────────────────────────────────────── */
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  localStorage.setItem("wollby-theme", t);
+}
+
+/* ── EVENT LISTENERS ────────────────────────────────────────── */
+document.querySelectorAll(".toggle-group button[data-lang]").forEach(b => {
+  b.addEventListener("click", () => {
+    LANG = b.dataset.lang;
+    localStorage.setItem("wollby_lang", LANG);
+    applyLang();
+  });
+});
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme") || "light";
+  applyTheme(cur === "light" ? "dark" : "light");
 });
 
-// ── SEATS: HAGENBACH-BISCHOFF ──────────────────────────────────
-function allocateSeats(poll) {
-  const cands = PARTIES.map(p=>({...p,pct:poll[p.key]||0})).filter(p=>p.pct>=5);
-  if(!cands.length) return [];
-  const sum = cands.reduce((s,p)=>s+p.pct,0), q = sum/(TOTAL+1);
-  cands.forEach(p=>{p.seats=Math.floor(p.pct/q);p.rem=p.pct/q-p.seats;});
-  let r = TOTAL - cands.reduce((s,p)=>s+p.seats,0);
-  [...cands].sort((a,b)=>b.rem-a.rem).slice(0,r).forEach(p=>p.seats++);
-  return cands.sort((a,b)=>b.seats-a.seats);
-}
+/* ── BOOT ───────────────────────────────────────────────────── */
+(function initTheme() {
+  const stored = localStorage.getItem("wollby-theme");
+  applyTheme(stored || (window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+})();
 
-function initZone() { zoneMap = {}; currentSeats.forEach(p=>{zoneMap[p.key]=p.defaultZone;}); }
+LANG = localStorage.getItem("wollby_lang") === "en" ? "en" : "sk";
+document.querySelectorAll(".toggle-group button[data-lang]").forEach(b =>
+  b.setAttribute("aria-pressed", b.dataset.lang === LANG ? "true" : "false")
+);
+document.documentElement.lang = LANG;
+renderStamp();
 
-// ── HEMICYCLE ──────────────────────────────────────────────────
-function drawHemicycle() {
-  const svg = document.getElementById("hemicycle-svg"); svg.innerHTML = "";
-  const W=700,H=320,cx=W/2,cy=H-28,rows=5,rMin=65,rMax=245,MARG=0.07;
-  const total = currentSeats.reduce((s,p)=>s+p.seats,0); if(!total) return;
-  const radii=[], spR=[];
-  for(let i=0;i<rows;i++) radii.push(rMin+(rMax-rMin)*(i/(rows-1)));
-  const sumR = radii.reduce((s,r)=>s+r,0);
-  radii.forEach(r=>spR.push(Math.round(total*r/sumR)));
-  let diff = total - spR.reduce((s,v)=>s+v,0);
-  for(let i=0;diff!==0;i=(i+1)%rows){spR[i]+=diff>0?1:-1;diff+=diff>0?-1:1;}
-  const dotR = Math.max(3.2,Math.min(6.5,(Math.PI*rMin/(spR[0]+1))/2.8/2));
-  let all=[];
-  for(let ri=0;ri<rows;ri++){
-    const r=radii[ri],n=spR[ri];
-    for(let si=0;si<n;si++){
-      const a=Math.PI-MARG-(si/(n-1||1))*(Math.PI-2*MARG);
-      all.push({x:cx+r*Math.cos(a),y:cy-r*Math.sin(a)});
-    }
-  }
-  all.sort((a,b)=>a.x-b.x);
-  // Dots grouped by zone with opacity
-  const oC=[],nC=[],gC=[];
-  currentSeats.forEach(p=>{
-    const z=zoneMap[p.key]||'neutral';
-    const op=z==='gov'?1.0:z==='opp'?0.25:0.5;
-    const arr=z==='gov'?gC:z==='opp'?oC:nC;
-    for(let i=0;i<p.seats;i++) arr.push({color:p.color,op});
-  });
-  const cm=[...oC,...nC,...gC];
-  // Arc guide lines
-  for(let ri=0;ri<rows;ri++){
-    const r=radii[ri];
-    const arc=document.createElementNS("http://www.w3.org/2000/svg","path");
-    arc.setAttribute("d",`M${cx+r*Math.cos(Math.PI-MARG)} ${cy-r*Math.sin(Math.PI-MARG)} A${r} ${r} 0 0 1 ${cx+r*Math.cos(MARG)} ${cy-r*Math.sin(MARG)}`);
-    arc.setAttribute("fill","none");arc.setAttribute("stroke","rgba(66,71,83,0.3)");arc.setAttribute("stroke-width","1");
-    svg.appendChild(arc);
-  }
-  // Coalition arc highlight (rendered before dots so dots appear on top)
-  const gS=currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
-  if(gS>0){
-    const arcColor=gS>=MAJ?"#66FF00":"#CC0000";
-    const arcR=rMax+40;
-    const aStart=Math.PI-MARG, aEnd=aStart-(gS/TOTAL)*(Math.PI-2*MARG);
-    const large=(aStart-aEnd)>Math.PI?1:0;
-    const x1=(cx+arcR*Math.cos(aStart)).toFixed(1),y1=(cy-arcR*Math.sin(aStart)).toFixed(1);
-    const x2=(cx+arcR*Math.cos(aEnd)).toFixed(1),y2=(cy-arcR*Math.sin(aEnd)).toFixed(1);
-    const arcEl=document.createElementNS("http://www.w3.org/2000/svg","path");
-    arcEl.setAttribute("d",`M${x1} ${y1} A${arcR} ${arcR} 0 ${large} 1 ${x2} ${y2}`);
-    arcEl.setAttribute("fill","none");arcEl.setAttribute("stroke",arcColor);
-    arcEl.setAttribute("stroke-width","5");arcEl.setAttribute("opacity","0.75");
-    svg.appendChild(arcEl);
-    const midA=(aStart+aEnd)/2;
-    const lx=(cx+(arcR+14)*Math.cos(midA)).toFixed(1),ly=(cy-(arcR+14)*Math.sin(midA)).toFixed(1);
-    const lbArc=document.createElementNS("http://www.w3.org/2000/svg","text");
-    lbArc.setAttribute("x",lx);lbArc.setAttribute("y",ly);
-    lbArc.setAttribute("fill",arcColor);lbArc.setAttribute("font-size","10");
-    lbArc.setAttribute("font-family","JetBrains Mono,monospace");lbArc.setAttribute("font-weight","700");
-    lbArc.setAttribute("text-anchor","middle");lbArc.textContent=gS;
-    svg.appendChild(lbArc);
-  }
-  // Dots (rendered after coalition arc so they appear on top)
-  all.forEach((pos,i)=>{
-    const c=document.createElementNS("http://www.w3.org/2000/svg","rect");
-    const s=dotR*1.6;
-    c.setAttribute("x",(pos.x-s/2).toFixed(1));c.setAttribute("y",(pos.y-s/2).toFixed(1));
-    c.setAttribute("width",s);c.setAttribute("height",s);
-    const dot=cm[i]||{color:"#353534",op:1.0};
-    c.setAttribute("fill",dot.color);c.setAttribute("opacity",dot.op);
-    svg.appendChild(c);
-  });
-  // Majority line
-  const ln=document.createElementNS("http://www.w3.org/2000/svg","line");
-  ln.setAttribute("x1",cx);ln.setAttribute("y1",cy-rMin+5);ln.setAttribute("x2",cx);ln.setAttribute("y2",cy-rMax-8);
-  ln.setAttribute("stroke","rgba(255,255,255,0.3)");ln.setAttribute("stroke-width","2");ln.setAttribute("stroke-dasharray","6,4");
-  svg.appendChild(ln);
-  const lbl=document.createElementNS("http://www.w3.org/2000/svg","text");
-  lbl.setAttribute("x",cx+8);lbl.setAttribute("y",cy-rMax-10);
-  lbl.setAttribute("fill","rgba(255,255,255,0.4)");lbl.setAttribute("font-size","10");lbl.setAttribute("font-family","JetBrains Mono, monospace");lbl.setAttribute("font-weight","700");
-  lbl.textContent=T('index.seats.majority76'); svg.appendChild(lbl);
-}
-
-function renderBars() {
-  const max = currentSeats[0]?.seats||1;
-  const el = document.getElementById("seat-bars"); el.innerHTML = "";
-  currentSeats.forEach(p=>{
-    const row = document.createElement("div"); row.className = "flex items-center gap-3 md:gap-4";
-    row.innerHTML = `
-      <div class="w-20 md:w-24 font-mono font-bold text-xs uppercase text-right shrink-0" style="color:${p.color}">${p.label}</div>
-      <div class="flex-1 bg-surface-container-lowest border-2 border-outline-variant h-7 md:h-8 relative overflow-hidden">
-        <div class="absolute inset-y-0 left-0 transition-none" style="width:${(p.seats/max*100).toFixed(1)}%;background:${p.color}20;border-right:2px solid ${p.color}"></div>
-        <div class="absolute right-3 inset-y-0 flex items-center font-mono font-bold text-sm text-on-surface">${p.seats}</div>
-      </div>`;
-    el.appendChild(row);
-  });
-}
-
-
-function updateMajorityInfo() {
-  const gS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
-  const oS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='opp').reduce((s,p)=>s+p.seats,0);
-  document.getElementById("majority-info").innerHTML = `
-    <span class="font-mono text-xs text-outline">${T('majority.gov')} <strong class="text-[#CC0000]">${gS}</strong></span>
-    <span class="font-mono text-xs text-outline">${T('majority.opp')} <strong style="color:#acc7ff">${oS}</strong></span>
-    <span class="font-mono text-xs text-outline">${T('majority.threshold')} <strong class="text-white">76</strong></span>
-    <span class="font-mono text-xs font-bold ${gS>=76?"text-[#66FF00]":"text-[#CC0000]"}">${gS>=76?T('majority.has'):T('majority.no')}</span>`;
-}
-
-// ── COALITION BUILDER ──────────────────────────────────────────
-function buildChips() {
-  ['gov','neutral','opp'].forEach(zone=>{
-    const el = document.getElementById(`chips-${zone}`); el.innerHTML = "";
-    const inZone = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')===zone);
-    if(zone==='neutral' && !inZone.length){
-      el.innerHTML = `<div class="font-mono text-[10px] uppercase text-outline-variant tracking-widest border-2 border-dashed border-outline-variant p-4 w-full text-center">${T('index.coalition.dragHint')}</div>`;
-      return;
-    }
-    inZone.forEach(p=>{
-      const chip = document.createElement("div");
-      chip.className = "pchip"; chip.dataset.key = p.key; chip.draggable = true;
-      chip.style.cssText = `color:${p.color};border-color:${p.color};background:${p.color}22`;
-      chip.innerHTML = `${p.label} <span style="opacity:.6;font-size:10px">${p.seats}</span>`;
-      chip.addEventListener("dragstart",()=>{dragKey=p.key;setTimeout(()=>chip.classList.add("dragging"),0);});
-      chip.addEventListener("dragend",()=>{dragKey=null;chip.classList.remove("dragging");});
-      el.appendChild(chip);
-    });
-  });
-  updateCoalitionTotals();
-}
-
-function onDragOver(e){e.preventDefault();e.currentTarget.classList.add("drag-over");}
-function onDragLeave(e){e.currentTarget.classList.remove("drag-over");}
-function onDrop(e,zone){
-  e.preventDefault();e.currentTarget.classList.remove("drag-over");
-  if(!dragKey) return;
-  zoneMap[dragKey]=zone; buildChips(); drawHemicycle(); updateMajorityInfo();
-}
-
-function updateCoalitionTotals() {
-  const gS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='gov').reduce((s,p)=>s+p.seats,0);
-  const oS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='opp').reduce((s,p)=>s+p.seats,0);
-  const nS = currentSeats.filter(p=>(zoneMap[p.key]||'neutral')==='neutral').reduce((s,p)=>s+p.seats,0);
-  document.getElementById("big-gov").textContent = String(gS).padStart(2,"0");
-  document.getElementById("big-opp").textContent = String(oS).padStart(2,"0");
-  document.getElementById("big-neutral").textContent = String(nS).padStart(2,"0");
-  document.getElementById("gov-num").textContent = gS;
-  document.getElementById("opp-num").textContent = oS;
-  document.getElementById("gov-bar").style.width = Math.min(gS/TOTAL*100,100)+"%";
-  document.getElementById("opp-bar").style.width = Math.min(oS/TOTAL*100,100)+"%";
-  document.getElementById("gov-bar").style.background = gS>=MAJ?"#66FF00":"#CC0000";
-  document.getElementById("opp-bar").style.background = oS>=MAJ?"#66FF00":"#acc7ff";
-  document.getElementById("gov-status").textContent = gS>=MAJ?T('coalition.hasMaj'):T('coalition.noMaj.prefix')+' '+(MAJ-gS)+' '+T('coalition.noMaj.suffix');
-  document.getElementById("gov-status").style.color = gS>=MAJ?"#66FF00":"#CC0000";
-  document.getElementById("opp-status").textContent = oS>=MAJ?T('coalition.hasMaj'):T('coalition.noMaj.prefix')+' '+(MAJ-oS)+' '+T('coalition.noMaj.suffix');
-  document.getElementById("opp-status").style.color = oS>=MAJ?"#66FF00":"#acc7ff";
-}
-
-function resetCoalitions() { initZone(); buildChips(); drawHemicycle(); }
-
-// ── POLLS TABLE ────────────────────────────────────────────────
-function renderPollsTable() {
-  const cutoff = new Date();
-  if(rangeMonths !== 99) cutoff.setMonth(cutoff.getMonth() - rangeMonths);
-  const data = getFiltered().filter(p => rangeMonths === 99 || p.date >= cutoff);
-  const tbody = document.getElementById("polls-tbody");
-  tbody.innerHTML = "";
-  data.forEach((poll, i) => {
-    const tr = document.createElement("tr");
-    tr.className = `border-b border-outline-variant ${i%2===0?"bg-surface-container-low":"bg-surface"} hover:bg-surface-container-high transition-none`;
-    tr.innerHTML = `
-      <td class="py-3 px-4 font-mono font-bold text-sm whitespace-nowrap">${poll.firm}</td>
-      <td class="py-3 px-4 font-mono text-xs text-outline whitespace-nowrap">${poll.dateStr}</td>
-      ${["PS","Smer","Rep","OLaNO","SaS","Hlas","Dem","KDH","SNS"].map(k => {
-        const v = poll[k];
-        if(v==null) return `<td class="py-3 px-4 font-mono text-xs text-right text-outline/30">–</td>`;
-        const p = PARTIES.find(x=>x.key===k);
-        const hi = v >= 10;
-        return `<td class="py-3 px-4 font-mono text-xs text-right font-${hi?"bold":"normal"}" style="color:${p?.color||'#8c909e'}">${v.toFixed(1)}%</td>`;
-      }).join("")}`;
-    tbody.appendChild(tr);
-  });
-}
-
-// ── SEATS RENDER ───────────────────────────────────────────────
-function renderSeats(idx) {
-  currentSeats = allocateSeats(POLLS[idx]);
-  initZone(); drawHemicycle(); renderBars(); buildChips(); updateMajorityInfo();
-}
-
-// ── INIT ───────────────────────────────────────────────────────
-async function init() {
-  document.getElementById("hero-last-poll").textContent = T('status.loading');
+(async function init() {
   try {
     const res = await fetch(`${API}/polls`);
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    POLLS = (await res.json()).map(mapPoll);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    _polls = await res.json();
+    if (!_polls.length) throw new Error("Žiadne dáta v databáze — spustite /polls/fetch-wiki");
 
-    const latest = POLLS[0];
-    document.getElementById("hero-last-poll").textContent = latest.firm + " — " + latest.dateStr;
+    _agg = computeAggregate(_polls);
+    const twoWeeksAgo = new Date(); twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+    _prevAgg = computeAggBefore(_polls, twoWeeksAgo);
+    _history = computeHistory(_polls, 12);
 
-    const sel = document.getElementById("poll-select");
-    sel.innerHTML = "";
-    POLLS.forEach((p, i) => {
-      const o = document.createElement("option");
-      o.value = i;
-      o.textContent = `${p.firm} · ${p.dateStr}`;
-      sel.appendChild(o);
-    });
-    sel.addEventListener("change", e => renderSeats(+e.target.value));
-
-    renderPills();
-    setRange(6);
-    renderMedian();
-    renderPollsTable();
-    renderSeats(0);
-  } catch {
-    document.getElementById("hero-last-poll").innerHTML =
-      `<span style="color:#CC0000">${T('status.error')}</span>`;
-    document.getElementById("hemicycle-svg").innerHTML =
-      `<text x="350" y="160" text-anchor="middle" fill="#CC0000" font-size="11"
-        font-family="JetBrains Mono,monospace" font-weight="700">
-        CHYBA: Backend nedostupný — spustite server
-      </text>`;
+    applyLang();
+  } catch (e) {
+    const banner = document.getElementById("error-banner");
+    banner.textContent = "Backend nedostupný alebo žiadne dáta — spustite ./start.sh  ·  " + e.message;
+    banner.classList.add("visible");
+    document.getElementById("lede-headline").textContent = LANG === "sk" ? "Backend nedostupný" : "Backend unavailable";
+    document.getElementById("lede-dek").textContent = LANG === "sk" ? "Spustite ./start.sh a obnovte stránku." : "Run ./start.sh and reload.";
   }
-}
-
-function onLangChange() {
-  buildChart();
-  renderMedian();
-  if(currentSeats.length) { drawHemicycle(); updateMajorityInfo(); buildChips(); }
-  renderPollsTable();
-}
-
-init();
+})();
 </script>
 </body>
 </html>
